@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Building2,
@@ -17,10 +17,7 @@ import {
   CheckCircle,
   AlertCircle,
   ArrowLeft,
-  ExternalLink,
-  BarChart,
-  Target,
-  Building, // Use this instead of BuildingOffice
+  Building,
   Home,
   Wallet,
   Award,
@@ -28,34 +25,24 @@ import {
   Users as UsersIcon,
   CreditCard,
   FileCheck,
-  Sparkles,
-  ChevronRight,
   Download,
   Eye,
   Zap,
   Heart,
   Share2,
-  Flag,
   BuildingIcon,
   Loader2,
   FileWarning,
-  ChartBarIncreasing,
   BadgeCheck,
   Clock,
-  Globe2,
-  BanknoteIcon,
   Scale,
   Handshake,
   ShieldCheck,
   Cpu,
-  Lightbulb,
   Target as TargetIcon,
   TrendingDown,
   LineChart,
-  PieChart,
-  MoreVertical,
   ChevronDown,
-  BookOpen,
   Layers,
   Hash,
 } from "lucide-react";
@@ -69,135 +56,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Link from "next/link";
+import ComplaintModal from "@/components/compaint";
+import { Company } from "@/types/company";
 
-// Type definitions based on your API response
-interface Company {
-  id: string;
-  name: string;
-  registrationNumber: string;
-  status: "active" | "pending" | "suspended" | "inactive";
-  verificationLevel: "verified" | "pending" | "unverified";
-  industry: string;
-  businessType: string;
-  ownership: string;
-  location: string;
-  city?: string;
-  province?: string;
-  country: string;
-  address?: string;
-  postalCode?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  website?: string;
-  ceo?: string;
-  description?: string;
-  tradingName?: string;
-  foundedYear: number;
-  employees?: string;
-  revenue?: string;
-  rating?: string;
-  complianceScore?: number;
-  trustScore?: number;
-  capitalInvestment?: string;
-  annualRevenueRange?: string;
-  financialSummary?: string;
-  yearEnd?: string;
-  taxId?: string;
-  
-  // JSON fields
-  tags: string[];
-  services: string[];
-  certifications: string[];
-  subsidiaries: string[];
-  recentNews: Array<{
-    title: string;
-    date: string;
-    source: string;
-    link?: string;
-  }>;
-  directors: Array<{
-    name: string;
-    position: string;
-    nationality?: string;
-    identificationNumber?: string;
-    isPrimary?: boolean;
-    sharePercentage?: number;
-  }>;
-  complianceRecords: Array<{
-    type: string;
-    status: string;
-    dueDate?: string;
-    completedDate?: string;
-    score?: number;
-  }>;
-  revenueGrowth: Array<{
-    year: number;
-    growth: number;
-    amount: string;
-  }>;
-  marketCoverage: Array<{
-    region: string;
-    percentage: number;
-    notes?: string;
-  }>;
-  majorClients: string[];
-  awards: Array<{
-    name: string;
-    year: number;
-    issuer: string;
-  }>;
-  socialMedia: Record<string, string>;
-  bankDetails: {
-    bankName?: string;
-    accountNumber?: string;
-    accountName?: string;
-    branch?: string;
-  };
-  esgScores: {
-    environmental: number;
-    social: number;
-    governance: number;
-    overall: number;
-  };
-  riskAssessment: {
-    financialRisk: number;
-    operationalRisk: number;
-    complianceRisk: number;
-    marketRisk: number;
-    overallRisk: number;
-  };
-  auditInfo: {
-    lastAuditDate?: string;
-    auditor?: string;
-    auditOpinion?: string;
-    nextAuditDate?: string;
-  };
-  regulatoryFilings: Array<{
-    type: string;
-    filingDate: string;
-    status: string;
-    documentUrl?: string;
-  }>;
-  
-  // Timestamps
-  cacRegistrationDate?: string;
-  cacExpiryDate?: string;
-  lastVerifiedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-  lastUpdated?: string;
-  yearsOperating?: number;
-}
 
 interface ApiResponse {
   success: boolean;
@@ -277,6 +145,244 @@ const verificationColors = {
   },
 };
 
+// Enhanced Icon Component with better styling
+function IconContainer({ children, className = "", variant = "default" }: { 
+  children: React.ReactNode; 
+  className?: string;
+  variant?: "default" | "primary" | "success" | "warning" | "danger";
+}) {
+  const variantClasses = {
+    default: "bg-blue-100 text-blue-600",
+    primary: "bg-blue-100 text-blue-600",
+    success: "bg-emerald-100 text-emerald-600",
+    warning: "bg-amber-100 text-amber-600",
+    danger: "bg-rose-100 text-rose-600",
+  };
+
+  return (
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${variantClasses[variant]} ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+// Responsive Tab Navigation Component with prominent complaint button
+// Responsive Tab Navigation Component with prominent complaint button
+function ResponsiveTabs({ 
+  activeTab, 
+  setActiveTab,
+  showComplaintButton = false,
+  companyId,
+  companyName 
+}: { 
+  activeTab: string;
+  setActiveTab: (value: string) => void;
+  showComplaintButton?: boolean;
+  companyId?: string;
+  companyName?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [mobileTab, setMobileTab] = useState(activeTab);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const tabs = [
+    { value: "overview", label: "Overview", icon: Eye },
+    { value: "financial", label: "Financial", icon: LineChart },
+    { value: "operations", label: "Operations", icon: Cpu },
+    { value: "compliance", label: "Compliance", icon: ShieldCheck },
+  ];
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setMobileTab(value);
+    if (window.innerWidth < 1024) {
+      setIsOpen(false);
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="w-full relative" ref={dropdownRef}>
+      {/* Desktop Tabs with prominent complaint button */}
+      <div className="hidden lg:block">
+        <div className="flex items-center justify-between mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 rounded-2xl p-1 shadow-lg">
+          <div className="flex-1">
+            <div className="grid grid-cols-4 gap-1">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => handleTabChange(tab.value)}
+                  className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all duration-200 group ${
+                    activeTab === tab.value
+                      ? "bg-white shadow-lg border border-gray-200/50"
+                      : "hover:bg-gray-50/50"
+                  }`}
+                >
+                  <tab.icon className={`w-5 h-5 mr-2 ${
+                    activeTab === tab.value ? "text-blue-600" : "text-gray-500 group-hover:text-blue-500"
+                  }`} />
+                  <span className={`font-medium ${
+                    activeTab === tab.value ? "text-blue-700" : "text-gray-700 group-hover:text-blue-600"
+                  }`}>
+                    {tab.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* {showComplaintButton && companyId && companyName && (
+            <div className="ml-4">
+              <ComplaintModal companyId={companyId} companyName={companyName} />
+            </div>
+          )} */}
+        </div>
+      </div>
+
+      {/* Mobile Tabs with prominent complaint button */}
+      <div className="lg:hidden relative">
+        <div className="flex items-center gap-3 mb-6">
+          <Button
+            variant="outline"
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex-1 h-12 px-4 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 hover:border-blue-300 hover:bg-white justify-between"
+          >
+            <div className="flex items-center">
+              {(() => {
+                const Icon = tabs.find(t => t.value === mobileTab)?.icon || Eye;
+                return <Icon className="w-5 h-5 mr-2 text-blue-600" />;
+              })()}
+              <span className="font-medium text-gray-900">
+                {tabs.find(t => t.value === mobileTab)?.label || "Overview"}
+              </span>
+            </div>
+            <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          </Button>
+          {/* {showComplaintButton && companyId && companyName && (
+            <ComplaintModal companyId={companyId} companyName={companyName} />
+          )} */}
+        </div>
+
+        {/* Mobile Dropdown Menu - Fixed positioning */}
+        {isOpen && (
+          <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white/95 backdrop-blur-xl border-2 border-gray-200/50 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-top-5 max-h-[80vh] overflow-y-auto">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => handleTabChange(tab.value)}
+                  className={`flex items-center w-full p-4 rounded-xl transition-all duration-200 ${
+                    mobileTab === tab.value
+                      ? "bg-gradient-to-r from-blue-50 to-cyan-50/50 border border-blue-200 text-blue-700"
+                      : "hover:bg-gray-50 text-gray-700"
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 mr-3 ${
+                    mobileTab === tab.value ? "text-blue-600" : "text-gray-500"
+                  }`} />
+                  <span className="font-medium">{tab.label}</span>
+                  {mobileTab === tab.value && (
+                    <div className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Loading Component
+function LoadingState() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 animate-pulse" />
+            <Loader2 className="w-12 h-12 animate-spin text-blue-600 absolute inset-0 m-auto" />
+          </div>
+          <div className="text-center space-y-3">
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
+              Loading Company Profile
+            </h2>
+            <p className="text-gray-600 max-w-md">
+              Fetching comprehensive business intelligence and analytics...
+            </p>
+            <div className="w-64 h-2 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-slide"></div>
+            </div>
+          </div>
+          <style jsx>{`
+            @keyframes slide {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(200%); }
+            }
+            .animate-slide {
+              animation: slide 1.5s ease-in-out infinite;
+            }
+          `}</style>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Error Component
+function ErrorState({ error, router }: { error: string | null; router: any }) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <div className="relative w-32 h-32 mx-auto mb-6">
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-pink-500/10 rounded-full blur-xl" />
+            <div className="relative w-32 h-32 rounded-full bg-gradient-to-r from-rose-100 to-pink-100 flex items-center justify-center border-4 border-white shadow-lg">
+              <AlertCircle className="w-16 h-16 text-rose-600" />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            {error?.includes('not found') ? 'Company Not Found' : 'Error Loading Profile'}
+          </h2>
+          <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg">
+            {error || 'The requested company profile could not be found in our registry.'}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => router.back()}
+              className="h-12 px-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Return to Previous
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => router.push('/explore')}
+              className="h-12 px-6 border-2"
+            >
+              <Building2 className="w-5 h-5 mr-2" />
+              Browse Companies
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main Page Component
 export default function CompanyDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -322,82 +428,8 @@ export default function CompanyDetailPage() {
     }
   }, [params.id]);
 
-  // Loading State
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col items-center justify-center space-y-8">
-            <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 animate-pulse" />
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600 absolute inset-0 m-auto" />
-            </div>
-            <div className="text-center space-y-3">
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
-                Loading Company Profile
-              </h2>
-              <p className="text-gray-600 max-w-md">
-                Fetching comprehensive business intelligence and analytics...
-              </p>
-              <div className="w-64 h-2 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-slide"></div>
-              </div>
-            </div>
-            <style jsx>{`
-              @keyframes slide {
-                0% { transform: translateX(-100%); }
-                100% { transform: translateX(200%); }
-              }
-              .animate-slide {
-                animation: slide 1.5s ease-in-out infinite;
-              }
-            `}</style>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Error State
-  if (error || !company) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="relative w-32 h-32 mx-auto mb-6">
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-pink-500/10 rounded-full blur-xl" />
-              <div className="relative w-32 h-32 rounded-full bg-gradient-to-r from-rose-100 to-pink-100 flex items-center justify-center border-4 border-white shadow-lg">
-                <AlertCircle className="w-16 h-16 text-rose-600" />
-              </div>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              {error?.includes('not found') ? 'Company Not Found' : 'Error Loading Profile'}
-            </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg">
-              {error || 'The requested company profile could not be found in our registry.'}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={() => router.back()}
-                className="h-12 px-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
-              >
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Return to Previous
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => router.push('/explore')}
-                className="h-12 px-6 border-2"
-              >
-                <Building2 className="w-5 h-5 mr-2" />
-                Browse Companies
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingState />;
+  if (error || !company) return <ErrorState error={error} router={router} />;
 
   // Calculate years operating
   const yearsOperating = new Date().getFullYear() - company.foundedYear;
@@ -434,12 +466,6 @@ export default function CompanyDetailPage() {
   const displayRevenueGrowth = company.revenueGrowth || [];
   const displayAwards = company.awards || [];
   const displayDirectors = company.directors || [];
-  const displayFinancialSummary = company.financialSummary || 'No financial summary available.';
-
-  // Handle View button click
-  const handleVisitWebsite = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
 
   // Calculate metrics
   const trustScore = company.trustScore || 85;
@@ -460,7 +486,7 @@ export default function CompanyDetailPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
         
-        {/* Navigation */}
+        {/* Navigation with prominent complaint button */}
         <div className="relative border-b border-white/20 bg-white/80 backdrop-blur-xl shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
@@ -516,29 +542,10 @@ export default function CompanyDetailPage() {
                   </Tooltip>
                 </TooltipProvider>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-amber-300 hover:bg-amber-50/50 hover:text-amber-600 transition-all duration-200"
-                      >
-                        <Flag className="w-5 h-5" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Report issue</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <Button
-                  className="h-10 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-200"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  <span className="font-medium">Full Report</span>
-                </Button>
+                {/* Prominent complaint button in header */}
+                {company && (
+                  <ComplaintModal companyId={company.id} companyName={displayName} />
+                )}
               </div>
             </div>
           </div>
@@ -605,19 +612,25 @@ export default function CompanyDetailPage() {
                     </span>
                   </h1>
 
-                  {/* Quick Info */}
+                  {/* Quick Info with better icons */}
                   <div className="flex flex-wrap items-center gap-4 mb-8">
-                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
-                      <MapPin className="w-5 h-5 text-blue-600 mr-3" />
-                      <span className="font-medium text-gray-900">{displayLocation}</span>
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-blue-300 transition-all duration-200">
+                      <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                        <MapPin className="w-4 h-4" />
+                      </IconContainer>
+                      <span className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">{displayLocation}</span>
                     </div>
-                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
-                      <Building className="w-5 h-5 text-purple-600 mr-3" /> {/* Changed from BuildingOffice */}
-                      <span className="font-medium text-gray-900">{displayIndustry}</span>
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-purple-300 transition-all duration-200">
+                      <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                        <Building className="w-4 h-4" />
+                      </IconContainer>
+                      <span className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">{displayIndustry}</span>
                     </div>
-                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
-                      <Clock className="w-5 h-5 text-amber-600 mr-3" />
-                      <span className="font-medium text-gray-900">
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-amber-300 transition-all duration-200">
+                      <IconContainer variant="warning" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                        <Calendar className="w-4 h-4" />
+                      </IconContainer>
+                      <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
                         Since {company.foundedYear} · {yearsOperating} years
                       </span>
                     </div>
@@ -635,18 +648,18 @@ export default function CompanyDetailPage() {
 
             {/* Right Column - Quick Actions & Metrics */}
             <div className="lg:w-80 space-y-6">
-              {/* Primary Actions */}
+              {/* Primary Actions with better icons */}
               <div className="grid grid-cols-2 gap-3">
                 {displayWebsite && (
                   <Button
                     variant="outline"
                     className="h-14 bg-white/80 backdrop-blur-sm border-gray-300/50 hover:border-blue-300 hover:bg-white rounded-xl group transition-all duration-200"
-                    onClick={() => handleVisitWebsite(displayWebsite)}
+                    onClick={() => window.open(displayWebsite, "_blank", "noopener,noreferrer")}
                   >
                     <div className="flex items-center justify-center w-full">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-600/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                        <Globe className="w-5 h-5 text-blue-600" />
-                      </div>
+                      <IconContainer variant="primary" className="mr-3 group-hover:scale-110 transition-transform">
+                        <Globe className="w-5 h-5" />
+                      </IconContainer>
                       <div className="text-left">
                         <div className="text-sm font-semibold text-gray-900">Website</div>
                         <div className="text-xs text-gray-500 truncate">Visit</div>
@@ -659,9 +672,9 @@ export default function CompanyDetailPage() {
                   className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group"
                 >
                   <div className="flex items-center justify-center w-full">
-                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                    <IconContainer variant="primary" className="bg-white/20 mr-3 group-hover:scale-110 transition-transform">
                       <FileText className="w-5 h-5 text-white" />
-                    </div>
+                    </IconContainer>
                     <div className="text-left">
                       <div className="text-sm font-semibold text-white">Full Report</div>
                       <div className="text-xs text-white/80">Download PDF</div>
@@ -670,31 +683,49 @@ export default function CompanyDetailPage() {
                 </Button>
               </div>
 
-              {/* Key Metrics */}
-              <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-5 shadow-sm">
-                <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-                  <TargetIcon className="w-4 h-4 text-blue-600 mr-2" />
-                  Key Metrics
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayEmployees}</div>
-                    <div className="text-xs text-gray-500">Employees</div>
+              {/* Key Metrics with better icons */}
+              <Card className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+                <CardHeader className="p-0 pb-4">
+                  <CardTitle className="flex items-center text-sm font-semibold text-gray-900">
+                    <IconContainer variant="primary" className="w-8 h-8 mr-2">
+                      <TargetIcon className="w-4 h-4" />
+                    </IconContainer>
+                    Key Metrics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center group">
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">{displayEmployees}</div>
+                      <div className="text-xs text-gray-500 flex items-center justify-center">
+                        <Users className="w-3 h-3 mr-1" />
+                        Employees
+                      </div>
+                    </div>
+                    <div className="text-center group">
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-green-700 transition-colors">{displayRevenue}</div>
+                      <div className="text-xs text-gray-500 flex items-center justify-center">
+                        <TrendingUp className="w-3 h-3 mr-1" />
+                        Annual Revenue
+                      </div>
+                    </div>
+                    <div className="text-center group">
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-emerald-700 transition-colors">{displayComplianceScore}%</div>
+                      <div className="text-xs text-gray-500 flex items-center justify-center">
+                        <ShieldCheck className="w-3 h-3 mr-1" />
+                        Compliance
+                      </div>
+                    </div>
+                    <div className="text-center group">
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">{trustScore}%</div>
+                      <div className="text-xs text-gray-500 flex items-center justify-center">
+                        <Handshake className="w-3 h-3 mr-1" />
+                        Trust Score
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayRevenue}</div>
-                    <div className="text-xs text-gray-500">Annual Revenue</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayComplianceScore}%</div>
-                    <div className="text-xs text-gray-500">Compliance</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 mb-1">{trustScore}%</div>
-                    <div className="text-xs text-gray-500">Trust Score</div>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -711,25 +742,25 @@ export default function CompanyDetailPage() {
               <CardHeader className="relative">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
                 <CardTitle className="flex items-center text-lg">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-3 shadow-lg">
-                    <FileCheck className="w-6 h-6 text-white" />
-                  </div>
-                  <span>Registration Details</span>
+                  <IconContainer variant="primary">
+                    <FileCheck className="w-6 h-6" />
+                  </IconContainer>
+                  <span className="ml-3">Registration Details</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative space-y-5">
                 {[
-                  { label: "Registration Number", value: company.registrationNumber, icon: CreditCard },
-                  { label: "Business Type", value: displayBusinessType, icon: BuildingIcon },
-                  { label: "Ownership", value: displayOwnership, icon: UsersIcon },
-                  { label: "Year End", value: displayYearEnd || 'Not specified', icon: Calendar },
-                  { label: "Tax ID", value: displayTaxId || 'Not specified', icon: Wallet },
-                  { label: "Industry", value: displayIndustry, icon: Hash },
+                  { label: "Registration Number", value: company.registrationNumber, icon: CreditCard, variant: "primary" as const },
+                  { label: "Business Type", value: displayBusinessType, icon: BuildingIcon, variant: "primary" as const },
+                  { label: "Ownership", value: displayOwnership, icon: UsersIcon, variant: "primary" as const },
+                  { label: "Year End", value: displayYearEnd || 'Not specified', icon: Calendar, variant: "warning" as const },
+                  { label: "Tax ID", value: displayTaxId || 'Not specified', icon: Wallet, variant: "success" as const },
+                  { label: "Industry", value: displayIndustry, icon: Hash, variant: "primary" as const },
                 ].map((item, index) => (
                   <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-blue-50/50 transition-all duration-200">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-600/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                      <item.icon className="w-5 h-5 text-blue-600" />
-                    </div>
+                    <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                      <item.icon className="w-5 h-5" />
+                    </IconContainer>
                     <div className="flex-1">
                       <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
                       <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
@@ -748,25 +779,25 @@ export default function CompanyDetailPage() {
                 <CardHeader className="relative">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-cyan-500" />
                   <CardTitle className="flex items-center text-lg">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center mr-3 shadow-lg">
-                      <UsersIcon className="w-6 h-6 text-white" />
-                    </div>
-                    <span>Contact Information</span>
+                    <IconContainer variant="success">
+                      <UsersIcon className="w-6 h-6" />
+                    </IconContainer>
+                    <span className="ml-3">Contact Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="relative space-y-5">
                   {[
-                    { label: "CEO", value: displayCEO, icon: Briefcase, show: !!displayCEO },
-                    { label: "Phone", value: displayContactPhone, icon: Phone, show: !!displayContactPhone },
-                    { label: "Email", value: displayContactEmail, icon: Mail, show: !!displayContactEmail },
-                    { label: "Address", value: displayAddress, icon: Home, show: !!displayAddress },
+                    { label: "CEO", value: displayCEO, icon: Briefcase, variant: "primary" as const, show: !!displayCEO },
+                    { label: "Phone", value: displayContactPhone, icon: Phone, variant: "success" as const, show: !!displayContactPhone },
+                    { label: "Email", value: displayContactEmail, icon: Mail, variant: "primary" as const, show: !!displayContactEmail },
+                    { label: "Address", value: displayAddress, icon: Home, variant: "warning" as const, show: !!displayAddress },
                   ]
                     .filter(item => item.show)
                     .map((item, index) => (
                       <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-cyan-50/50 transition-all duration-200">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/10 to-emerald-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                          <item.icon className="w-5 h-5 text-cyan-600" />
-                        </div>
+                        <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                          <item.icon className="w-5 h-5" />
+                        </IconContainer>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
                           <p className="font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors truncate">
@@ -787,10 +818,10 @@ export default function CompanyDetailPage() {
                 <CardHeader className="relative pb-4">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500" />
                   <CardTitle className="flex items-center text-lg">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
-                      <ShieldCheck className="w-6 h-6 text-white" />
-                    </div>
-                    <span>Compliance</span>
+                    <IconContainer variant="success">
+                      <ShieldCheck className="w-6 h-6" />
+                    </IconContainer>
+                    <span className="ml-3">Compliance</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="relative">
@@ -806,7 +837,9 @@ export default function CompanyDetailPage() {
               <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                 <CardContent className="p-5">
                   <div className="flex items-center mb-3">
-                    <Handshake className="w-5 h-5 text-blue-600 mr-2" />
+                    <IconContainer variant="primary" className="w-8 h-8 mr-2">
+                      <Handshake className="w-4 h-4" />
+                    </IconContainer>
                     <span className="text-sm font-semibold text-gray-900">Trust Score</span>
                   </div>
                   <div className="text-2xl font-bold text-blue-700">{trustScore}%</div>
@@ -818,7 +851,9 @@ export default function CompanyDetailPage() {
               <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-rose-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                 <CardContent className="p-5">
                   <div className="flex items-center mb-3">
-                    <Scale className="w-5 h-5 text-rose-600 mr-2" />
+                    <IconContainer variant="danger" className="w-8 h-8 mr-2">
+                      <Scale className="w-4 h-4" />
+                    </IconContainer>
                     <span className="text-sm font-semibold text-gray-900">Risk Score</span>
                   </div>
                   <div className="text-2xl font-bold text-rose-700">{riskScore}%</div>
@@ -831,136 +866,126 @@ export default function CompanyDetailPage() {
           {/* Right Column - Detailed Info */}
           <div className="lg:col-span-2">
             {/* Enhanced Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 p-1 rounded-2xl shadow-lg">
-                {[
-                  { value: "overview", label: "Overview", icon: Eye },
-                  { value: "financial", label: "Financial", icon: LineChart },
-                  { value: "operations", label: "Operations", icon: Cpu },
-                  { value: "compliance", label: "Compliance", icon: ShieldCheck },
-                ].map((tab) => (
-                  <TabsTrigger
-                    key={tab.value}
-                    value={tab.value}
-                    className="data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:border data-[state=active]:border-gray-200/50 rounded-xl transition-all duration-200 group"
-                  >
-                    <tab.icon className="w-4 h-4 mr-2 text-gray-500 group-data-[state=active]:text-blue-600" />
-                    <span className="font-medium text-gray-700 group-data-[state=active]:text-blue-700">
-                      {tab.label}
-                    </span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            <ResponsiveTabs 
+              activeTab={activeTab} 
+              setActiveTab={setActiveTab}
+              showComplaintButton={true}
+              companyId={company.id}
+              companyName={displayName}
+            />
 
+            {/* Tab Contents */}
+            <div className="mt-8">
               {/* Overview Tab */}
-              <TabsContent value="overview" className="space-y-6">
-                {/* Services & Offerings */}
-                {displayServices.length > 0 && (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
-                          <Zap className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <span>Services & Offerings</span>
-                          <CardDescription>Core business services provided</CardDescription>
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {displayServices.map((service, index) => (
-                          <div
-                            key={index}
-                            className="group flex items-center p-4 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50/30 transition-all duration-200"
-                          >
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/10 to-green-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                              <CheckCircle className="w-5 h-5 text-emerald-600" />
-                            </div>
-                            <span className="font-medium text-gray-900 group-hover:text-emerald-700 transition-colors">
-                              {service}
-                            </span>
+              {activeTab === "overview" && (
+                <div className="space-y-6">
+                  {/* Services & Offerings */}
+                  {displayServices.length > 0 && (
+                    <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <IconContainer variant="success">
+                            <Zap className="w-6 h-6" />
+                          </IconContainer>
+                          <div className="ml-3">
+                            <span>Services & Offerings</span>
+                            <CardDescription>Core business services provided</CardDescription>
                           </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Business Categories */}
-                {displayTags.length > 0 && (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mr-3 shadow-lg">
-                          <Layers className="w-6 h-6 text-white" />
-                        </div>
-                        <span>Business Categories</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2">
-                        {displayTags.map((tag, index) => (
-                          <Badge
-                            key={index}
-                            className="px-4 py-2 rounded-full backdrop-blur-sm bg-white/50 border border-purple-200/50 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:border-purple-300 transition-all duration-200 group"
-                          >
-                            <span className="text-purple-700 group-hover:text-purple-800 font-medium">
-                              {tag}
-                            </span>
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Certifications */}
-                {displayCertifications.length > 0 && (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-amber-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mr-3 shadow-lg">
-                          <Award className="w-6 h-6 text-white" />
-                        </div>
-                        <span>Certifications & Awards</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {displayCertifications.map((cert, index) => (
-                          <div
-                            key={index}
-                            className="group p-4 bg-white/50 backdrop-blur-sm border border-amber-200/50 rounded-xl hover:border-amber-300 hover:bg-amber-50/30 transition-all duration-200"
-                          >
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/10 to-orange-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                                <BadgeCheck className="w-5 h-5 text-amber-600" />
-                              </div>
-                              <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
-                                {cert}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {displayServices.map((service, index) => (
+                            <div
+                              key={index}
+                              className="group flex items-center p-4 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50/30 transition-all duration-200"
+                            >
+                              <IconContainer variant="success" className="mr-3 group-hover:scale-110 transition-transform">
+                                <CheckCircle className="w-5 h-5" />
+                              </IconContainer>
+                              <span className="font-medium text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                {service}
                               </span>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Business Categories */}
+                  {displayTags.length > 0 && (
+                    <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <IconContainer variant="primary">
+                            <Layers className="w-6 h-6" />
+                          </IconContainer>
+                          <span className="ml-3">Business Categories</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                          {displayTags.map((tag, index) => (
+                            <Badge
+                              key={index}
+                              className="px-4 py-2 rounded-full backdrop-blur-sm bg-white/50 border border-purple-200/50 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:border-purple-300 transition-all duration-200 group"
+                            >
+                              <span className="text-purple-700 group-hover:text-purple-800 font-medium">
+                                {tag}
+                              </span>
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Certifications */}
+                  {displayCertifications.length > 0 && (
+                    <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-amber-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <IconContainer variant="warning">
+                            <Award className="w-6 h-6" />
+                          </IconContainer>
+                          <span className="ml-3">Certifications & Awards</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {displayCertifications.map((cert, index) => (
+                            <div
+                              key={index}
+                              className="group p-4 bg-white/50 backdrop-blur-sm border border-amber-200/50 rounded-xl hover:border-amber-300 hover:bg-amber-50/30 transition-all duration-200"
+                            >
+                              <div className="flex items-center">
+                                <IconContainer variant="warning" className="mr-3 group-hover:scale-110 transition-transform">
+                                  <BadgeCheck className="w-5 h-5" />
+                                </IconContainer>
+                                <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
+                                  {cert}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
 
               {/* Financial Tab */}
-              <TabsContent value="financial" className="space-y-6">
-                {/* Financial Overview */}
+              {activeTab === "financial" && (
                 <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                   <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-full -translate-y-24 translate-x-24" />
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
-                        <LineChart className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
+                      <IconContainer variant="success">
+                        <LineChart className="w-6 h-6" />
+                      </IconContainer>
+                      <div className="ml-3">
                         <span>Financial Overview</span>
                         <CardDescription>Revenue, growth, and financial health</CardDescription>
                       </div>
@@ -996,207 +1021,146 @@ export default function CompanyDetailPage() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Revenue Growth Chart */}
-                    {displayRevenueGrowth.length > 0 && (
-                      <div className="border border-emerald-200/50 rounded-2xl p-6 bg-white/50 backdrop-blur-sm">
-                        <h4 className="font-semibold text-gray-900 mb-6 flex items-center">
-                          <TrendingUp className="w-5 h-5 text-emerald-600 mr-2" />
-                          Revenue Growth Timeline
-                        </h4>
-                        <div className="space-y-4">
-                          {displayRevenueGrowth.map((item, index) => (
-                            <div key={index} className="flex items-center group">
-                              <span className="w-16 text-sm font-medium text-gray-700">
-                                {item.year}
-                              </span>
-                              <div className="flex-1 ml-4">
-                                <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden">
-                                  <div
-                                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full transition-all duration-500 group-hover:opacity-90"
-                                    style={{ width: `${Math.min(item.growth * 2, 100)}%` }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="w-32 text-right">
-                                <span className="text-sm font-semibold text-emerald-700">
-                                  {item.amount}
-                                </span>
-                                <span className={`text-xs ml-2 ${item.growth >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                  ({item.growth >= 0 ? '+' : ''}{item.growth}%)
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </CardContent>
                 </Card>
-              </TabsContent>
+              )}
 
               {/* Operations Tab */}
-              <TabsContent value="operations" className="space-y-6">
-                {/* Operational Structure */}
-                <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-3 shadow-lg">
-                        <Cpu className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <span>Operational Structure</span>
-                        <CardDescription>Business operations and organizational details</CardDescription>
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {[
-                        { label: "Business Type", value: displayBusinessType, icon: Building },
-                        { label: "Ownership Structure", value: displayOwnership, icon: Users },
-                        { label: "Years Operating", value: `${yearsOperating} years`, icon: Calendar },
-                        { label: "Primary Location", value: displayLocation, icon: MapPin },
-                        { label: "Employee Count", value: displayEmployees, icon: UsersIcon },
-                        { label: "Industry", value: displayIndustry, icon: Building }, {/* Changed from BuildingOffice */}
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="p-5 bg-white/50 backdrop-blur-sm border border-blue-200/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-200 group"
-                        >
-                          <div className="flex items-center mb-3">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                              {item.icon && <item.icon className="w-5 h-5 text-blue-600" />}
-                            </div>
-                            <p className="text-sm font-medium text-gray-700">{item.label}</p>
-                          </div>
-                          <p className="text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
-                            {item.value}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Subsidiaries */}
-                {displaySubsidiaries.length > 0 && (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+              {activeTab === "operations" && (
+                <div className="space-y-6">
+                  {/* Operational Structure */}
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mr-3 shadow-lg">
-                          <Building2 className="w-6 h-6 text-white" />
+                        <IconContainer variant="primary">
+                          <Cpu className="w-6 h-6" />
+                        </IconContainer>
+                        <div className="ml-3">
+                          <span>Operational Structure</span>
+                          <CardDescription>Business operations and organizational details</CardDescription>
                         </div>
-                        <span>Subsidiaries & Affiliates</span>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-3">
-                        {displaySubsidiaries.map((subsidiary, index) => (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {[
+                          { label: "Business Type", value: displayBusinessType, icon: Building, variant: "primary" as const },
+                          { label: "Ownership Structure", value: displayOwnership, icon: Users, variant: "primary" as const },
+                          { label: "Years Operating", value: `${yearsOperating} years`, icon: Calendar, variant: "warning" as const },
+                          { label: "Primary Location", value: displayLocation, icon: MapPin, variant: "primary" as const },
+                          { label: "Employee Count", value: displayEmployees, icon: UsersIcon, variant: "primary" as const },
+                          { label: "Industry", value: displayIndustry, icon: Building, variant: "primary" as const },
+                        ].map((item, index) => (
                           <div
                             key={index}
-                            className="flex items-center p-4 bg-white/50 backdrop-blur-sm border border-purple-200/50 rounded-xl hover:border-purple-300 hover:bg-purple-50/30 transition-all duration-200 group"
+                            className="p-5 bg-white/50 backdrop-blur-sm border border-blue-200/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-200 group"
                           >
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                              <Building2 className="w-5 h-5 text-purple-600" />
+                            <div className="flex items-center mb-3">
+                              <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                                <item.icon className="w-5 h-5" />
+                              </IconContainer>
+                              <p className="text-sm font-medium text-gray-700">{item.label}</p>
                             </div>
-                            <span className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">
-                              {subsidiary}
-                            </span>
-                            <ChevronRight className="w-4 h-4 ml-auto text-gray-400 group-hover:text-purple-600 transition-colors" />
+                            <p className="text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                              {item.value}
+                            </p>
                           </div>
                         ))}
                       </div>
                     </CardContent>
                   </Card>
-                )}
-              </TabsContent>
+                </div>
+              )}
 
               {/* Compliance Tab */}
-              <TabsContent value="compliance" className="space-y-6">
-                {/* Compliance Status */}
-                {displayComplianceRecords.length > 0 ? (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
-                          <ShieldCheck className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <span>Regulatory Compliance</span>
-                          <CardDescription>Legal and regulatory standing</CardDescription>
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {displayComplianceRecords.map((record, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-5 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 transition-all duration-200 group"
-                        >
-                          <div className="flex items-center">
-                            <div className={`w-3 h-3 rounded-full mr-4 ${
-                              (record.score || 0) > 90
-                                ? "bg-emerald-500 animate-pulse"
-                                : (record.score || 0) > 70
-                                  ? "bg-amber-500"
-                                  : "bg-rose-500"
-                            }`} />
-                            <div>
-                              <p className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
-                                {record.type}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                Status: {record.status}
-                                {record.completedDate && (
-                                  <span className="ml-3">
-                                    Completed: {new Date(record.completedDate).toLocaleDateString()}
-                                  </span>
-                                )}
-                              </p>
+              {activeTab === "compliance" && (
+                <div className="space-y-6">
+                  {/* Compliance Status */}
+                  {displayComplianceRecords.length > 0 ? (
+                    <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <IconContainer variant="success">
+                            <ShieldCheck className="w-6 h-6" />
+                          </IconContainer>
+                          <div className="ml-3">
+                            <span>Regulatory Compliance</span>
+                            <CardDescription>Legal and regulatory standing</CardDescription>
+                          </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {displayComplianceRecords.map((record, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-5 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 transition-all duration-200 group"
+                          >
+                            <div className="flex items-center">
+                              <div className={`w-3 h-3 rounded-full mr-4 ${
+                                (record.score || 0) > 90
+                                  ? "bg-emerald-500 animate-pulse"
+                                  : (record.score || 0) > 70
+                                    ? "bg-amber-500"
+                                    : "bg-rose-500"
+                              }`} />
+                              <div>
+                                <p className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                  {record.type}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  Status: {record.status}
+                                  {record.completedDate && (
+                                    <span className="ml-3">
+                                      Completed: {new Date(record.completedDate).toLocaleDateString()}
+                                    </span>
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              {record.score && (
+                                <div className="text-right">
+                                  <div className="text-2xl font-bold text-emerald-700">
+                                    {record.score}%
+                                  </div>
+                                  <Badge
+                                    className={`mt-1 ${
+                                      record.status === "Active"
+                                        ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                                        : record.status === "Pending"
+                                          ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
+                                          : "bg-rose-100 text-rose-700 hover:bg-rose-100"
+                                    }`}
+                                  >
+                                    {record.status}
+                                  </Badge>
+                                </div>
+                              )}
                             </div>
                           </div>
-                          <div className="flex items-center gap-4">
-                            {record.score && (
-                              <div className="text-right">
-                                <div className="text-2xl font-bold text-emerald-700">
-                                  {record.score}%
-                                </div>
-                                <Badge
-                                  className={`mt-1 ${
-                                    record.status === "Active"
-                                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-                                      : record.status === "Pending"
-                                        ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
-                                        : "bg-rose-100 text-rose-700 hover:bg-rose-100"
-                                  }`}
-                                >
-                                  {record.status}
-                                </Badge>
-                              </div>
-                            )}
-                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                      <CardContent className="py-12">
+                        <div className="text-center">
+                          <IconContainer variant="default" className="w-16 h-16 mx-auto mb-6">
+                            <FileWarning className="w-8 h-8" />
+                          </IconContainer>
+                          <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                            No Compliance Data Available
+                          </h3>
+                          <p className="text-gray-600 max-w-md mx-auto">
+                            Compliance information for this company is not yet available in our records.
+                          </p>
                         </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
-                    <CardContent className="py-12">
-                      <div className="text-center">
-                        <FileWarning className="w-16 h-16 text-gray-400 mx-auto mb-6" />
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                          No Compliance Data Available
-                        </h3>
-                        <p className="text-gray-600 max-w-md mx-auto">
-                          Compliance information for this company is not yet available in our records.
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
-            </Tabs>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Verification Banner */}
             <div className={`mt-8 backdrop-blur-sm rounded-2xl border-2 p-8 shadow-xl overflow-hidden ${
