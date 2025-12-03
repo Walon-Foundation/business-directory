@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* @import "@tailwindcss/line-clamp"; */
 
 /* Add to your global CSS file */
 @keyframes float {
