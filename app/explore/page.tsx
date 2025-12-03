@@ -699,7 +699,7 @@ function EnhancedHeader({
                 <SelectTrigger className="w-full h-12 rounded-xl border-2 border-blue-200/50 bg-white/50 group-hover:border-blue-300 transition-colors">
                   <SelectValue placeholder="All Industries" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   <SelectItem value="all">All Industries</SelectItem>
                   {industries.slice(1).map((industry: string) => (
                     <SelectItem key={industry} value={industry}>
@@ -720,7 +720,7 @@ function EnhancedHeader({
                 <SelectTrigger className="w-full h-12 rounded-xl border-2 border-green-200/50 bg-white/50 group-hover:border-green-300 transition-colors">
                   <SelectValue placeholder="All Locations" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   {uniqueLocations.map((location: string) => (
                     <SelectItem key={location} value={location === "All Locations" ? "all" : location}>
                       {location}
@@ -741,7 +741,7 @@ function EnhancedHeader({
                   <SelectTrigger className="h-12 rounded-xl border-2 border-amber-200/50 bg-white/50">
                     <SelectValue placeholder="Min" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     {[0, 1, 2, 3, 4].map(rating => (
                       <SelectItem key={rating} value={rating.toString()}>
                         {rating}+ Stars
@@ -753,7 +753,7 @@ function EnhancedHeader({
                   <SelectTrigger className="h-12 rounded-xl border-2 border-amber-200/50 bg-white/50">
                     <SelectValue placeholder="Max" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     {[1, 2, 3, 4, 5].map(rating => (
                       <SelectItem key={rating} value={rating.toString()}>
                         Up to {rating}
