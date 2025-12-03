@@ -8,6 +8,13 @@
       "when": 1764763057336,
       "tag": "0000_many_talos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764797108019,
+      "tag": "0001_daffy_thor",
+      "breakpoints": true
     }
   ]
 }

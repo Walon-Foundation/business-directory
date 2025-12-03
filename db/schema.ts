@@ -323,3 +323,30 @@ export type DetailedBusiness = Business & {
   yearsOperating?: number;
   serviceCoverage?: string;
 };
+
+
+
+export const sourceEnum = pgEnum("source", [
+  "web",
+  "whatsapp"
+])
+
+export const complaints = pgTable("complaints", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  businessId: uuid("business_id").notNull(),
+  username: varchar("username", { length:100}),
+  type: varchar("type", { length: 50 }).notNull(), 
+  description: text("description"),
+  evidenceUrl: text("evidence_url"),
+  userPhone: varchar("user_phone", { length: 20 }),
+  source: sourceEnum("source").default("web"), 
+  status: varchar("status", { length: 20 })
+    .default("pending"), 
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("complaint_business_idx").on(table.businessId),
+  index("complaint_created_idx").on(table.createdAt.desc()),
+]);
+
+export type Complaint = typeof complaints.$inferSelect;
+export type NewComplaint = typeof complaints.$inferInsert;
