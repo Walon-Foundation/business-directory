@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Terminal,
   Code,
@@ -18,63 +20,108 @@ import {
   AlertCircle,
   Clock,
   Users,
+  Building2,
+  MapPin,
+  Star,
+  TrendingUp,
+  Sparkles,
+  Layers,
+  Target,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 
 export default function APIPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+      {/* Animated Background Effects */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-60 -left-40 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 left-1/2 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
+      </div>
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5" />
-
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-violet-600/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.08),transparent_50%)]" />
+        
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-violet-500/10 text-purple-700 border-purple-200/50 backdrop-blur-sm">
+            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 text-purple-700 border-purple-200/50 backdrop-blur-sm shadow-lg animate-pulse-subtle">
               <Code className="w-4 h-4 mr-2" />
-              Open API Platform
+              Open Business Intelligence API
             </Badge>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Build with{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-600">
+              Power Your Apps with{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-600 animate-gradient">
                 Sierra Leone Business Data
               </span>
             </h1>
 
             <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Access verified business information through our open API. No API
-              key required. Build applications that leverage official Sierra
-              Leone business registry data.
+              Access the complete Sierra Leone business registry through our RESTful API. 
+              No authentication required. Build powerful applications with verified, 
+              real-time business intelligence.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="px-8 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700"
+                className="px-8 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
               >
-                <Terminal className="mr-2 w-5 h-5" />
-                Get Started
+                <Terminal className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                Start Building
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="px-8 border-purple-300"
+                className="px-8 border-purple-300 hover:border-purple-400 hover:bg-purple-50/50 transition-all duration-300 group"
               >
-                <BookOpen className="mr-2 w-5 h-5" />
+                <BookOpen className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 Documentation
               </Button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-12 sm:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { value: "50K+", label: "Businesses", icon: Building2, color: "purple" },
+            { value: "24/7", label: "Uptime", icon: Clock, color: "green" },
+            { value: "0ms", label: "Latency", icon: Zap, color: "blue" },
+            { value: "100%", label: "Free Access", icon: LockOpen, color: "amber" },
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="relative p-6 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 flex items-center justify-center shadow-lg`}>
+                  <stat.icon className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+              </div>
+              <div className="text-sm font-semibold text-gray-900">{stat.label}</div>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -84,37 +131,36 @@ export default function APIPage() {
           {[
             {
               icon: LockOpen,
-              title: "No API Key Required",
-              description:
-                "Open access for all developers. No registration or authentication needed.",
-              color: "green",
+              title: "Zero Authentication",
+              description: "No API keys, no registration. Instant access to all endpoints.",
+              color: "emerald",
+              gradient: "from-emerald-500 to-green-500",
             },
             {
               icon: Zap,
               title: "Real-time Data",
-              description:
-                "Direct integration with Corporate Affairs Commission for up-to-date information.",
+              description: "Live sync with Corporate Affairs Commission database.",
               color: "blue",
+              gradient: "from-blue-500 to-cyan-500",
             },
             {
-              icon: Shield,
-              title: "Verified Sources",
-              description:
-                "All data is officially verified and legally accurate.",
-              color: "amber",
+              icon: ShieldCheck,
+              title: "Government Verified",
+              description: "All data is officially verified and legally accurate.",
+              color: "purple",
+              gradient: "from-purple-500 to-violet-500",
             },
           ].map((feature, index) => (
             <Card
               key={index}
-              className="border-2 hover:border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group overflow-hidden"
             >
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`} />
               <CardContent className="p-6">
-                <div
-                  className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${feature.color}-500 to-${feature.color}-600 flex items-center justify-center mb-4`}
-                >
-                  <feature.icon className="w-6 h-6 text-white" />
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600">{feature.description}</p>
@@ -126,585 +172,591 @@ export default function APIPage() {
         {/* API Endpoints */}
         <div className="mb-12 sm:mb-16">
           <div className="text-center mb-10">
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700">
+            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200/50 backdrop-blur-sm">
               <Server className="w-4 h-4 mr-2" />
-              Available Endpoints
+              RESTful API Endpoints
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-              API Endpoints
+              Powerful Query Parameters
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Currently available endpoints with more coming soon
+              Advanced filtering and sorting capabilities for precise data retrieval
             </p>
           </div>
 
-          <div className="space-y-6">
-            {/* List All Businesses Endpoint */}
-            <Card className="border-2 border-blue-100/50 bg-gradient-to-b from-white to-blue-50/30 shadow-lg overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500" />
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        GET
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="bg-blue-50 text-blue-700"
-                      >
-                        <Globe className="w-3 h-3 mr-1" />
-                        Public Access
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl font-bold text-gray-900">
-                      List All Businesses
-                    </CardTitle>
-                    <CardDescription className="text-gray-600">
-                      Retrieve a paginated list of all registered businesses
-                      with filtering options
-                    </CardDescription>
-                  </div>
-                  <Badge className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700">
-                    <Download className="w-3 h-3 mr-1" />
-                    Available Now
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* URL */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Terminal className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Endpoint URL
-                      </span>
-                    </div>
-                    <div className="bg-gray-900 text-gray-100 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                      GET https://api.slbizregistry.gov.sl/v1/businesses
-                    </div>
-                  </div>
+          <Tabs defaultValue="list" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 p-1 rounded-2xl shadow-lg">
+              <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all">
+                <Filter className="w-4 h-4 mr-2" />
+                List Businesses
+              </TabsTrigger>
+              <TabsTrigger value="single" className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all">
+                <Search className="w-4 h-4 mr-2" />
+                Single Business
+              </TabsTrigger>
+            </TabsList>
 
-                  {/* Parameters */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Filter className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Query Parameters
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        {
-                          param: "page",
-                          type: "number",
-                          default: "1",
-                          desc: "Page number for pagination",
-                        },
-                        {
-                          param: "limit",
-                          type: "number",
-                          default: "20",
-                          desc: "Number of items per page (max: 100)",
-                        },
-                        {
-                          param: "industry",
-                          type: "string",
-                          default: "-",
-                          desc: 'Filter by industry (e.g., "technology")',
-                        },
-                        {
-                          param: "location",
-                          type: "string",
-                          default: "-",
-                          desc: 'Filter by location (e.g., "freetown")',
-                        },
-                        {
-                          param: "status",
-                          type: "string",
-                          default: "-",
-                          desc: "Filter by status: active, pending, inactive",
-                        },
-                        {
-                          param: "verified",
-                          type: "boolean",
-                          default: "-",
-                          desc: "Filter by verification status",
-                        },
-                        {
-                          param: "search",
-                          type: "string",
-                          default: "-",
-                          desc: "Search across name, registration number, description",
-                        },
-                      ].map((param, idx) => (
-                        <div
-                          key={idx}
-                          className="grid grid-cols-1 md:grid-cols-4 gap-2 p-3 bg-gray-50 rounded-lg"
+            <TabsContent value="list" className="space-y-6">
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500" />
+                <CardHeader>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          GET
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className="bg-blue-50 text-blue-700"
                         >
-                          <div className="font-mono text-sm">
-                            <span className="text-purple-600">
-                              {param.param}
-                            </span>
-                          </div>
-                          <div>
-                            <Badge variant="outline" className="text-xs">
-                              {param.type}
-                            </Badge>
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            Default:{" "}
-                            <span className="font-mono">{param.default}</span>
-                          </div>
-                          <div className="text-sm text-gray-600 md:col-span-2 md:col-start-4">
-                            {param.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Example Request */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Code className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Example Request
-                      </span>
-                    </div>
-                    <div className="bg-gray-900 rounded-lg overflow-hidden">
-                      <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                        JavaScript (Fetch API)
+                          <Globe className="w-3 h-3 mr-1" />
+                          Public Access
+                        </Badge>
                       </div>
-                      <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                        {`fetch('https://api.slbizregistry.gov.sl/v1/businesses?page=1&limit=10&industry=technology&verified=true')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));`}
-                      </pre>
+                      <CardTitle className="text-xl font-bold text-gray-900">
+                        List All Businesses
+                      </CardTitle>
+                      <CardDescription className="text-gray-600">
+                        Retrieve paginated business data with advanced filtering options
+                      </CardDescription>
                     </div>
+                    <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700">
+                      <Download className="w-3 h-3 mr-1" />
+                      Available Now
+                    </Badge>
                   </div>
-
-                  {/* Example Response */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <FileJson className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Example Response
-                      </span>
-                    </div>
-                    <div className="bg-gray-900 rounded-lg overflow-hidden">
-                      <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                        JSON Response
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-8">
+                    {/* URL */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Terminal className="w-4 h-4 text-blue-600" />
+                        <span className="text-sm font-semibold text-gray-700">
+                          Endpoint URL
+                        </span>
                       </div>
-                      <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                        {`{
-  "success": true,
-  "data": {
-    "businesses": [
-      {
-        "id": "SL-2023-001",
-        "name": "Africell Sierra Leone Limited",
-        "registrationNumber": "C123456",
-        "status": "Active",
-        "industry": "Telecommunications",
-        "location": "Freetown",
-        "foundedYear": 2010,
-        "employees": "500-1000",
-        "verificationLevel": "Verified",
-        "rating": 4.8,
-        "website": "https://africell.sl"
-      }
-    ],
-    "pagination": {
-      "page": 1,
-      "limit": 10,
-      "total": 8432,
-      "pages": 844
-    }
-  },
-  "timestamp": "2024-01-15T10:30:00Z"
-}`}
-                      </pre>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Get Single Business Endpoint */}
-            <Card className="border-2 border-green-100/50 bg-gradient-to-b from-white to-green-50/30 shadow-lg overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500" />
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        GET
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="bg-green-50 text-green-700"
-                      >
-                        <Globe className="w-3 h-3 mr-1" />
-                        Public Access
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl font-bold text-gray-900">
-                      Get Single Business
-                    </CardTitle>
-                    <CardDescription className="text-gray-600">
-                      Retrieve detailed information about a specific business by
-                      ID, name, or registration number
-                    </CardDescription>
-                  </div>
-                  <Badge className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 text-green-700">
-                    <Download className="w-3 h-3 mr-1" />
-                    Available Now
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* URL */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Terminal className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Endpoint URL
-                      </span>
-                    </div>
-                    <div className="bg-gray-900 text-gray-100 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                      GET https://api.slbizregistry.gov.sl/v1/businesses/
-                      {"{identifier}"}
-                    </div>
-                    <p className="text-sm text-gray-500 mt-2">
-                      <span className="font-medium">Identifier can be:</span>{" "}
-                      Business ID (SL-2023-001), Registration Number (C123456),
-                      or Business Name (Africell Sierra Leone Limited)
-                    </p>
-                  </div>
-
-                  {/* Example Requests */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Code className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Example Requests
-                      </span>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="bg-gray-900 rounded-lg overflow-hidden">
-                        <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                          By Business ID
+                      <div className="relative bg-gradient-to-r from-blue-900 to-gray-900 text-gray-100 rounded-xl p-5 font-mono text-sm overflow-x-auto shadow-inner">
+                        <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-cyan-500 rounded-l-xl" />
+                        <div className="pl-4">
+                          GET /api/explore
                         </div>
-                        <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                          {`fetch('https://api.slbizregistry.gov.sl/v1/businesses/SL-2023-001')
-  .then(response => response.json())
-  .then(data => console.log(data));`}
-                        </pre>
                       </div>
-                      <div className="bg-gray-900 rounded-lg overflow-hidden">
-                        <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                          By Registration Number
-                        </div>
-                        <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                          {`fetch('https://api.slbizregistry.gov.sl/v1/businesses/C123456')
-  .then(response => response.json())
-  .then(data => console.log(data));`}
-                        </pre>
+                    </div>
+
+                    {/* Parameters Grid */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Layers className="w-5 h-5 text-blue-600" />
+                        <span className="text-lg font-semibold text-gray-900">
+                          Available Parameters
+                        </span>
                       </div>
-                      <div className="bg-gray-900 rounded-lg overflow-hidden">
-                        <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                          By Business Name (URL encoded)
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        {[
+                          { param: "page", type: "number", desc: "Page number (default: 1)" },
+                          { param: "limit", type: "number", desc: "Items per page (max: 100)" },
+                          { param: "search", type: "string", desc: "Search across multiple fields" },
+                          { param: "status", type: "string", desc: "active, pending, suspended, inactive" },
+                          { param: "industry", type: "string", desc: "Filter by industry" },
+                          { param: "businessType", type: "string", desc: "Type of business" },
+                          { param: "ownership", type: "string", desc: "Ownership structure" },
+                          { param: "location", type: "string", desc: "General location" },
+                          { param: "city", type: "string", desc: "Specific city" },
+                          { param: "province", type: "string", desc: "Province/region" },
+                          { param: "minRating", type: "number", desc: "Minimum rating (1-5)" },
+                          { param: "maxRating", type: "number", desc: "Maximum rating (1-5)" },
+                          { param: "minCompliance", type: "number", desc: "Minimum compliance score" },
+                          { param: "maxCompliance", type: "number", desc: "Maximum compliance score" },
+                          { param: "sortBy", type: "string", desc: "Field to sort by" },
+                          { param: "sortOrder", type: "string", desc: "asc or desc" },
+                          { param: "tags", type: "string", desc: "Comma-separated tags" },
+                          { param: "verificationLevel", type: "string", desc: "verified, pending, unverified" },
+                        ].map((param, idx) => (
+                          <div
+                            key={idx}
+                            className="group relative p-4 bg-white/50 backdrop-blur-sm border border-blue-100/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-200"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-mono text-sm font-semibold text-blue-700">
+                                    {param.param}
+                                  </span>
+                                  <Badge variant="outline" className="text-xs px-2 py-0.5">
+                                    {param.type}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-gray-600">{param.desc}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Example Request */}
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Code className="w-5 h-5 text-blue-600" />
+                          <span className="text-lg font-semibold text-gray-900">
+                            Example Request
+                          </span>
                         </div>
-                        <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                          {`fetch('https://api.slbizregistry.gov.sl/v1/businesses/Africell%20Sierra%20Leone%20Limited')
-  .then(response => response.json())
-  .then(data => console.log(data));`}
+                        <Badge className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700">
+                          JavaScript
+                        </Badge>
+                      </div>
+                      <div className="relative bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                        <div className="px-4 py-3 bg-gray-800 text-gray-300 text-sm font-medium flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                          Live Example
+                        </div>
+                        <pre className="p-5 text-sm text-gray-100 overflow-x-auto">
+                          {`// Advanced search with multiple filters
+const fetchBusinesses = async () => {
+  const params = new URLSearchParams({
+    page: '1',
+    limit: '20',
+    search: 'technology',
+    industry: 'IT_Services',
+    status: 'active',
+    minRating: '4',
+    verificationLevel: 'verified',
+    sortBy: 'complianceScore',
+    sortOrder: 'desc',
+    tags: 'startup,innovative,tech',
+  });
+
+  const response = await fetch(\`/api/explore?\${params}\`);
+  const data = await response.json();
+  return data;
+};`}
                         </pre>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Example Response */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <FileJson className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Example Response
-                      </span>
-                    </div>
-                    <div className="bg-gray-900 rounded-lg overflow-hidden">
-                      <div className="px-4 py-2 bg-gray-800 text-gray-300 text-sm font-medium">
-                        JSON Response
+                    {/* Try It Yourself */}
+                    <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-2xl border-2 border-blue-200/50 p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <Zap className="w-6 h-6 text-blue-600" />
+                        <h3 className="text-lg font-semibold text-gray-900">Try It Yourself</h3>
                       </div>
-                      <pre className="p-4 text-sm text-gray-100 overflow-x-auto">
-                        {`{
-  "success": true,
-  "data": {
-    "business": {
-      "id": "SL-2023-001",
-      "name": "Africell Sierra Leone Limited",
-      "registrationNumber": "C123456",
-      "status": "Active",
-      "industry": "Telecommunications",
-      "location": "Freetown",
-      "foundedYear": 2010,
-      "employees": "500-1000",
-      "revenue": "$100M+",
-      "description": "Leading telecommunications provider...",
-      "verificationLevel": "Verified",
-      "rating": 4.8,
-      "tags": ["Telecom", "ISP", "Mobile", "National"],
-      "website": "https://africell.sl",
-      "contactEmail": "info@africell.sl",
-      "address": "25 Siaka Stevens Street, Freetown",
-      "taxId": "TAX-2023-001234",
-      "businessType": "Private Limited Company",
-      "ownership": "Foreign Investment",
-      "yearEnd": "December 31",
-      "lastUpdated": "2024-01-15T08:30:00Z",
-      "complianceScore": 92,
-      "services": ["Mobile Voice Services", "4G/5G Data Services"],
-      "certifications": ["ISO 9001:2015 Certified", "GSMA Member"]
-    }
-  },
-  "timestamp": "2024-01-15T10:30:00Z"
-}`}
-                      </pre>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-gray-700">Quick Examples:</label>
+                          <div className="space-y-2">
+                            {[
+                              { label: "Top Rated Businesses", query: "?sortBy=rating&sortOrder=desc&minRating=4" },
+                              { label: "Newest Companies", query: "?sortBy=foundedYear&sortOrder=desc" },
+                              { label: "High Compliance", query: "?minCompliance=90&verificationLevel=verified" },
+                            ].map((example, idx) => (
+                              <div
+                                key={idx}
+                                className="p-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-lg hover:border-blue-300 transition-all group cursor-pointer"
+                                onClick={() => navigator.clipboard.writeText(`/api/explore${example.query}`)}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium text-gray-900">{example.label}</span>
+                                  <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to copy
+                                  </span>
+                                </div>
+                                <code className="text-xs text-gray-600 font-mono">{example.query}</code>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-gray-700">Response Preview:</label>
+                          <div className="p-4 bg-gray-900/90 backdrop-blur-sm rounded-lg border border-gray-700/50">
+                            <div className="text-xs text-gray-400 mb-2">Pagination included</div>
+                            <div className="text-sm text-green-400 font-mono">✓ 200 OK</div>
+                            <div className="text-xs text-gray-300 mt-2">
+                              Returns paginated array with metadata
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+                <CardFooter className="bg-gradient-to-r from-blue-50/30 to-cyan-50/30 border-t border-blue-100/50">
+                  <Button
+                    variant="ghost"
+                    className="text-blue-700 hover:text-blue-800 hover:bg-blue-100/50"
+                    onClick={() => window.open('/api/explore', '_blank')}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Test Endpoint Live
+                  </Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="single" className="space-y-6">
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500" />
+                <CardHeader>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          GET
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className="bg-emerald-50 text-emerald-700"
+                        >
+                          <Globe className="w-3 h-3 mr-1" />
+                          Public Access
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-xl font-bold text-gray-900">
+                        Get Business Details
+                      </CardTitle>
+                      <CardDescription className="text-gray-600">
+                        Retrieve comprehensive information about a specific business
+                      </CardDescription>
+                    </div>
+                    <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700">
+                      <Download className="w-3 h-3 mr-1" />
+                      Available Now
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-8">
+                    {/* URL */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Terminal className="w-4 h-4 text-emerald-600" />
+                        <span className="text-sm font-semibold text-gray-700">
+                          Endpoint URL
+                        </span>
+                      </div>
+                      <div className="relative bg-gradient-to-r from-emerald-900 to-gray-900 text-gray-100 rounded-xl p-5 font-mono text-sm overflow-x-auto shadow-inner">
+                        <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-emerald-500 to-green-500 rounded-l-xl" />
+                        <div className="pl-4">
+                          GET /api/explore/{"{id}"}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-3">
+                        <span className="font-medium text-emerald-700">ID can be:</span> Database ID, Registration Number, or Business Name
+                      </p>
+                    </div>
+
+                    {/* Example Requests */}
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <Code className="w-5 h-5 text-emerald-600" />
+                          <span className="text-lg font-semibold text-gray-900">
+                            Example Usage
+                          </span>
+                        </div>
+                        <div className="flex gap-2">
+                          <Badge className="bg-emerald-500/10 text-emerald-700">ID</Badge>
+                          <Badge className="bg-blue-500/10 text-blue-700">Registration</Badge>
+                          <Badge className="bg-purple-500/10 text-purple-700">Name</Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {[
+                          {
+                            type: "By ID",
+                            color: "emerald",
+                            code: "/api/explore/abc123-def456-789",
+                            desc: "Internal database identifier"
+                          },
+                          {
+                            type: "By Registration",
+                            color: "blue",
+                            code: "/api/explore/C123456",
+                            desc: "Official registration number"
+                          },
+                          {
+                            type: "By Name",
+                            color: "purple",
+                            code: "/api/explore/Africell Sierra Leone",
+                            desc: "URL-encoded business name"
+                          },
+                        ].map((example, idx) => (
+                          <div
+                            key={idx}
+                            className="group relative p-4 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-xl hover:border-emerald-300 hover:bg-emerald-50/30 transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className={`w-3 h-3 rounded-full bg-${example.color}-500`} />
+                              <span className="text-sm font-semibold text-gray-900">
+                                {example.type}
+                              </span>
+                            </div>
+                            <div className="bg-gray-900 text-gray-100 rounded-lg p-3 font-mono text-xs overflow-x-auto mb-2">
+                              {example.code}
+                            </div>
+                            <p className="text-xs text-gray-600">{example.desc}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Rich Response Preview */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <FileJson className="w-5 h-5 text-emerald-600" />
+                        <span className="text-lg font-semibold text-gray-900">
+                          Rich Data Response
+                        </span>
+                      </div>
+                      
+                      <div className="bg-gradient-to-br from-emerald-50/30 to-green-50/30 border-2 border-emerald-200/50 rounded-2xl p-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                          {[
+                            { label: "Basic Info", icon: Building2, color: "emerald" },
+                            { label: "Financial", icon: TrendingUp, color: "blue" },
+                            { label: "Compliance", icon: Shield, color: "green" },
+                            { label: "Operations", icon: Target, color: "purple" },
+                          ].map((section, idx) => (
+                            <div key={idx} className="text-center group">
+                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${section.color}-500 to-${section.color}-600 mx-auto mb-2 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                                <section.icon className="w-6 h-6 text-white" />
+                              </div>
+                              <div className="text-sm font-semibold text-gray-900">
+                                {section.label}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
+                            <div className="text-sm font-medium text-gray-900">Full Company Profile</div>
+                            <Badge className="bg-emerald-100 text-emerald-700">40+ Fields</Badge>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
+                            <div className="text-sm font-medium text-gray-900">Directors & Leadership</div>
+                            <Badge className="bg-blue-100 text-blue-700">Array Data</Badge>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
+                            <div className="text-sm font-medium text-gray-900">Financial Metrics</div>
+                            <Badge className="bg-purple-100 text-purple-700">Growth Data</Badge>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
+                            <div className="text-sm font-medium text-gray-900">Compliance Records</div>
+                            <Badge className="bg-green-100 text-green-700">Live Status</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
 
-        {/* Rate Limits & Guidelines */}
+        {/* Advanced Features Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-12 sm:mb-16">
           {/* Rate Limits */}
-          <Card className="border-2 border-amber-100/50 bg-gradient-to-b from-white to-amber-50/30">
+          <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-amber-50/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-amber-600" />
-                Rate Limits
+                <Zap className="w-6 h-6 mr-2 text-amber-600" />
+                Performance & Limits
               </CardTitle>
-              <CardDescription>Current API usage limitations</CardDescription>
+              <CardDescription>Optimized for high-performance applications</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
-                  <div>
-                    <div className="font-semibold text-gray-900">
-                      Requests per Minute
+              <div className="space-y-6">
+                {[
+                  { label: "Requests per Second", value: "10", color: "green", icon: "⚡" },
+                  { label: "Response Time", value: "< 100ms", color: "blue", icon: "🚀" },
+                  { label: "Cache Duration", value: "5 minutes", color: "purple", icon: "💾" },
+                  { label: "Max Page Size", value: "100 items", color: "amber", icon: "📄" },
+                ].map((metric, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-4 bg-white/50 backdrop-blur-sm border border-amber-100/50 rounded-xl hover:border-amber-300 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">{metric.icon}</span>
+                      <div>
+                        <div className="font-semibold text-gray-900">{metric.label}</div>
+                        <div className="text-sm text-gray-600">Production ready</div>
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-600">Per IP address</div>
-                  </div>
-                  <div className="text-2xl font-bold text-amber-600">60</div>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                  <div>
-                    <div className="font-semibold text-gray-900">
-                      Requests per Hour
+                    <div className={`text-2xl font-bold text-${metric.color}-600`}>
+                      {metric.value}
                     </div>
-                    <div className="text-sm text-gray-600">Per IP address</div>
                   </div>
-                  <div className="text-2xl font-bold text-blue-600">1,000</div>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div>
-                    <div className="font-semibold text-gray-900">
-                      Requests per Day
+                ))}
+                
+                <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/5 to-orange-500/5 rounded-xl border border-amber-200/50">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 mb-1">
+                        Need Higher Limits?
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Contact us for enterprise access with increased rate limits and priority support.
+                      </p>
                     </div>
-                    <div className="text-sm text-gray-600">Per IP address</div>
-                  </div>
-                  <div className="text-2xl font-bold text-green-600">
-                    10,000
                   </div>
                 </div>
-              </div>
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">
-                  <AlertCircle className="w-4 h-4 inline mr-1 text-gray-400" />
-                  Rate limits are subject to change as we scale. Contact us for
-                  higher limits.
-                </p>
               </div>
             </CardContent>
           </Card>
 
           {/* Coming Soon */}
-          <Card className="border-2 border-purple-100/50 bg-gradient-to-b from-white to-purple-50/30">
+          <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-violet-500" />
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-purple-600" />
-                Coming Soon
+                <Sparkles className="w-6 h-6 mr-2 text-purple-600" />
+                Roadmap & Future
               </CardTitle>
-              <CardDescription>Planned API endpoints</CardDescription>
+              <CardDescription>Exciting features coming soon</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {[
                   {
-                    endpoint: "Search by Director/CEO",
+                    feature: "GraphQL API",
                     status: "In Development",
+                    desc: "Flexible querying with GraphQL",
+                    eta: "Q1 2024"
                   },
-                  { endpoint: "Industry Statistics", status: "Planned" },
-                  { endpoint: "Business Verification API", status: "Planned" },
-                  { endpoint: "Webhook Support", status: "Planned" },
-                  { endpoint: "Bulk Data Export", status: "Planned" },
-                  { endpoint: "Historical Data Access", status: "Planned" },
+                  {
+                    feature: "WebSocket Stream",
+                    status: "Planned",
+                    desc: "Real-time business updates",
+                    eta: "Q2 2024"
+                  },
+                  {
+                    feature: "Bulk Export",
+                    status: "Planned",
+                    desc: "CSV/JSON full dataset export",
+                    eta: "Q2 2024"
+                  },
+                  {
+                    feature: "Advanced Analytics",
+                    status: "Research",
+                    desc: "Industry trends and insights",
+                    eta: "Q3 2024"
+                  },
+                  {
+                    feature: "Webhook Support",
+                    status: "Planned",
+                    desc: "Real-time event notifications",
+                    eta: "Q2 2024"
+                  },
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between p-4 bg-white/50 backdrop-blur-sm border border-purple-100/50 rounded-xl hover:border-purple-300 transition-all group"
                   >
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-md bg-gradient-to-r from-purple-500/10 to-violet-500/10 flex items-center justify-center mr-3">
-                        <Cpu className="w-4 h-4 text-purple-600" />
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/10 to-violet-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Cpu className="w-5 h-5 text-purple-600" />
                       </div>
-                      <span className="font-medium text-gray-900">
-                        {item.endpoint}
-                      </span>
+                      <div>
+                        <div className="font-semibold text-gray-900">{item.feature}</div>
+                        <div className="text-sm text-gray-600">{item.desc}</div>
+                      </div>
                     </div>
-                    <Badge
-                      variant="outline"
-                      className="bg-gradient-to-r from-purple-500/5 to-violet-500/5 text-purple-700"
-                    >
-                      {item.status}
-                    </Badge>
+                    <div className="text-right">
+                      <Badge className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 text-purple-700 mb-1">
+                        {item.status}
+                      </Badge>
+                      <div className="text-xs text-gray-500">{item.eta}</div>
+                    </div>
                   </div>
                 ))}
-              </div>
-              <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/5 to-violet-500/5 rounded-lg border border-purple-200/50">
-                <p className="text-sm text-gray-700">
-                  <Users className="w-4 h-4 inline mr-1 text-purple-600" />
-                  Have suggestions for new endpoints? Contact our developer
-                  relations team.
-                </p>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Quick Start Guide */}
-        <Card className="border-2 border-blue-100/50 bg-gradient-to-b from-white to-blue-50/30">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
-              Quick Start Guide
-            </CardTitle>
-            <CardDescription>Get started in 5 minutes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-6">
-                {[
-                  {
-                    step: 1,
-                    title: "Make Your First Request",
-                    description:
-                      "Start with a simple GET request to explore the data",
-                    code: "curl https://api.slbizregistry.gov.sl/v1/businesses",
-                  },
-                  {
-                    step: 2,
-                    title: "Add Parameters",
-                    description: "Filter results with query parameters",
-                    code: "curl 'https://api.slbizregistry.gov.sl/v1/businesses?industry=technology&verified=true'",
-                  },
-                  {
-                    step: 3,
-                    title: "Get Detailed Data",
-                    description: "Retrieve specific business information",
-                    code: "curl https://api.slbizregistry.gov.sl/v1/businesses/SL-2023-001",
-                  },
-                ].map((step, index) => (
-                  <div
-                    key={index}
-                    className="relative p-6 bg-white border border-gray-200 rounded-xl"
-                  >
-                    <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold">
-                      {step.step}
+        {/* Quick Start CTA */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-violet-600/10 to-blue-600/10 rounded-3xl blur-xl" />
+          <Card className="relative border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-2xl overflow-hidden">
+            <CardHeader className="text-center">
+              <CardTitle className="text-3xl font-bold text-gray-900 mb-4">
+                Start Building in Seconds
+              </CardTitle>
+              <CardDescription className="text-lg text-gray-600">
+                No setup required. Just start making requests.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="max-w-3xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    {
+                      title: "1. Make Request",
+                      desc: "Use any HTTP client",
+                      code: "curl /api/explore",
+                    },
+                    {
+                      title: "2. Add Filters",
+                      desc: "Refine your results",
+                      code: "?status=active&minRating=4",
+                    },
+                    {
+                      title: "3. Get Data",
+                      desc: "Receive JSON response",
+                      code: '{"data": [], "pagination": {}}',
+                    },
+                  ].map((step, idx) => (
+                    <div
+                      key={idx}
+                      className="relative p-6 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl group hover:-translate-y-1 transition-all"
+                    >
+                      <div className="absolute -top-3 -left-3 w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-violet-500 flex items-center justify-center text-white font-bold shadow-lg">
+                        {idx + 1}
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4">{step.desc}</p>
+                      <div className="bg-gray-900 text-gray-100 rounded-lg p-3 font-mono text-sm overflow-x-auto">
+                        {step.code}
+                      </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{step.description}</p>
-                    <div className="bg-gray-900 text-gray-100 rounded-lg p-3 font-mono text-xs overflow-x-auto">
-                      {step.code}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-200">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Need Help?
-                    </h3>
-                    <p className="text-gray-600">
-                      Check our documentation or contact our developer support
-                      team.
-                    </p>
-                  </div>
+                <div className="text-center">
                   <Button
-                    variant="outline"
-                    className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                    size="lg"
+                    className="px-10 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                    onClick={() => window.open('/api/explore', '_blank')}
                   >
-                    <ExternalLink className="mr-2 w-4 h-4" />
-                    View Full Documentation
+                    <Terminal className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                    Try Live API Endpoint
                   </Button>
+                  <p className="text-sm text-gray-500 mt-4">
+                    No API key required • Rate limited per IP • Commercial use allowed
+                  </p>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Footer */}
-      {/* <div className="border-t border-gray-200/50 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center">
-                <Terminal className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-left">
-                <div className="text-lg font-bold text-gray-900">SL BizRegistry API</div>
-                <div className="text-sm text-gray-600">Open Data • No API Key Required • Official Source</div>
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-6 mb-8">
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-                Data License
-              </a>
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-                GitHub
-              </a>
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-                Support
-              </a>
-            </div>
-            
-            <div className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Sierra Leone Business Registry API. All data is public domain.
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
