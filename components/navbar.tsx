@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { Building2, Menu, X } from 'lucide-react';
-import { useState } from 'react';
-import Link from 'next/link';
+import { Building2, Menu, X } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: 'Explore', href: '/explore' },
-    { label: 'Features', href: '#features' },
-    { label: 'Businesses', href: '#businesses' },
-    { label: 'API', href: '/api-page' },
-    { label: 'About', href: '/about' },
+    { label: "Explore", href: "/explore" },
+    { label: "Features", href: "#features" },
+    { label: "Businesses", href: "#businesses" },
+    { label: "API", href: "/api-page" },
+    { label: "About", href: "/about" },
   ];
 
   return (
@@ -55,7 +55,11 @@ export default function Navbar() {
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>

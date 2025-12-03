@@ -4,7 +4,8 @@
 
 /* Add to your global CSS file */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
   25% {
@@ -23,7 +24,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.1;
   }
   50% {

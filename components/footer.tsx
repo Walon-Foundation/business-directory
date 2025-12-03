@@ -1,4 +1,4 @@
-import { Building2 } from 'lucide-react';
+import { Building2 } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,7 +10,9 @@ export default function Footer() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center">
               <Building2 className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900">SLBizRegistry</span>
+            <span className="text-xl font-bold text-gray-900">
+              SLBizRegistry
+            </span>
           </div>
           <p className="text-gray-600 text-center max-w-md">
             The official directory for verified businesses in Sierra Leone.
