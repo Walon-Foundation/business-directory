@@ -2,7 +2,18 @@ import { errorResponse } from "@/lib/errorHandler";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/db";
 import { business, Business } from "@/db/schema";
-import { sql, and, or, like, ilike, desc, asc, eq, inArray, between } from "drizzle-orm";
+import {
+  sql,
+  and,
+  or,
+  like,
+  ilike,
+  desc,
+  asc,
+  eq,
+  inArray,
+  between,
+} from "drizzle-orm";
 import { z } from "zod";
 
 // Validation schema for query parameters
@@ -11,19 +22,45 @@ const querySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   search: z.string().optional(),
   status: z.enum(["active", "pending", "suspended", "inactive"]).optional(),
-  industry: z.enum([
-    "technology", "banking_finance", "agriculture", "mining", "healthcare",
-    "telecommunications", "logistics_shipping", "fisheries", "construction",
-    "manufacturing", "retail", "tourism_hospitality", "education",
-    "energy_utilities", "real_estate", "transportation", "media_entertainment",
-    "professional_services", "other"
-  ]).optional(),
-  businessType: z.enum([
-    "private_limited", "public_limited", "sole_proprietorship",
-    "partnership", "government_agency", "ngo", "cooperative",
-    "foreign_branch", "other"
-  ]).optional(),
-  ownership: z.enum(["local", "foreign", "joint_venture", "government", "mixed"]).optional(),
+  industry: z
+    .enum([
+      "technology",
+      "banking_finance",
+      "agriculture",
+      "mining",
+      "healthcare",
+      "telecommunications",
+      "logistics_shipping",
+      "fisheries",
+      "construction",
+      "manufacturing",
+      "retail",
+      "tourism_hospitality",
+      "education",
+      "energy_utilities",
+      "real_estate",
+      "transportation",
+      "media_entertainment",
+      "professional_services",
+      "other",
+    ])
+    .optional(),
+  businessType: z
+    .enum([
+      "private_limited",
+      "public_limited",
+      "sole_proprietorship",
+      "partnership",
+      "government_agency",
+      "ngo",
+      "cooperative",
+      "foreign_branch",
+      "other",
+    ])
+    .optional(),
+  ownership: z
+    .enum(["local", "foreign", "joint_venture", "government", "mixed"])
+    .optional(),
   location: z.string().optional(),
   city: z.string().optional(),
   province: z.string().optional(),
@@ -31,7 +68,16 @@ const querySchema = z.object({
   maxRating: z.coerce.number().min(0).max(5).optional(),
   minCompliance: z.coerce.number().min(0).max(100).optional(),
   maxCompliance: z.coerce.number().min(0).max(100).optional(),
-  sortBy: z.enum(["name", "rating", "complianceScore", "createdAt", "foundedYear", "revenue"]).default("name"),
+  sortBy: z
+    .enum([
+      "name",
+      "rating",
+      "complianceScore",
+      "createdAt",
+      "foundedYear",
+      "revenue",
+    ])
+    .default("name"),
   sortOrder: z.enum(["asc", "desc"]).default("asc"),
   tags: z.string().optional(), // comma-separated tags
   verificationLevel: z.enum(["verified", "pending", "unverified"]).optional(),
@@ -42,11 +88,15 @@ export async function GET(req: NextRequest) {
     // Parse query parameters
     const searchParams = req.nextUrl.searchParams;
     const queryParams = Object.fromEntries(searchParams.entries());
-    
+
     // Validate query parameters
     const validated = querySchema.safeParse(queryParams);
     if (!validated.success) {
-      return errorResponse(400, validated.error.flatten, "Invalid query parameters");
+      return errorResponse(
+        400,
+        validated.error.flatten,
+        "Invalid query parameters",
+      );
     }
 
     const {
@@ -85,8 +135,8 @@ export async function GET(req: NextRequest) {
           ilike(business.tradingName, searchTerm),
           ilike(business.description, searchTerm),
           ilike(business.location, searchTerm),
-          ilike(business.registrationNumber, searchTerm)
-        )
+          ilike(business.registrationNumber, searchTerm),
+        ),
       );
     }
 
@@ -98,34 +148,43 @@ export async function GET(req: NextRequest) {
     if (location) conditions.push(ilike(business.location, `%${location}%`));
     if (city) conditions.push(ilike(business.city, `%${city}%`));
     if (province) conditions.push(ilike(business.province, `%${province}%`));
-    if (verificationLevel) conditions.push(eq(business.verificationLevel, verificationLevel));
+    if (verificationLevel)
+      conditions.push(eq(business.verificationLevel, verificationLevel));
 
     // Rating range filter
     if (minRating !== undefined || maxRating !== undefined) {
-      const minRatingValue = minRating !== undefined ? minRating.toString() : "0";
-      const maxRatingValue = maxRating !== undefined ? maxRating.toString() : "5";
+      const minRatingValue =
+        minRating !== undefined ? minRating.toString() : "0";
+      const maxRatingValue =
+        maxRating !== undefined ? maxRating.toString() : "5";
       conditions.push(
         and(
           sql`${business.rating} >= ${minRatingValue}`,
-          sql`${business.rating} <= ${maxRatingValue}`
-        )
+          sql`${business.rating} <= ${maxRatingValue}`,
+        ),
       );
     }
 
     // Compliance score range filter
     if (minCompliance !== undefined || maxCompliance !== undefined) {
-      const minComplianceValue = minCompliance !== undefined ? minCompliance : 0;
-      const maxComplianceValue = maxCompliance !== undefined ? maxCompliance : 100;
+      const minComplianceValue =
+        minCompliance !== undefined ? minCompliance : 0;
+      const maxComplianceValue =
+        maxCompliance !== undefined ? maxCompliance : 100;
       conditions.push(
-        between(business.complianceScore, minComplianceValue, maxComplianceValue)
+        between(
+          business.complianceScore,
+          minComplianceValue,
+          maxComplianceValue,
+        ),
       );
     }
 
     // Tags filter
     if (tags) {
-      const tagArray = tags.split(',').map(tag => tag.trim());
+      const tagArray = tags.split(",").map((tag) => tag.trim());
       conditions.push(
-        sql`${business.tags} @> ${JSON.stringify(tagArray)}::jsonb`
+        sql`${business.tags} @> ${JSON.stringify(tagArray)}::jsonb`,
       );
     }
 
@@ -135,26 +194,40 @@ export async function GET(req: NextRequest) {
     // Build order by clause
     let orderByClause;
     switch (sortBy) {
-      case 'rating':
-        orderByClause = sortOrder === 'desc' ? desc(business.rating) : asc(business.rating);
+      case "rating":
+        orderByClause =
+          sortOrder === "desc" ? desc(business.rating) : asc(business.rating);
         break;
-      case 'complianceScore':
-        orderByClause = sortOrder === 'desc' ? desc(business.complianceScore) : asc(business.complianceScore);
+      case "complianceScore":
+        orderByClause =
+          sortOrder === "desc"
+            ? desc(business.complianceScore)
+            : asc(business.complianceScore);
         break;
-      case 'createdAt':
-        orderByClause = sortOrder === 'desc' ? desc(business.createdAt) : asc(business.createdAt);
+      case "createdAt":
+        orderByClause =
+          sortOrder === "desc"
+            ? desc(business.createdAt)
+            : asc(business.createdAt);
         break;
-      case 'foundedYear':
-        orderByClause = sortOrder === 'desc' ? desc(business.foundedYear) : asc(business.foundedYear);
+      case "foundedYear":
+        orderByClause =
+          sortOrder === "desc"
+            ? desc(business.foundedYear)
+            : asc(business.foundedYear);
         break;
-      case 'revenue':
+      case "revenue":
         // Assuming revenue is stored as string, we need to parse it
         // This is a simplified approach - you might need a better solution for revenue sorting
-        orderByClause = sortOrder === 'desc' ? desc(sql`${business.revenue}`) : asc(sql`${business.revenue}`);
+        orderByClause =
+          sortOrder === "desc"
+            ? desc(sql`${business.revenue}`)
+            : asc(sql`${business.revenue}`);
         break;
-      case 'name':
+      case "name":
       default:
-        orderByClause = sortOrder === 'desc' ? desc(business.name) : asc(business.name);
+        orderByClause =
+          sortOrder === "desc" ? desc(business.name) : asc(business.name);
     }
 
     // Get total count for pagination
@@ -176,7 +249,7 @@ export async function GET(req: NextRequest) {
       .offset(offset);
 
     // Transform data for frontend (optional)
-    const transformedBusinesses = businesses.map(biz => ({
+    const transformedBusinesses = businesses.map((biz) => ({
       ...biz,
       // Add computed fields
       yearsOperating: new Date().getFullYear() - biz.foundedYear,
@@ -221,10 +294,13 @@ export async function GET(req: NextRequest) {
           hasPreviousPage: page > 1,
         },
         filters: {
-          availableStatuses: aggregations.reduce((acc, curr) => {
-            acc[curr.status] = curr.count;
-            return acc;
-          }, {} as Record<string, number>),
+          availableStatuses: aggregations.reduce(
+            (acc, curr) => {
+              acc[curr.status] = curr.count;
+              return acc;
+            },
+            {} as Record<string, number>,
+          ),
           topIndustries: industryStats,
         },
         currentFilters: {
@@ -250,7 +326,6 @@ export async function GET(req: NextRequest) {
     };
 
     return NextResponse.json(response, { status: 200 });
-
   } catch (error) {
     console.error("Error fetching businesses:", error);
     return errorResponse(500, error, "Internal Server Error");
