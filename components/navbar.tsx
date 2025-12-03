@@ -11,7 +11,7 @@ export default function Navbar() {
     { label: 'Explore', href: '/explore' },
     { label: 'Features', href: '#features' },
     { label: 'Businesses', href: '#businesses' },
-    { label: 'API', href: '#api' },
+    { label: 'API', href: '/api-page' },
     { label: 'About', href: '/about' },
   ];
 
