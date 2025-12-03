@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
@@ -55,8 +55,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import { debounce } from "lodash";
 
 // Type definitions based on your API response
@@ -199,7 +197,27 @@ const getIndustryIcon = (industry: string) => {
   }
 };
 
+// Main page component with Suspense wrapper
 export default function ExplorePage() {
+  return (
+    <Suspense fallback={<ExplorePageSkeleton />}>
+      <ExplorePageContent />
+    </Suspense>
+  );
+}
+
+// Skeleton component
+function ExplorePageSkeleton() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+      <EnhancedHeaderSkeleton />
+      <EnhancedContentSkeleton />
+    </div>
+  );
+}
+
+// Main content component
+function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -216,17 +234,17 @@ export default function ExplorePage() {
   const [isFavorite, setIsFavorite] = useState<string[]>([]);
 
   // Filters from URL or default
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
-  const [selectedIndustry, setSelectedIndustry] = useState(searchParams.get('industry') || "all");
-  const [selectedBusinessType, setSelectedBusinessType] = useState(searchParams.get('businessType') || "all");
-  const [selectedOwnership, setSelectedOwnership] = useState(searchParams.get('ownership') || "all");
-  const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || "all");
-  const [showVerifiedOnly, setShowVerifiedOnly] = useState(searchParams.get('verifiedOnly') === 'true');
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('search') || "");
+  const [selectedIndustry, setSelectedIndustry] = useState(searchParams?.get('industry') || "all");
+  const [selectedBusinessType, setSelectedBusinessType] = useState(searchParams?.get('businessType') || "all");
+  const [selectedOwnership, setSelectedOwnership] = useState(searchParams?.get('ownership') || "all");
+  const [selectedLocation, setSelectedLocation] = useState(searchParams?.get('location') || "all");
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(searchParams?.get('verifiedOnly') === 'true');
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || "name");
-  const [sortOrder, setSortOrder] = useState(searchParams.get('sortOrder') || "asc");
-  const [minRating, setMinRating] = useState(searchParams.get('minRating') || "0");
-  const [maxRating, setMaxRating] = useState(searchParams.get('maxRating') || "5");
+  const [sortBy, setSortBy] = useState(searchParams?.get('sortBy') || "name");
+  const [sortOrder, setSortOrder] = useState(searchParams?.get('sortOrder') || "asc");
+  const [minRating, setMinRating] = useState(searchParams?.get('minRating') || "0");
+  const [maxRating, setMaxRating] = useState(searchParams?.get('maxRating') || "5");
 
   // Fetch companies from API
   const fetchCompanies = useCallback(async (page = 1) => {
@@ -293,7 +311,7 @@ export default function ExplorePage() {
     debouncedFetch(1);
     // Update URL with current filters
     updateURL();
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
+  }, [debouncedFetch]);
 
   // Update URL with current filters
   const updateURL = useCallback(() => {
