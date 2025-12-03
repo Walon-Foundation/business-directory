@@ -21,6 +21,20 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
+  Sparkles,
+  Target,
+  Zap,
+  Building,
+  Tag,
+  Award,
+  Globe,
+  Phone,
+  Mail,
+  BarChart,
+  Users as UsersIcon,
+  FileText,
+  Clock,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +55,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { debounce } from "lodash";
 
 // Type definitions based on your API response
@@ -139,6 +155,50 @@ const ownershipTypes = [
   "mixed"
 ];
 
+// Get industry icon
+const getIndustryIcon = (industry: string) => {
+  switch (industry) {
+    case "technology":
+      return Zap;
+    case "banking_finance":
+      return Building;
+    case "agriculture":
+      return Tag;
+    case "mining":
+      return Award;
+    case "healthcare":
+      return Users;
+    case "telecommunications":
+      return Globe;
+    case "logistics_shipping":
+      return TrendingUp;
+    case "fisheries":
+      return Tag;
+    case "construction":
+      return Building2;
+    case "manufacturing":
+      return BarChart;
+    case "retail":
+      return Tag;
+    case "tourism_hospitality":
+      return Award;
+    case "education":
+      return FileText;
+    case "energy_utilities":
+      return Zap;
+    case "real_estate":
+      return Building2;
+    case "transportation":
+      return TrendingUp;
+    case "media_entertainment":
+      return Globe;
+    case "professional_services":
+      return UsersIcon;
+    default:
+      return Building2;
+  }
+};
+
 export default function ExplorePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -153,6 +213,7 @@ export default function ExplorePage() {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [industryStats, setIndustryStats] = useState<Array<{ industry: string; count: number }>>([]);
+  const [isFavorite, setIsFavorite] = useState<string[]>([]);
 
   // Filters from URL or default
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
@@ -164,6 +225,8 @@ export default function ExplorePage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || "name");
   const [sortOrder, setSortOrder] = useState(searchParams.get('sortOrder') || "asc");
+  const [minRating, setMinRating] = useState(searchParams.get('minRating') || "0");
+  const [maxRating, setMaxRating] = useState(searchParams.get('maxRating') || "5");
 
   // Fetch companies from API
   const fetchCompanies = useCallback(async (page = 1) => {
@@ -183,10 +246,12 @@ export default function ExplorePage() {
       if (showVerifiedOnly) params.set('verificationLevel', 'verified');
       if (sortBy) params.set('sortBy', sortBy);
       if (sortOrder) params.set('sortOrder', sortOrder);
+      if (minRating !== "0") params.set('minRating', minRating);
+      if (maxRating !== "5") params.set('maxRating', maxRating);
       
       // Pagination
       params.set('page', page.toString());
-      params.set('limit', '12'); // You can make this configurable
+      params.set('limit', '12');
 
       const response = await fetch(`/api/explore?${params.toString()}`);
       
@@ -213,7 +278,7 @@ export default function ExplorePage() {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder]);
+  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
 
   // Debounced search to avoid too many API calls
   const debouncedFetch = useCallback(
@@ -228,7 +293,7 @@ export default function ExplorePage() {
     debouncedFetch(1);
     // Update URL with current filters
     updateURL();
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder]);
+  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
 
   // Update URL with current filters
   const updateURL = useCallback(() => {
@@ -241,9 +306,11 @@ export default function ExplorePage() {
     if (showVerifiedOnly) params.set('verifiedOnly', 'true');
     if (sortBy !== 'name') params.set('sortBy', sortBy);
     if (sortOrder !== 'asc') params.set('sortOrder', sortOrder);
+    if (minRating !== '0') params.set('minRating', minRating);
+    if (maxRating !== '5') params.set('maxRating', maxRating);
     
     router.replace(`/explore?${params.toString()}`, { scroll: false });
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, router]);
+  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating, router]);
 
   // Handle search input with debouncing
   const handleSearch = (value: string) => {
@@ -260,18 +327,13 @@ export default function ExplorePage() {
     setShowVerifiedOnly(false);
     setSortBy("name");
     setSortOrder("asc");
+    setMinRating("0");
+    setMaxRating("5");
   };
 
   // Handle pagination
   const goToPage = (page: number) => {
     fetchCompanies(page);
-  };
-
-  // Load more companies (infinite scroll alternative)
-  const loadMore = () => {
-    if (hasNextPage) {
-      fetchCompanies(currentPage + 1);
-    }
   };
 
   // Handle View button click
@@ -282,6 +344,15 @@ export default function ExplorePage() {
   // Handle Website button click
   const handleVisitWebsite = (url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  // Handle favorite toggle
+  const toggleFavorite = (companyId: string) => {
+    setIsFavorite(prev =>
+      prev.includes(companyId)
+        ? prev.filter(id => id !== companyId)
+        : [...prev, companyId]
+    );
   };
 
   // Get unique locations from current companies
@@ -301,8 +372,10 @@ export default function ExplorePage() {
       showVerifiedOnly ? 1 : 0,
       sortBy !== "name" ? 1 : 0,
       sortOrder !== "asc" ? 1 : 0,
+      minRating !== "0" ? 1 : 0,
+      maxRating !== "5" ? 1 : 0,
     ].reduce((a, b) => a + b, 0);
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder]);
+  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
 
   // Format status for display
   const formatStatus = (status: string) => {
@@ -322,238 +395,88 @@ export default function ExplorePage() {
       .join(' ');
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-600/10 via-cyan-600/10 to-emerald-600/10 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 md:py-12">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Explore{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">
-                Businesses
-              </span>
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl sm:max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
-              Discover all legally registered businesses in Sierra Leone. Filter
-              by industry, location, and status.
-            </p>
-          </div>
+  // Get status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "from-green-500 to-emerald-500";
+      case "pending":
+        return "from-amber-500 to-orange-500";
+      case "suspended":
+        return "from-red-500 to-rose-500";
+      default:
+        return "from-gray-500 to-gray-600";
+    }
+  };
 
-          {/* Search and Filters */}
-          <div className="max-w-6xl mx-auto">
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 p-3 sm:p-4 md:p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {/* Search */}
-                <div className="md:col-span-2 lg:col-span-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                    <Input
-                      placeholder="Search by company name, registration number, or keyword..."
-                      className="pl-9 sm:pl-10 w-full text-sm sm:text-base"
-                      value={searchQuery}
-                      onChange={(e) => handleSearch(e.target.value)}
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
+  // Get verification color
+  const getVerificationColor = (level: string) => {
+    switch (level) {
+      case "verified":
+        return "from-blue-500 to-cyan-500";
+      case "pending":
+        return "from-amber-500 to-orange-500";
+      default:
+        return "from-gray-500 to-gray-600";
+    }
+  };
 
-                {/* Industry Filter */}
-                <div>
-                  <Select
-                    value={selectedIndustry}
-                    onValueChange={setSelectedIndustry}
-                  >
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <Building2 className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Industry" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Industries</SelectItem>
-                      {industries.slice(1).map((industry) => (
-                        <SelectItem key={industry} value={industry}>
-                          {formatIndustry(industry)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Location Filter */}
-                <div>
-                  <Select
-                    value={selectedLocation}
-                    onValueChange={setSelectedLocation}
-                  >
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {uniqueLocations.map((location) => (
-                        <SelectItem key={location} value={location === "All Locations" ? "all" : location}>
-                          {location}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Advanced Filters Row */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
-                {/* Business Type Filter */}
-                <div>
-                  <Select
-                    value={selectedBusinessType}
-                    onValueChange={setSelectedBusinessType}
-                  >
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <Filter className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Business Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {businessTypes.map((type) => (
-                        <SelectItem key={type} value={type === "All Types" ? "all" : type}>
-                          {type === "All Types" ? type : formatIndustry(type)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Ownership Filter */}
-                <div>
-                  <Select
-                    value={selectedOwnership}
-                    onValueChange={setSelectedOwnership}
-                  >
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <Users className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Ownership" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ownershipTypes.map((type) => (
-                        <SelectItem key={type} value={type === "All Ownership" ? "all" : type}>
-                          {type === "All Ownership" ? type : formatIndustry(type)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Sort Options */}
-                <div className="grid grid-cols-2 gap-2">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="name">Name</SelectItem>
-                      <SelectItem value="rating">Rating</SelectItem>
-                      <SelectItem value="complianceScore">Compliance</SelectItem>
-                      <SelectItem value="foundedYear">Founded Year</SelectItem>
-                      <SelectItem value="createdAt">Date Added</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={sortOrder} onValueChange={setSortOrder}>
-                    <SelectTrigger className="w-full text-sm sm:text-base">
-                      <SelectValue placeholder="Order" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="asc">Ascending</SelectItem>
-                      <SelectItem value="desc">Descending</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Active Filters Bar */}
-              {activeFiltersCount > 0 && (
-                <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs sm:text-sm font-medium text-gray-700">
-                      {companies.length} of {totalCount} results
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className="bg-blue-50 text-blue-700 text-xs"
-                    >
-                      {activeFiltersCount} filter
-                      {activeFiltersCount !== 1 ? "s" : ""} active
-                    </Badge>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm h-7 sm:h-8"
-                  >
-                    <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                    Clear all
-                  </Button>
-                </div>
-              )}
-
-              {/* Quick Filters */}
-              <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full text-xs sm:text-sm h-7 sm:h-8"
-                    onClick={() => setShowVerifiedOnly(!showVerifiedOnly)}
-                  >
-                    <Shield
-                      className={`w-3 h-3 sm:w-4 sm:h-4 mr-1.5 ${showVerifiedOnly ? "text-green-600" : ""}`}
-                    />
-                    Verified Only
-                    {showVerifiedOnly && (
-                      <CheckCircle className="w-3 h-3 ml-1.5 text-green-600" />
-                    )}
-                  </Button>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-xs sm:text-sm text-gray-600">
-                    Verified Only
-                  </span>
-                  <Switch
-                    checked={showVerifiedOnly}
-                    onCheckedChange={setShowVerifiedOnly}
-                    className="scale-90 sm:scale-100"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  // Loading skeleton
+  if (loading && companies.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+        <EnhancedHeaderSkeleton />
+        <EnhancedContentSkeleton />
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+      {/* Enhanced Header */}
+      <EnhancedHeader
+        searchQuery={searchQuery}
+        handleSearch={handleSearch}
+        selectedIndustry={selectedIndustry}
+        setSelectedIndustry={setSelectedIndustry}
+        selectedLocation={selectedLocation}
+        setSelectedLocation={setSelectedLocation}
+        selectedBusinessType={selectedBusinessType}
+        setSelectedBusinessType={setSelectedBusinessType}
+        selectedOwnership={selectedOwnership}
+        setSelectedOwnership={setSelectedOwnership}
+        showVerifiedOnly={showVerifiedOnly}
+        setShowVerifiedOnly={setShowVerifiedOnly}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        minRating={minRating}
+        setMinRating={setMinRating}
+        maxRating={maxRating}
+        setMaxRating={setMaxRating}
+        activeFiltersCount={activeFiltersCount}
+        clearFilters={clearFilters}
+        totalCount={totalCount}
+        companies={companies}
+        uniqueLocations={uniqueLocations}
+        formatIndustry={formatIndustry}
+      />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Loading State */}
-        {loading && (
-          <div className="flex justify-center items-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-            <span className="ml-3 text-gray-600">Loading businesses...</span>
-          </div>
-        )}
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error State */}
         {error && !loading && (
-          <div className="text-center py-12 bg-white rounded-xl border border-red-200">
-            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Data</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => fetchCompanies(1)}>
+          <div className="text-center py-16 bg-gradient-to-br from-white to-red-50/30 rounded-2xl border-2 border-red-200/50 shadow-lg">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500/10 to-rose-500/10 flex items-center justify-center mx-auto mb-6">
+              <AlertCircle className="w-10 h-10 text-red-500" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Error Loading Data</h3>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">{error}</p>
+            <Button 
+              onClick={() => fetchCompanies(1)}
+              className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 shadow-lg"
+            >
               Try Again
             </Button>
           </div>
@@ -562,230 +485,77 @@ export default function ExplorePage() {
         {/* Success State */}
         {!loading && !error && (
           <>
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-xl sm:text-2xl font-bold text-blue-600">
-                  {totalCount}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600">Total Businesses</div>
-              </div>
-              <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-xl sm:text-2xl font-bold text-green-600">
-                  {companies.filter((c) => c.status === "active").length}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600">
-                  Active Status
-                </div>
-              </div>
-              <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-xl sm:text-2xl font-bold text-amber-600">
-                  {Array.from(new Set(companies.map((c) => c.industry))).length}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600">Industries</div>
-              </div>
-              <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-xl sm:text-2xl font-bold text-purple-600">
-                  {Array.from(new Set(companies.map((c) => c.location))).length}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600">Locations</div>
-              </div>
-            </div>
+            {/* Enhanced Stats Cards */}
+            <EnhancedStatsCards 
+              totalCount={totalCount}
+              companies={companies}
+            />
 
-            {/* View Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-              <div>
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Featured Businesses
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-600">
-                  Showing {companies.length} of {totalCount} results
-                  {activeFiltersCount > 0 && " (filtered)"}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="flex items-center gap-1 sm:gap-2 bg-gray-100 rounded-lg p-1">
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className={`h-8 w-8 sm:h-9 sm:w-auto sm:px-3 ${viewMode === "grid" ? "shadow-sm" : ""}`}
-                  >
-                    <Grid className="w-4 h-4" />
-                    <span className="hidden sm:inline ml-2">Grid</span>
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className={`h-8 w-8 sm:h-9 sm:w-auto sm:px-3 ${viewMode === "list" ? "shadow-sm" : ""}`}
-                  >
-                    <List className="w-4 h-4" />
-                    <span className="hidden sm:inline ml-2">List</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
+            {/* Enhanced View Controls */}
+            <EnhancedViewControls
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              companies={companies}
+              totalCount={totalCount}
+              activeFiltersCount={activeFiltersCount}
+            />
 
             {/* Companies Grid/List */}
             {companies.length === 0 ? (
-              <div className="text-center py-12 sm:py-16 bg-white rounded-xl sm:rounded-2xl border border-gray-200">
-                <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  No businesses found
-                </h3>
-                <p className="text-sm text-gray-600 mb-4 sm:mb-6 max-w-md mx-auto px-4">
-                  Try adjusting your search or filters
-                </p>
-                <Button onClick={clearFilters} size="sm" className="sm:text-base">
-                  Clear all filters
-                </Button>
-              </div>
+              <EnhancedEmptyState clearFilters={clearFilters} />
             ) : viewMode === "grid" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {companies.map((company) => (
-                  <CompanyCard
+                  <EnhancedCompanyCard
                     key={company.id}
                     company={company}
                     onViewCompany={handleViewCompany}
                     onVisitWebsite={handleVisitWebsite}
+                    isFavorite={isFavorite.includes(company.id)}
+                    onToggleFavorite={() => toggleFavorite(company.id)}
                     formatStatus={formatStatus}
                     formatVerificationLevel={formatVerificationLevel}
                     formatIndustry={formatIndustry}
+                    getIndustryIcon={getIndustryIcon}
+                    getStatusColor={getStatusColor}
+                    getVerificationColor={getVerificationColor}
                   />
                 ))}
               </div>
             ) : (
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-4">
                 {companies.map((company) => (
-                  <CompanyRowCard
+                  <EnhancedCompanyRow
                     key={company.id}
                     company={company}
                     onViewCompany={handleViewCompany}
                     onVisitWebsite={handleVisitWebsite}
+                    isFavorite={isFavorite.includes(company.id)}
+                    onToggleFavorite={() => toggleFavorite(company.id)}
                     formatStatus={formatStatus}
                     formatVerificationLevel={formatVerificationLevel}
                     formatIndustry={formatIndustry}
+                    getIndustryIcon={getIndustryIcon}
+                    getStatusColor={getStatusColor}
+                    getVerificationColor={getVerificationColor}
                   />
                 ))}
               </div>
             )}
 
-            {/* Pagination */}
+            {/* Enhanced Pagination */}
             {companies.length > 0 && totalPages > 1 && (
-              <div className="flex justify-center items-center space-x-2 mt-8">
-                <Button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={!hasPreviousPage}
-                  className="px-4 py-2"
-                  variant="outline"
-                >
-                  Previous
-                </Button>
-                
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-                  
-                  return (
-                    <Button
-                      key={pageNum}
-                      onClick={() => goToPage(pageNum)}
-                      className={`px-4 py-2 ${
-                        currentPage === pageNum
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white'
-                      }`}
-                      variant={currentPage === pageNum ? "default" : "outline"}
-                    >
-                      {pageNum}
-                    </Button>
-                  );
-                })}
-                
-                <Button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={!hasNextPage}
-                  className="px-4 py-2"
-                  variant="outline"
-                >
-                  Next
-                </Button>
-              </div>
+              <EnhancedPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                hasPreviousPage={hasPreviousPage}
+                hasNextPage={hasNextPage}
+                goToPage={goToPage}
+              />
             )}
 
-            {/* Load More (alternative to pagination) */}
-            {companies.length > 0 && hasNextPage && (
-              <div className="text-center mt-8">
-                <Button
-                  onClick={loadMore}
-                  variant="outline"
-                  size="lg"
-                  className="px-6 sm:px-8 text-sm sm:text-base"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      Loading...
-                    </>
-                  ) : (
-                    <>
-                      Load More Businesses
-                      <ChevronRight className="ml-2 w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            )}
-
-            {/* Data Quality Note */}
-            <div className="mt-8 sm:mt-12 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-200">
-              <div className="flex flex-col md:flex-row items-start gap-4 sm:gap-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2">
-                    Data Quality & Verification
-                  </h3>
-                  <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">
-                    All business data is sourced directly from the Sierra Leone
-                    Corporate Affairs Commission and updated daily. Verification
-                    status indicates the level of due diligence completed.
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full mr-2 sm:mr-3 flex-shrink-0"></div>
-                      <span className="text-xs sm:text-sm">
-                        ✓ Verified - Full due diligence
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-amber-500 rounded-full mr-2 sm:mr-3 flex-shrink-0"></div>
-                      <span className="text-xs sm:text-sm">
-                        ⏳ Pending - Under review
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gray-400 rounded-full mr-2 sm:mr-3 flex-shrink-0"></div>
-                      <span className="text-xs sm:text-sm">
-                        ○ Unverified - Basic registration
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Enhanced Data Quality Note */}
+            <EnhancedDataQualityNote />
           </>
         )}
       </div>
@@ -793,286 +563,545 @@ export default function ExplorePage() {
   );
 }
 
-// Props for Company Card components
-interface CompanyCardProps {
-  company: Company;
-  onViewCompany: (companyId: string) => void;
-  onVisitWebsite: (url: string) => void;
-  formatStatus: (status: string) => string;
-  formatVerificationLevel: (level: string) => string;
-  formatIndustry: (industry: string) => string;
-}
-
-// Grid View Company Card Component
-function CompanyCard({
-  company,
-  onViewCompany,
-  onVisitWebsite,
-  formatStatus,
-  formatVerificationLevel,
+// Enhanced Header Component
+function EnhancedHeader({
+  searchQuery,
+  handleSearch,
+  selectedIndustry,
+  setSelectedIndustry,
+  selectedLocation,
+  setSelectedLocation,
+  selectedBusinessType,
+  setSelectedBusinessType,
+  selectedOwnership,
+  setSelectedOwnership,
+  showVerifiedOnly,
+  setShowVerifiedOnly,
+  sortBy,
+  setSortBy,
+  sortOrder,
+  setSortOrder,
+  minRating,
+  setMinRating,
+  maxRating,
+  setMaxRating,
+  activeFiltersCount,
+  clearFilters,
+  totalCount,
+  companies,
+  uniqueLocations,
   formatIndustry,
-}: CompanyCardProps) {
+}: any) {
   return (
-    <Card className="group hover:shadow-lg sm:hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border hover:border-blue-200 bg-gradient-to-b from-white to-gray-50/50 h-full flex flex-col">
-      <CardHeader className="pb-3 sm:pb-4 px-3 sm:px-6 pt-4 sm:pt-6">
-        <div className="flex flex-col gap-2">
-          {/* Badges Row */}
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap gap-1 sm:gap-2">
-              <Badge
-                className={`text-xs px-2 py-0.5 h-5 ${
-                  company.status === "active"
-                    ? "bg-green-100 text-green-700 border-green-200"
-                    : company.status === "pending"
-                      ? "bg-amber-100 text-amber-700 border-amber-200"
-                      : "bg-gray-100 text-gray-700 border-gray-200"
-                }`}
-              >
-                {formatStatus(company.status)}
-              </Badge>
-              <Badge
-                variant="outline"
-                className={`text-xs px-2 py-0.5 h-5 ${
-                  company.verificationLevel === "verified"
-                    ? "border-green-300 text-green-700 bg-green-50"
-                    : company.verificationLevel === "pending"
-                      ? "border-amber-300 text-amber-700 bg-amber-50"
-                      : "border-gray-300 text-gray-600 bg-gray-50"
-                }`}
-              >
-                {company.verificationLevel === "verified" ? (
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                ) : (
-                  <AlertCircle className="w-3 h-3 mr-1" />
-                )}
-                {formatVerificationLevel(company.verificationLevel)}
-              </Badge>
+    <div className="relative overflow-hidden">
+      {/* Animated Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-purple-500/10 animate-gradient-x" />
+      
+      {/* Floating Elements */}
+      <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-blue-500/5 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-tl from-cyan-500/5 to-transparent rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        {/* Hero Text */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600/10 to-cyan-600/10 backdrop-blur-sm px-4 py-2 rounded-2xl border border-blue-200/50 mb-4">
+            <Sparkles className="w-4 h-4 text-blue-500 mr-2" />
+            <span className="text-sm font-medium text-blue-700">
+              Discover {totalCount}+ Registered Businesses
+            </span>
+          </div>
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+            Explore Sierra Leone's
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600">
+              Business Ecosystem
+            </span>
+          </h1>
+          
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Find verified businesses, compare services, and connect with leading companies across all industries
+          </p>
+        </div>
+
+        {/* Enhanced Search Card */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border border-white/50 p-4 sm:p-6 lg:p-8 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            {/* Main Search */}
+            <div className="lg:col-span-2">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-cyan-500/5 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-500" />
+                  <Input
+                    placeholder="Search companies by name, industry, location, or services..."
+                    className="pl-12 pr-12 h-14 text-base rounded-xl border-2 border-blue-200/50 bg-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-200/50"
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => handleSearch("")}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Rating */}
-            <div className="flex items-center bg-amber-50 text-amber-700 px-2 py-1 rounded-md flex-shrink-0">
-              <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-amber-500 text-amber-500" />
-              <span className="font-bold text-sm sm:text-base ml-1">
-                {company.rating}
-              </span>
+            {/* Quick Actions */}
+            <div className="flex gap-3">
+              <Button
+                className="flex-1 h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl"
+                onClick={() => handleSearch(searchQuery)}
+              >
+                <Search className="w-5 h-5 mr-2" />
+                Search
+              </Button>
+              <Button
+                variant="outline"
+                className="h-14 px-4 border-blue-200 hover:border-blue-300 hover:bg-blue-50/50"
+                onClick={clearFilters}
+              >
+                <X className="w-5 h-5" />
+              </Button>
             </div>
           </div>
 
-          {/* Company Info */}
-          <div className="flex items-start gap-2 sm:gap-3 mt-1">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+          {/* Enhanced Filter Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {/* Industry Filter */}
+            <div className="group">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Building2 className="w-4 h-4 mr-2 text-blue-600" />
+                Industry
+              </label>
+              <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
+                <SelectTrigger className="w-full h-12 rounded-xl border-2 border-blue-200/50 bg-white/50 group-hover:border-blue-300 transition-colors">
+                  <SelectValue placeholder="All Industries" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Industries</SelectItem>
+                  {industries.slice(1).map((industry: string) => (
+                    <SelectItem key={industry} value={industry}>
+                      {formatIndustry(industry)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="flex-1 min-w-0">
-              <CardTitle className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors truncate leading-tight">
-                {company.name}
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm mt-0.5 truncate">
-                {company.registrationNumber} • {formatIndustry(company.industry)}
-              </CardDescription>
+
+            {/* Location Filter */}
+            <div className="group">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <MapPin className="w-4 h-4 mr-2 text-green-600" />
+                Location
+              </label>
+              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                <SelectTrigger className="w-full h-12 rounded-xl border-2 border-green-200/50 bg-white/50 group-hover:border-green-300 transition-colors">
+                  <SelectValue placeholder="All Locations" />
+                </SelectTrigger>
+                <SelectContent>
+                  {uniqueLocations.map((location: string) => (
+                    <SelectItem key={location} value={location === "All Locations" ? "all" : location}>
+                      {location}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Rating Filter */}
+            <div className="group">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Star className="w-4 h-4 mr-2 text-amber-600" />
+                Rating
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <Select value={minRating} onValueChange={setMinRating}>
+                  <SelectTrigger className="h-12 rounded-xl border-2 border-amber-200/50 bg-white/50">
+                    <SelectValue placeholder="Min" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[0, 1, 2, 3, 4].map(rating => (
+                      <SelectItem key={rating} value={rating.toString()}>
+                        {rating}+ Stars
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={maxRating} onValueChange={setMaxRating}>
+                  <SelectTrigger className="h-12 rounded-xl border-2 border-amber-200/50 bg-white/50">
+                    <SelectValue placeholder="Max" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5].map(rating => (
+                      <SelectItem key={rating} value={rating.toString()}>
+                        Up to {rating}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Verification Filter */}
+            <div className="group">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Shield className="w-4 h-4 mr-2 text-purple-600" />
+                Verification
+              </label>
+              <div className="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-50/50 rounded-xl p-2 border border-purple-200/50">
+                <span className="text-sm text-gray-700">Verified Only</span>
+                <Switch
+                  checked={showVerifiedOnly}
+                  onCheckedChange={setShowVerifiedOnly}
+                  className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-purple-600 data-[state=checked]:to-purple-700"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filters Bar */}
+          {activeFiltersCount > 0 && (
+            <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-xl p-4 border border-blue-200/50">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
+                      {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
+                    </Badge>
+                    <span className="text-sm font-medium text-gray-700">
+                      Showing {companies.length} of {totalCount} results
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                >
+                  <X className="w-4 h-4 mr-1.5" />
+                  Clear all filters
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-blue-200/50">
+            <div className="text-2xl font-bold text-blue-600">{totalCount}</div>
+            <div className="text-sm text-gray-600">Total Businesses</div>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-green-200/50">
+            <div className="text-2xl font-bold text-green-600">
+              {companies.filter((c: { status: string; }) => c.status === "active").length}
+            </div>
+            <div className="text-sm text-gray-600">Active</div>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-purple-200/50">
+            <div className="text-2xl font-bold text-purple-600">
+              {Array.from(new Set(companies.map((c: { industry: any; }) => c.industry))).length}
+            </div>
+            <div className="text-sm text-gray-600">Industries</div>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-amber-200/50">
+            <div className="text-2xl font-bold text-amber-600">
+              {companies.filter((c: { verificationLevel: string; }) => c.verificationLevel === "verified").length}
+            </div>
+            <div className="text-sm text-gray-600">Verified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Enhanced Company Card Component
+function EnhancedCompanyCard({
+  company,
+  onViewCompany,
+  onVisitWebsite,
+  isFavorite,
+  onToggleFavorite,
+  formatStatus,
+  formatVerificationLevel,
+  formatIndustry,
+  getIndustryIcon,
+  getStatusColor,
+  getVerificationColor,
+}: any) {
+  const IndustryIcon = getIndustryIcon(company.industry);
+  const statusColor = getStatusColor(company.status);
+  const verificationColor = getVerificationColor(company.verificationLevel);
+
+  return (
+    <Card className="group relative overflow-hidden border-2 border-gray-200/50 bg-gradient-to-b from-white to-gray-50/30 hover:border-blue-300 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+      {/* Background Gradient */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
+      
+      {/* Favorite Button */}
+      <Button
+        size="icon"
+        variant="ghost"
+        className="absolute top-3 right-3 z-10 bg-white/80 backdrop-blur-sm hover:bg-white"
+        onClick={onToggleFavorite}
+      >
+        <Heart className={`w-4 h-4 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+      </Button>
+
+      <CardHeader className="pb-3 pt-6 px-5">
+        <div className="flex items-start gap-4">
+          {/* Company Logo */}
+          <div className="relative">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <IndustryIcon className="w-7 h-7 text-white" />
+            </div>
+            {/* Status Dot */}
+            <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white`} />
+          </div>
+
+          {/* Company Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <CardTitle className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                  {company.name}
+                </CardTitle>
+                <CardDescription className="text-sm text-gray-600 line-clamp-1">
+                  {company.registrationNumber} • {formatIndustry(company.industry)}
+                </CardDescription>
+              </div>
+            </div>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2">
+              <Badge className={`text-xs px-2 py-1 bg-gradient-to-r ${statusColor} text-white border-0`}>
+                {formatStatus(company.status)}
+              </Badge>
+              <Badge variant="outline" className="text-xs px-2 py-1">
+                <Shield className="w-3 h-3 mr-1" />
+                {formatVerificationLevel(company.verificationLevel)}
+              </Badge>
             </div>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="pb-3 sm:pb-4 px-3 sm:px-6 flex-1">
-        <div className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-2 gap-2 sm:gap-3">
-            <div className="flex items-center text-xs sm:text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
-              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
-              <span className="truncate">{company.location}</span>
-            </div>
-            <div className="flex items-center text-xs sm:text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
-              <span className="truncate">{company.employees}</span>
-            </div>
-          </div>
+      <CardContent className="pb-4 px-5">
+        {/* Description */}
+        <p className="text-sm text-gray-700 line-clamp-2 mb-4">
+          {company.description}
+        </p>
 
-          <div className="text-xs sm:text-sm text-gray-700">
-            <p
-              className="line-clamp-3 leading-relaxed"
-              style={{
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-              }}
-            >
-              {company.description}
-            </p>
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="flex items-center text-sm text-gray-600">
+            <MapPin className="w-4 h-4 text-blue-600 mr-2" />
+            <span className="truncate">{company.location}</span>
           </div>
-
-          {company.tags && company.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {company.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-full border border-gray-300"
-                >
-                  {tag}
-                </span>
-              ))}
-              {company.tags.length > 3 && (
-                <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-                  +{company.tags.length - 3}
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex items-center text-sm text-gray-600">
+            <Users className="w-4 h-4 text-green-600 mr-2" />
+            <span>{company.employees}</span>
+          </div>
+          <div className="flex items-center text-sm text-gray-600">
+            <Calendar className="w-4 h-4 text-amber-600 mr-2" />
+            <span>Est. {company.foundedYear}</span>
+          </div>
+          <div className="flex items-center text-sm text-gray-600">
+            <TrendingUp className="w-4 h-4 text-purple-600 mr-2" />
+            <span>{company.revenue}</span>
+          </div>
         </div>
-      </CardContent>
 
-      <CardFooter className="pt-0 px-3 sm:px-6 pb-4 sm:pb-6">
-        <div className="flex justify-between items-center w-full">
-          <div className="text-xs sm:text-sm text-gray-500">
-            Est. {company.foundedYear} • {company.revenue}
-          </div>
-          <div className="flex gap-1.5 sm:gap-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-7 sm:h-8 w-7 sm:w-auto px-2 sm:px-3"
-              onClick={() => onViewCompany(company.id)}
-            >
-              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline ml-1.5">View</span>
-            </Button>
-            {company.website && (
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-7 sm:h-8 w-7 sm:w-auto px-2 sm:px-3"
-                onClick={() => onVisitWebsite(company.website!)}
-              >
-                <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline ml-1.5">Site</span>
-              </Button>
+        {/* Rating & Compliance */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <div className="flex items-center bg-amber-50 text-amber-700 px-3 py-1.5 rounded-lg">
+              <Star className="w-4 h-4 fill-amber-500 text-amber-500 mr-1.5" />
+              <span className="font-bold">{company.rating}</span>
+            </div>
+            {company.complianceScore > 0 && (
+              <div className="ml-3 flex items-center">
+                <div className="w-8 text-xs font-medium text-gray-600">Comp:</div>
+                <div className="text-sm pl-1 font-bold text-green-700 ml-1">
+                  {company.complianceScore}%
+                </div>
+              </div>
             )}
           </div>
+        </div>
+
+        {/* Tags */}
+        {company.tags && company.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {company.tags.slice(0, 3).map((tag: string, index: number) => (
+              <span
+                key={index}
+                className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-full border border-gray-300"
+              >
+                {tag}
+              </span>
+            ))}
+            {company.tags.length > 3 && (
+              <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
+                +{company.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+      </CardContent>
+
+      <CardFooter className="pt-0 pb-5 px-5">
+        <div className="flex gap-3 w-full">
+          <Button
+            variant="outline"
+            className="flex-1 h-10 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
+            onClick={() => onViewCompany(company.id)}
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            View Details
+          </Button>
+          {company.website && (
+            <Button
+              size="icon"
+              variant="outline"
+              className="h-10 w-10 border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+              onClick={() => onVisitWebsite(company.website!)}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>
   );
 }
 
-// List View Company Card Component
-function CompanyRowCard({
+// Enhanced Company Row Component (List View)
+function EnhancedCompanyRow({
   company,
   onViewCompany,
   onVisitWebsite,
+  isFavorite,
+  onToggleFavorite,
   formatStatus,
   formatVerificationLevel,
   formatIndustry,
-}: CompanyCardProps) {
+  getIndustryIcon,
+  getStatusColor,
+  getVerificationColor,
+}: any) {
+  const IndustryIcon = getIndustryIcon(company.industry);
+  const statusColor = getStatusColor(company.status);
+
   return (
-    <Card className="hover:shadow-md transition-all duration-300 border-l-2 sm:border-l-4 border-l-blue-500 hover:border-l-blue-600">
-      <div className="p-3 sm:p-4 md:p-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-          {/* Company Logo and Info */}
+    <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-gray-200/50 hover:border-blue-300 bg-gradient-to-r from-white to-gray-50/30">
+      <div className="p-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          {/* Left Section - Logo & Basic Info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
-                <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            <div className="flex items-start gap-4">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                  <IndustryIcon className="w-6 h-6 text-white" />
+                </div>
+                <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white`} />
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                     {company.name}
                   </h3>
-                  <div className="flex items-center bg-amber-50 text-amber-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md flex-shrink-0">
-                    <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-500 text-amber-500" />
-                    <span className="font-bold text-xs sm:text-sm ml-0.5 sm:ml-1">
-                      {company.rating}
-                    </span>
-                  </div>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-6 w-6"
+                    onClick={onToggleFavorite}
+                  >
+                    <Heart className={`w-3 h-3 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+                  </Button>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-                  <Badge
-                    className={`text-xs px-1.5 py-0.5 h-5 ${
-                      company.status === "active"
-                        ? "bg-green-100 text-green-700"
-                        : company.status === "pending"
-                          ? "bg-amber-100 text-amber-700"
-                          : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {formatStatus(company.status)}
-                  </Badge>
-                  <Badge variant="outline" className="text-xs h-5">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <Badge variant="outline" className="text-xs">
                     {formatIndustry(company.industry)}
                   </Badge>
-                  <Badge variant="outline" className="text-xs h-5">
-                    <MapPin className="w-3 h-3 mr-1" />
-                    {company.location}
+                  <Badge className={`text-xs bg-gradient-to-r ${statusColor} text-white border-0`}>
+                    {formatStatus(company.status)}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">
+                    <Shield className="w-3 h-3 mr-1" />
+                    {formatVerificationLevel(company.verificationLevel)}
                   </Badge>
                   <span className="text-xs text-gray-500">
                     {company.registrationNumber}
                   </span>
                 </div>
 
-                <p
-                  className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 line-clamp-2 leading-relaxed"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                  }}
-                >
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
                   {company.description}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-500">
-                  <span>
-                    <Users className="w-3 h-3 inline mr-1" />
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                  <span className="flex items-center">
+                    <MapPin className="w-4 h-4 text-blue-600 mr-1.5" />
+                    {company.location}
+                  </span>
+                  <span className="flex items-center">
+                    <Users className="w-4 h-4 text-green-600 mr-1.5" />
                     {company.employees}
                   </span>
-                  <span>•</span>
-                  <span>
-                    <Calendar className="w-3 h-3 inline mr-1" />
+                  <span className="flex items-center">
+                    <Calendar className="w-4 h-4 text-amber-600 mr-1.5" />
                     Est. {company.foundedYear}
                   </span>
-                  <span>•</span>
-                  <span>{company.revenue}</span>
+                  <span className="flex items-center">
+                    <TrendingUp className="w-4 h-4 text-purple-600 mr-1.5" />
+                    {company.revenue}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-            <div
-              className={`px-2 py-1 rounded-lg text-xs sm:text-sm font-medium text-center ${
-                company.verificationLevel === "verified"
-                  ? "bg-green-100 text-green-700"
-                  : company.verificationLevel === "pending"
-                    ? "bg-amber-100 text-amber-700"
-                    : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {formatVerificationLevel(company.verificationLevel)}
+          {/* Right Section - Rating & Actions */}
+          <div className="flex flex-col items-end gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center bg-amber-50 text-amber-700 px-3 py-1.5 rounded-lg">
+                <Star className="w-4 h-4 fill-amber-500 text-amber-500 mr-1.5" />
+                <span className="font-bold">{company.rating}</span>
+              </div>
+              {company.complianceScore > 0 && (
+                <div className="text-sm font-bold text-green-700">
+                  {company.complianceScore}% Comp
+                </div>
+              )}
             </div>
-            <div className="flex gap-1.5 sm:gap-2">
+
+            <div className="flex gap-2">
               <Button
+                variant="outline"
                 size="sm"
-                variant="ghost"
-                className="flex-1 sm:flex-none h-7 sm:h-8 text-xs sm:text-sm"
+                className="border-blue-200 text-blue-700 hover:bg-blue-50"
                 onClick={() => onViewCompany(company.id)}
               >
-                <Eye className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1.5" />
-                <span className="hidden sm:inline">View</span>
+                <Eye className="w-4 h-4 mr-1.5" />
+                View
               </Button>
               {company.website && (
                 <Button
-                  size="sm"
+                  size="icon"
                   variant="outline"
-                  className="flex-1 sm:flex-none h-7 sm:h-8 text-xs sm:text-sm"
+                  className="border-gray-200"
                   onClick={() => onVisitWebsite(company.website!)}
                 >
-                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1.5" />
-                  <span className="hidden sm:inline">Site</span>
+                  <ExternalLink className="w-4 h-4" />
                 </Button>
               )}
             </div>
@@ -1080,5 +1109,256 @@ function CompanyRowCard({
         </div>
       </div>
     </Card>
+  );
+}
+
+// Enhanced Stats Cards Component
+function EnhancedStatsCards({ totalCount, companies }: any) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-2xl p-5 border border-blue-200/50 backdrop-blur-sm">
+        <div className="text-3xl font-bold text-blue-700 mb-2">{totalCount}</div>
+        <div className="text-sm font-medium text-blue-800">Total Businesses</div>
+        <div className="text-xs text-blue-600 mt-1">Registered & Verified</div>
+      </div>
+      <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-2xl p-5 border border-green-200/50 backdrop-blur-sm">
+        <div className="text-3xl font-bold text-green-700 mb-2">
+          {companies.filter((c: Company) => c.status === "active").length}
+        </div>
+        <div className="text-sm font-medium text-green-800">Active Companies</div>
+        <div className="text-xs text-green-600 mt-1">Currently Operating</div>
+      </div>
+      <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-2xl p-5 border border-purple-200/50 backdrop-blur-sm">
+        <div className="text-3xl font-bold text-purple-700 mb-2">
+          {Array.from(new Set(companies.map((c: Company) => c.industry))).length}
+        </div>
+        <div className="text-sm font-medium text-purple-800">Industries</div>
+        <div className="text-xs text-purple-600 mt-1">Diverse Sectors</div>
+      </div>
+      <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 rounded-2xl p-5 border border-amber-200/50 backdrop-blur-sm">
+        <div className="text-3xl font-bold text-amber-700 mb-2">
+          {companies.filter((c: Company) => c.verificationLevel === "verified").length}
+        </div>
+        <div className="text-sm font-medium text-amber-800">Verified</div>
+        <div className="text-xs text-amber-600 mt-1">Fully Compliant</div>
+      </div>
+    </div>
+  );
+}
+
+// Enhanced View Controls Component
+function EnhancedViewControls({
+  viewMode,
+  setViewMode,
+  companies,
+  totalCount,
+  activeFiltersCount,
+}: any) {
+  return (
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+          Discover Businesses
+        </h2>
+        <p className="text-sm text-gray-600">
+          Showing {companies.length} of {totalCount} results
+          {activeFiltersCount > 0 && ` (${activeFiltersCount} filter${activeFiltersCount !== 1 ? 's' : ''} active)`}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1 bg-gray-100/50 rounded-xl p-1 backdrop-blur-sm">
+          <Button
+            variant={viewMode === "grid" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("grid")}
+            className={`h-9 px-3 rounded-lg ${viewMode === "grid" ? "shadow-sm bg-white" : ""}`}
+          >
+            <Grid className="w-4 h-4" />
+            <span className="ml-2">Grid</span>
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("list")}
+            className={`h-9 px-3 rounded-lg ${viewMode === "list" ? "shadow-sm bg-white" : ""}`}
+          >
+            <List className="w-4 h-4" />
+            <span className="ml-2">List</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Enhanced Empty State Component
+function EnhancedEmptyState({ clearFilters }: any) {
+  return (
+    <div className="text-center py-16 bg-gradient-to-br from-white to-gray-50/50 rounded-3xl border-2 border-gray-200/50 shadow-lg">
+      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex items-center justify-center mx-auto mb-6">
+        <Search className="w-10 h-10 text-blue-500" />
+      </div>
+      <h3 className="text-2xl font-bold text-gray-900 mb-3">No businesses found</h3>
+      <p className="text-gray-600 mb-8 max-w-md mx-auto">
+        Try adjusting your search criteria or filters to find what you're looking for.
+      </p>
+      <Button
+        onClick={clearFilters}
+        className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
+      >
+        <X className="w-4 h-4 mr-2" />
+        Clear all filters
+      </Button>
+    </div>
+  );
+}
+
+// Enhanced Pagination Component
+function EnhancedPagination({
+  currentPage,
+  totalPages,
+  hasPreviousPage,
+  hasNextPage,
+  goToPage,
+}: any) {
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
+      <div className="text-sm text-gray-600">
+        Page {currentPage} of {totalPages}
+      </div>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={!hasPreviousPage}
+          className="h-9 px-4 rounded-xl border-gray-300"
+        >
+          Previous
+        </Button>
+        
+        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+          let pageNum;
+          if (totalPages <= 5) {
+            pageNum = i + 1;
+          } else if (currentPage <= 3) {
+            pageNum = i + 1;
+          } else if (currentPage >= totalPages - 2) {
+            pageNum = totalPages - 4 + i;
+          } else {
+            pageNum = currentPage - 2 + i;
+          }
+          
+          return (
+            <Button
+              key={pageNum}
+              variant={currentPage === pageNum ? "default" : "outline"}
+              size="sm"
+              onClick={() => goToPage(pageNum)}
+              className={`h-9 w-9 rounded-xl ${currentPage === pageNum ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'border-gray-300'}`}
+            >
+              {pageNum}
+            </Button>
+          );
+        })}
+        
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={!hasNextPage}
+          className="h-9 px-4 rounded-xl border-gray-300"
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Enhanced Data Quality Note Component
+function EnhancedDataQualityNote() {
+  return (
+    <div className="mt-12 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-emerald-500/10 rounded-3xl border-2 border-blue-200/50 p-6 sm:p-8 backdrop-blur-sm">
+      <div className="flex flex-col md:flex-row items-start gap-6">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
+          <Shield className="w-8 h-8 text-white" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-gray-900 mb-3">
+            Trusted & Verified Business Data
+          </h3>
+          <p className="text-gray-700 mb-6 leading-relaxed">
+            All business information is sourced directly from the Sierra Leone Corporate Affairs Commission 
+            and verified through official channels. Our verification process ensures you get accurate, 
+            up-to-date information for confident business decisions.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 mr-3"></div>
+              <span className="text-sm font-medium text-gray-900">✓ Official Registration Data</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mr-3"></div>
+              <span className="text-sm font-medium text-gray-900">⏳ Real-time Updates</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 mr-3"></div>
+              <span className="text-sm font-medium text-gray-900">🔒 Secure & Verified Sources</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Skeleton Components
+function EnhancedHeaderSkeleton() {
+  return (
+    <div className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-300 rounded w-48 mx-auto mb-4"></div>
+          <div className="h-12 bg-gray-300 rounded w-3/4 mx-auto mb-3"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto mb-8"></div>
+          
+          <div className="bg-white/50 rounded-2xl p-6 mb-6">
+            <div className="h-14 bg-gray-300 rounded mb-4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="h-12 bg-gray-300 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EnhancedContentSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="animate-pulse">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-24 bg-gray-300 rounded-2xl"></div>
+          ))}
+        </div>
+        
+        <div className="flex justify-between mb-6">
+          <div className="h-8 bg-gray-300 rounded w-48"></div>
+          <div className="h-8 bg-gray-300 rounded w-32"></div>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-96 bg-gray-300 rounded-xl"></div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

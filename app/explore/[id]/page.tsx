@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   Building2,
   MapPin,
@@ -19,7 +20,7 @@ import {
   ExternalLink,
   BarChart,
   Target,
-  Building,
+  Building, // Use this instead of BuildingOffice
   Home,
   Wallet,
   Award,
@@ -36,6 +37,27 @@ import {
   Share2,
   Flag,
   BuildingIcon,
+  Loader2,
+  FileWarning,
+  ChartBarIncreasing,
+  BadgeCheck,
+  Clock,
+  Globe2,
+  BanknoteIcon,
+  Scale,
+  Handshake,
+  ShieldCheck,
+  Cpu,
+  Lightbulb,
+  Target as TargetIcon,
+  TrendingDown,
+  LineChart,
+  PieChart,
+  MoreVertical,
+  ChevronDown,
+  BookOpen,
+  Layers,
+  Hash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -50,232 +72,629 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 
-// Mock detailed company data
-const detailedCompany = {
-  id: "SL-2023-001",
-  name: "Africell Sierra Leone Limited",
-  registrationNumber: "C123456",
-  status: "Active",
-  industry: "Telecommunications",
-  location: "Freetown",
-  foundedYear: 2010,
-  employees: "500-1000",
-  revenue: "$100M+",
-  description:
-    "Leading telecommunications provider in Sierra Leone with nationwide coverage. Africell is committed to connecting communities and driving digital transformation across the country.",
-  verificationLevel: "Verified",
-  rating: 4.8,
-  tags: ["Telecom", "ISP", "Mobile", "National", "Digital Services"],
-  website: "https://africell.sl",
-  contactEmail: "info@africell.sl",
-  ceo: "Mr. John Doe",
-  contactPhone: "+232 76 123 456",
-  address: "25 Siaka Stevens Street, Freetown, Sierra Leone",
-  taxId: "TAX-2023-001234",
-  businessType: "Private Limited Company",
-  ownership: "Foreign Investment",
-  yearEnd: "December 31",
-  lastUpdated: "2024-01-15",
-  complianceScore: 92,
-  financialSummary:
-    "Strong financial performance with consistent year-over-year growth. Market leader in telecommunications with expanding customer base.",
-  services: [
-    "Mobile Voice Services",
-    "4G/5G Data Services",
-    "Mobile Money (AfriMoney)",
-    "Corporate Solutions",
-    "Internet Services",
-    "Digital Content",
-  ],
-  subsidiaries: [
-    "Africell Mobile Money Ltd",
-    "Africell Digital Services Ltd",
-    "Africell Towers Ltd",
-  ],
-  certifications: [
-    "ISO 9001:2015 Certified",
-    "GSMA Member",
-    "Sierra Leone Chamber of Commerce",
-    "Telecommunications Regulatory Commission Licensed",
-  ],
-  recentNews: [
-    {
-      title: "Africell expands 4G coverage to rural areas",
-      date: "2024-01-10",
-      source: "Sierra Leone Business News",
-    },
-    {
-      title: "Company reports 20% revenue growth",
-      date: "2023-12-15",
-      source: "Financial Times",
-    },
-    {
-      title: "Launches new digital payment platform",
-      date: "2023-11-20",
-      source: "Tech Africa",
-    },
-  ],
+// Type definitions based on your API response
+interface Company {
+  id: string;
+  name: string;
+  registrationNumber: string;
+  status: "active" | "pending" | "suspended" | "inactive";
+  verificationLevel: "verified" | "pending" | "unverified";
+  industry: string;
+  businessType: string;
+  ownership: string;
+  location: string;
+  city?: string;
+  province?: string;
+  country: string;
+  address?: string;
+  postalCode?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  website?: string;
+  ceo?: string;
+  description?: string;
+  tradingName?: string;
+  foundedYear: number;
+  employees?: string;
+  revenue?: string;
+  rating?: string;
+  complianceScore?: number;
+  trustScore?: number;
+  capitalInvestment?: string;
+  annualRevenueRange?: string;
+  financialSummary?: string;
+  yearEnd?: string;
+  taxId?: string;
+  
+  // JSON fields
+  tags: string[];
+  services: string[];
+  certifications: string[];
+  subsidiaries: string[];
+  recentNews: Array<{
+    title: string;
+    date: string;
+    source: string;
+    link?: string;
+  }>;
+  directors: Array<{
+    name: string;
+    position: string;
+    nationality?: string;
+    identificationNumber?: string;
+    isPrimary?: boolean;
+    sharePercentage?: number;
+  }>;
+  complianceRecords: Array<{
+    type: string;
+    status: string;
+    dueDate?: string;
+    completedDate?: string;
+    score?: number;
+  }>;
+  revenueGrowth: Array<{
+    year: number;
+    growth: number;
+    amount: string;
+  }>;
+  marketCoverage: Array<{
+    region: string;
+    percentage: number;
+    notes?: string;
+  }>;
+  majorClients: string[];
+  awards: Array<{
+    name: string;
+    year: number;
+    issuer: string;
+  }>;
+  socialMedia: Record<string, string>;
+  bankDetails: {
+    bankName?: string;
+    accountNumber?: string;
+    accountName?: string;
+    branch?: string;
+  };
+  esgScores: {
+    environmental: number;
+    social: number;
+    governance: number;
+    overall: number;
+  };
+  riskAssessment: {
+    financialRisk: number;
+    operationalRisk: number;
+    complianceRisk: number;
+    marketRisk: number;
+    overallRisk: number;
+  };
+  auditInfo: {
+    lastAuditDate?: string;
+    auditor?: string;
+    auditOpinion?: string;
+    nextAuditDate?: string;
+  };
+  regulatoryFilings: Array<{
+    type: string;
+    filingDate: string;
+    status: string;
+    documentUrl?: string;
+  }>;
+  
+  // Timestamps
+  cacRegistrationDate?: string;
+  cacExpiryDate?: string;
+  lastVerifiedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  lastUpdated?: string;
+  yearsOperating?: number;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: Company;
+  timestamp: string;
+}
+
+// Helper functions to format data
+const formatStatus = (status: string) => {
+  return status.charAt(0).toUpperCase() + status.slice(1);
+};
+
+const formatVerificationLevel = (level: string) => {
+  return level.charAt(0).toUpperCase() + level.slice(1);
+};
+
+const formatIndustry = (industry: string) => {
+  return industry
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Color themes for different statuses
+const statusColors = {
+  active: {
+    bg: "from-emerald-500/20 to-green-500/10",
+    border: "border-emerald-200/50",
+    text: "text-emerald-700",
+    icon: "text-emerald-500",
+    gradient: "from-emerald-500 to-green-500",
+  },
+  pending: {
+    bg: "from-amber-500/20 to-orange-500/10",
+    border: "border-amber-200/50",
+    text: "text-amber-700",
+    icon: "text-amber-500",
+    gradient: "from-amber-500 to-orange-500",
+  },
+  suspended: {
+    bg: "from-rose-500/20 to-pink-500/10",
+    border: "border-rose-200/50",
+    text: "text-rose-700",
+    icon: "text-rose-500",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  inactive: {
+    bg: "from-gray-500/20 to-gray-500/10",
+    border: "border-gray-200/50",
+    text: "text-gray-700",
+    icon: "text-gray-500",
+    gradient: "from-gray-500 to-gray-600",
+  },
+};
+
+const verificationColors = {
+  verified: {
+    bg: "from-blue-500/20 to-cyan-500/10",
+    border: "border-blue-200/50",
+    text: "text-blue-700",
+    icon: "text-blue-500",
+    gradient: "from-blue-500 to-cyan-500",
+  },
+  pending: {
+    bg: "from-amber-500/20 to-orange-500/10",
+    border: "border-amber-200/50",
+    text: "text-amber-700",
+    icon: "text-amber-500",
+    gradient: "from-amber-500 to-orange-500",
+  },
+  unverified: {
+    bg: "from-gray-500/20 to-gray-500/10",
+    border: "border-gray-200/50",
+    text: "text-gray-700",
+    icon: "text-gray-500",
+    gradient: "from-gray-500 to-gray-600",
+  },
 };
 
 export default function CompanyDetailPage() {
+  const params = useParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [isFavorite, setIsFavorite] = useState(false);
+  const [company, setCompany] = useState<Company | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
-      {/* Back Navigation */}
-      <div className="border-b border-gray-200/50 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link
-              href="/explore"
-              className="inline-flex items-center group text-sm text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 flex items-center justify-center mr-2 transition-colors">
-                <ArrowLeft className="w-4 h-4" />
+  // Fetch company details
+  useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(`/api/explore/${params.id}`);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Company not found');
+          }
+          throw new Error(`Failed to fetch company: ${response.status}`);
+        }
+
+        const data: ApiResponse = await response.json();
+        
+        if (data.success) {
+          setCompany(data.data);
+        } else {
+          setError('Failed to load company data');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching company:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (params.id) {
+      fetchCompany();
+    }
+  }, [params.id]);
+
+  // Loading State
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex flex-col items-center justify-center space-y-8">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 animate-pulse" />
+              <Loader2 className="w-12 h-12 animate-spin text-blue-600 absolute inset-0 m-auto" />
+            </div>
+            <div className="text-center space-y-3">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
+                Loading Company Profile
+              </h2>
+              <p className="text-gray-600 max-w-md">
+                Fetching comprehensive business intelligence and analytics...
+              </p>
+              <div className="w-64 h-2 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-slide"></div>
               </div>
-              Back to Explore
-            </Link>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsFavorite(!isFavorite)}
-                className="text-gray-500 hover:text-rose-500"
+            </div>
+            <style jsx>{`
+              @keyframes slide {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(200%); }
+              }
+              .animate-slide {
+                animation: slide 1.5s ease-in-out infinite;
+              }
+            `}</style>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error State
+  if (error || !company) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="relative w-32 h-32 mx-auto mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-pink-500/10 rounded-full blur-xl" />
+              <div className="relative w-32 h-32 rounded-full bg-gradient-to-r from-rose-100 to-pink-100 flex items-center justify-center border-4 border-white shadow-lg">
+                <AlertCircle className="w-16 h-16 text-rose-600" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              {error?.includes('not found') ? 'Company Not Found' : 'Error Loading Profile'}
+            </h2>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg">
+              {error || 'The requested company profile could not be found in our registry.'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                onClick={() => router.back()}
+                className="h-12 px-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
               >
-                <Heart
-                  className={`w-5 h-5 ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`}
-                />
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Return to Previous
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-500 hover:text-blue-600"
+              <Button 
+                variant="outline"
+                onClick={() => router.push('/explore')}
+                className="h-12 px-6 border-2"
               >
-                <Share2 className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-500 hover:text-amber-500"
-              >
-                <Flag className="w-5 h-5" />
+                <Building2 className="w-5 h-5 mr-2" />
+                Browse Companies
               </Button>
             </div>
           </div>
         </div>
       </div>
+    );
+  }
 
-      {/* Company Header with Glass Effect */}
+  // Calculate years operating
+  const yearsOperating = new Date().getFullYear() - company.foundedYear;
+
+  // Get display values with fallbacks
+  const displayName = company.name || 'Unknown Company';
+  const displayIndustry = formatIndustry(company.industry);
+  const displayLocation = company.city || company.location || 'Location not specified';
+  const displayDescription = company.description || 'No description available.';
+  const displayStatus = formatStatus(company.status);
+  const displayVerificationLevel = formatVerificationLevel(company.verificationLevel);
+  const displayRating = company.rating || 'N/A';
+  const displayComplianceScore = company.complianceScore || 0;
+  const displayRevenue = company.revenue || company.annualRevenueRange || 'Not available';
+  const displayEmployees = company.employees || 'Not specified';
+  const displayWebsite = company.website;
+  const displayContactEmail = company.contactEmail;
+  const displayContactPhone = company.contactPhone;
+  const displayCEO = company.ceo;
+  const displayAddress = company.address;
+  const displayTaxId = company.taxId;
+  const displayBusinessType = formatIndustry(company.businessType);
+  const displayOwnership = formatIndustry(company.ownership);
+  const displayYearEnd = company.yearEnd;
+  const displayLastUpdated = company.lastUpdated || company.updatedAt || company.lastVerifiedAt;
+
+  // Get arrays (with fallback)
+  const displayServices = company.services || [];
+  const displaySubsidiaries = company.subsidiaries || [];
+  const displayCertifications = company.certifications || [];
+  const displayTags = company.tags || [];
+  const displayRecentNews = company.recentNews || [];
+  const displayComplianceRecords = company.complianceRecords || [];
+  const displayRevenueGrowth = company.revenueGrowth || [];
+  const displayAwards = company.awards || [];
+  const displayDirectors = company.directors || [];
+  const displayFinancialSummary = company.financialSummary || 'No financial summary available.';
+
+  // Handle View button click
+  const handleVisitWebsite = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  // Calculate metrics
+  const trustScore = company.trustScore || 85;
+  const riskScore = company.riskAssessment?.overallRisk || 25;
+  const esgScore = company.esgScores?.overall || 78;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50/50 via-white to-blue-50/20">
+      {/* Background Effects */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-60 -left-40 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 left-1/2 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl" />
+      </div>
+
+      {/* Header with Gradient Background */}
       <div className="relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
+        
+        {/* Navigation */}
+        <div className="relative border-b border-white/20 bg-white/80 backdrop-blur-xl shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="ghost"
+                onClick={() => router.back()}
+                className="group px-4 h-10 bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-blue-300 hover:bg-white/80 rounded-xl transition-all duration-200"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                <span className="text-sm font-medium text-gray-700 group-hover:text-blue-700 transition-colors">
+                  Back
+                </span>
+              </Button>
+              <div className="flex items-center gap-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsFavorite(!isFavorite)}
+                        className={`h-10 w-10 rounded-xl backdrop-blur-sm border ${
+                          isFavorite
+                            ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100"
+                            : "bg-white/50 border-gray-200/50 text-gray-600 hover:border-rose-200 hover:bg-rose-50/50"
+                        } transition-all duration-200`}
+                      >
+                        <Heart
+                          className={`w-5 h-5 ${isFavorite ? "fill-rose-500" : ""}`}
+                        />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
 
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-600 transition-all duration-200"
+                      >
+                        <Share2 className="w-5 h-5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Share profile</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-amber-300 hover:bg-amber-50/50 hover:text-amber-600 transition-all duration-200"
+                      >
+                        <Flag className="w-5 h-5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Report issue</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <Button
+                  className="h-10 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  <span className="font-medium">Full Report</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Company Header */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
-            {/* Company Logo & Basic Info */}
+          <div className="flex flex-col lg:flex-row gap-8 lg:items-start">
+            {/* Left Column - Company Identity */}
             <div className="flex-1">
-              <div className="flex items-start gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row gap-6 lg:gap-8">
+                {/* Logo Container */}
                 <div className="relative">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 flex items-center justify-center shadow-2xl shadow-blue-500/20">
-                    <Building2 className="w-12 h-12 sm:w-14 sm:h-14 text-white" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
-                    <CheckCircle className="w-4 h-4 text-white" />
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 shadow-2xl shadow-blue-500/30 flex items-center justify-center overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+                    <Building2 className="w-16 h-16 sm:w-20 sm:h-20 text-white z-10" />
+                    
+                    {/* Animated rings */}
+                    <div className="absolute inset-0 border-2 border-white/20 rounded-3xl animate-ping" style={{ animationDelay: '0.5s' }} />
+                    <div className="absolute inset-4 border-2 border-white/10 rounded-2xl animate-ping" style={{ animationDelay: '1s' }} />
+                    
+                    {/* Verification Badge */}
+                    {company.verificationLevel === "verified" && (
+                      <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-20 animate-bounce-subtle">
+                        <BadgeCheck className="w-6 h-6 text-white" />
+                      </div>
+                    )}
                   </div>
                 </div>
 
+                {/* Company Info */}
                 <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <Badge
-                      className={`backdrop-blur-sm ${
-                        detailedCompany.status === "Active"
-                          ? "bg-gradient-to-r from-green-500/10 to-emerald-500/10 text-green-700 border-green-200/50"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2 animate-pulse" />
-                      {detailedCompany.status}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="bg-gradient-to-r from-blue-500/5 to-cyan-500/5 text-blue-700 border-blue-200/50 backdrop-blur-sm"
-                    >
-                      <Shield className="w-3 h-3 mr-1.5" />
-                      {detailedCompany.verificationLevel}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="bg-gradient-to-r from-amber-500/5 to-orange-500/5 text-amber-700 border-amber-200/50 backdrop-blur-sm"
-                    >
-                      <Star className="w-3.5 h-3.5 mr-1.5 fill-amber-500 text-amber-500" />
-                      {detailedCompany.rating}
-                    </Badge>
+                  {/* Status Badges */}
+                  <div className="flex flex-wrap items-center gap-3 mb-5">
+                    <div className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${statusColors[company.status].border} ${statusColors[company.status].bg}`}>
+                      <div className={`w-2 h-2 rounded-full ${statusColors[company.status].icon} mr-2 animate-pulse`} />
+                      <span className={`text-sm font-semibold ${statusColors[company.status].text}`}>
+                        {displayStatus}
+                      </span>
+                    </div>
+                    
+                    <div className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${verificationColors[company.verificationLevel].border} ${verificationColors[company.verificationLevel].bg}`}>
+                      <Shield className={`w-4 h-4 ${verificationColors[company.verificationLevel].icon} mr-2`} />
+                      <span className={`text-sm font-semibold ${verificationColors[company.verificationLevel].text}`}>
+                        {displayVerificationLevel}
+                      </span>
+                    </div>
+                    
+                    {displayRating !== 'N/A' && (
+                      <div className="inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm bg-gradient-to-r from-amber-500/10 to-orange-500/5 border border-amber-200/50">
+                        <Star className="w-4 h-4 fill-amber-500 text-amber-500 mr-2" />
+                        <span className="text-sm font-semibold text-amber-700">
+                          {displayRating} Rating
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 leading-tight">
-                    {detailedCompany.name}
-                    <span className="block text-lg sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 font-normal mt-1">
-                      {detailedCompany.registrationNumber}
+                  {/* Company Name */}
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+                    {displayName}
+                    <span className="block text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 font-medium mt-2">
+                      {company.tradingName || company.registrationNumber}
                     </span>
                   </h1>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base text-gray-600 mb-6">
-                    <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-gray-200/50">
-                      <MapPin className="w-4 h-4 mr-2 text-blue-600" />
-                      <span className="font-medium">
-                        {detailedCompany.location}
-                      </span>
+                  {/* Quick Info */}
+                  <div className="flex flex-wrap items-center gap-4 mb-8">
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
+                      <MapPin className="w-5 h-5 text-blue-600 mr-3" />
+                      <span className="font-medium text-gray-900">{displayLocation}</span>
                     </div>
-                    <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-gray-200/50">
-                      <Building className="w-4 h-4 mr-2 text-purple-600" />
-                      <span className="font-medium">
-                        {detailedCompany.industry}
-                      </span>
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
+                      <Building className="w-5 h-5 text-purple-600 mr-3" /> {/* Changed from BuildingOffice */}
+                      <span className="font-medium text-gray-900">{displayIndustry}</span>
                     </div>
-                    <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-gray-200/50">
-                      <Calendar className="w-4 h-4 mr-2 text-amber-600" />
-                      <span className="font-medium">
-                        Est. {detailedCompany.foundedYear}
+                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl">
+                      <Clock className="w-5 h-5 text-amber-600 mr-3" />
+                      <span className="font-medium text-gray-900">
+                        Since {company.foundedYear} · {yearsOperating} years
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 max-w-3xl text-lg leading-relaxed">
-                    {detailedCompany.description}
-                  </p>
+                  {/* Description */}
+                  <div className="prose prose-lg max-w-none">
+                    <p className="text-gray-700 text-lg leading-relaxed bg-gradient-to-r from-gray-900 to-gray-800 bg-clip-text text-transparent">
+                      {displayDescription}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-64">
-              {detailedCompany.website && (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="group h-12 bg-white/80 backdrop-blur-sm border-gray-300/50 hover:border-blue-300 hover:bg-white"
-                >
-                  <a
-                    href={detailedCompany.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
+            {/* Right Column - Quick Actions & Metrics */}
+            <div className="lg:w-80 space-y-6">
+              {/* Primary Actions */}
+              <div className="grid grid-cols-2 gap-3">
+                {displayWebsite && (
+                  <Button
+                    variant="outline"
+                    className="h-14 bg-white/80 backdrop-blur-sm border-gray-300/50 hover:border-blue-300 hover:bg-white rounded-xl group transition-all duration-200"
+                    onClick={() => handleVisitWebsite(displayWebsite)}
                   >
-                    <Globe className="w-4 h-4 mr-2 group-hover:text-blue-600 transition-colors" />
-                    <span>Visit Website</span>
-                    <ExternalLink className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                    <div className="flex items-center justify-center w-full">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-600/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <Globe className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div className="text-left">
+                        <div className="text-sm font-semibold text-gray-900">Website</div>
+                        <div className="text-xs text-gray-500 truncate">Visit</div>
+                      </div>
+                    </div>
+                  </Button>
+                )}
+                
+                <Button
+                  className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group"
+                >
+                  <div className="flex items-center justify-center w-full">
+                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                      <FileText className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-semibold text-white">Full Report</div>
+                      <div className="text-xs text-white/80">Download PDF</div>
+                    </div>
+                  </div>
                 </Button>
-              )}
-              <Button
-                variant="default"
-                className="h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Report
-              </Button>
+              </div>
+
+              {/* Key Metrics */}
+              <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
+                  <TargetIcon className="w-4 h-4 text-blue-600 mr-2" />
+                  Key Metrics
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayEmployees}</div>
+                    <div className="text-xs text-gray-500">Employees</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayRevenue}</div>
+                    <div className="text-xs text-gray-500">Annual Revenue</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{displayComplianceScore}%</div>
+                    <div className="text-xs text-gray-500">Compliance</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{trustScore}%</div>
+                    <div className="text-xs text-gray-500">Trust Score</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -286,52 +705,34 @@ export default function CompanyDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Quick Facts */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Enhanced Registration Card */}
-            <Card className="border-2 border-blue-100/50 bg-gradient-to-b from-white to-blue-50/30 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-3">
-                    <FileCheck className="w-5 h-5 text-white" />
+            {/* Registration Card */}
+            <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5" />
+              <CardHeader className="relative">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
+                <CardTitle className="flex items-center text-lg">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-3 shadow-lg">
+                    <FileCheck className="w-6 h-6 text-white" />
                   </div>
                   <span>Registration Details</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-5">
+              <CardContent className="relative space-y-5">
                 {[
-                  {
-                    label: "Registration Number",
-                    value: detailedCompany.registrationNumber,
-                    icon: CreditCard,
-                  },
-                  {
-                    label: "Business Type",
-                    value: detailedCompany.businessType,
-                    icon: BuildingIcon,
-                  },
-                  {
-                    label: "Ownership",
-                    value: detailedCompany.ownership,
-                    icon: UsersIcon,
-                  },
-                  {
-                    label: "Year End",
-                    value: detailedCompany.yearEnd,
-                    icon: Calendar,
-                  },
-                  {
-                    label: "Tax ID",
-                    value: detailedCompany.taxId,
-                    icon: Wallet,
-                  },
+                  { label: "Registration Number", value: company.registrationNumber, icon: CreditCard },
+                  { label: "Business Type", value: displayBusinessType, icon: BuildingIcon },
+                  { label: "Ownership", value: displayOwnership, icon: UsersIcon },
+                  { label: "Year End", value: displayYearEnd || 'Not specified', icon: Calendar },
+                  { label: "Tax ID", value: displayTaxId || 'Not specified', icon: Wallet },
+                  { label: "Industry", value: displayIndustry, icon: Hash },
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center group">
-                    <item.icon className="w-4 h-4 text-blue-600 mr-3 flex-shrink-0" />
+                  <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-blue-50/50 transition-all duration-200">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-600/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                      <item.icon className="w-5 h-5 text-blue-600" />
+                    </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 mb-0.5">
-                        {item.label}
-                      </p>
-                      <p className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
+                      <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
                         {item.value}
                       </p>
                     </div>
@@ -340,580 +741,206 @@ export default function CompanyDetailPage() {
               </CardContent>
             </Card>
 
-            {/* Enhanced Contact Card */}
-            <Card className="border-2 border-cyan-100/50 bg-gradient-to-b from-white to-cyan-50/30 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-emerald-500" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center mr-3">
-                    <UsersIcon className="w-5 h-5 text-white" />
-                  </div>
-                  <span>Contact Information</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                {[
-                  { label: "CEO", value: detailedCompany.ceo, icon: Briefcase },
-                  {
-                    label: "Phone",
-                    value: detailedCompany.contactPhone,
-                    icon: Phone,
-                  },
-                  {
-                    label: "Email",
-                    value: detailedCompany.contactEmail,
-                    icon: Mail,
-                  },
-                  {
-                    label: "Address",
-                    value: detailedCompany.address,
-                    icon: Home,
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start group">
-                    <item.icon className="w-4 h-4 text-cyan-600 mr-3 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 mb-0.5">
-                        {item.label}
-                      </p>
-                      <p className="font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors break-all">
-                        {item.value}
-                      </p>
+            {/* Contact Card */}
+            {(displayCEO || displayContactPhone || displayContactEmail || displayAddress) && (
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-cyan-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5" />
+                <CardHeader className="relative">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-cyan-500" />
+                  <CardTitle className="flex items-center text-lg">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center mr-3 shadow-lg">
+                      <UsersIcon className="w-6 h-6 text-white" />
                     </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+                    <span>Contact Information</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative space-y-5">
+                  {[
+                    { label: "CEO", value: displayCEO, icon: Briefcase, show: !!displayCEO },
+                    { label: "Phone", value: displayContactPhone, icon: Phone, show: !!displayContactPhone },
+                    { label: "Email", value: displayContactEmail, icon: Mail, show: !!displayContactEmail },
+                    { label: "Address", value: displayAddress, icon: Home, show: !!displayAddress },
+                  ]
+                    .filter(item => item.show)
+                    .map((item, index) => (
+                      <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-cyan-50/50 transition-all duration-200">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/10 to-emerald-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                          <item.icon className="w-5 h-5 text-cyan-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
+                          <p className="font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors truncate">
+                            {item.value}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </CardContent>
+              </Card>
+            )}
 
-            {/* Enhanced Compliance Score Card */}
-            <Card className="border-2 border-green-100/50 bg-gradient-to-b from-white to-green-50/30 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mr-3">
-                    <Target className="w-5 h-5 text-white" />
-                  </div>
-                  <span>Compliance Score</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center mb-6">
-                  <div className="relative inline-block">
-                    <div className="text-4xl font-bold text-green-700 mb-1">
-                      {detailedCompany.complianceScore}%
+            {/* Score Cards Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Compliance Score */}
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm col-span-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-green-500/5" />
+                <CardHeader className="relative pb-4">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500" />
+                  <CardTitle className="flex items-center text-lg">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
+                      <ShieldCheck className="w-6 h-6 text-white" />
                     </div>
-                    <div className="absolute -top-1 -right-1">
-                      <Sparkles className="w-4 h-4 text-amber-500" />
-                    </div>
+                    <span>Compliance</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl font-bold text-emerald-700 mb-2">{displayComplianceScore}%</div>
+                    <p className="text-sm text-gray-600">Regulatory Compliance Score</p>
                   </div>
-                  <p className="text-sm text-gray-600">Regulatory Compliance</p>
-                </div>
-                <div className="space-y-2">
-                  <Progress
-                    value={detailedCompany.complianceScore}
-                    className="h-3 bg-gray-200"
-                  />
-                  <div className="flex justify-between text-xs font-medium text-gray-600">
-                    <span>Poor</span>
-                    <span>Average</span>
-                    <span className="text-green-700">Excellent</span>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0">
-                <div className="w-full text-center">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs text-gray-600 hover:text-green-700"
-                  >
-                    <Eye className="w-3 h-3 mr-1.5" />
-                    View Compliance Details
-                    <ChevronRight className="w-3 h-3 ml-1.5" />
-                  </Button>
-                </div>
-              </CardFooter>
-            </Card>
+                  <Progress value={displayComplianceScore} className="h-3 bg-gray-200/50" />
+                </CardContent>
+              </Card>
 
-            {/* Last Updated Badge */}
-            <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-xl border border-blue-200/50 p-4">
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-3 flex-shrink-0">
-                  <CheckCircle className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Data Verified & Updated
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    Last updated:{" "}
-                    {new Date(detailedCompany.lastUpdated).toLocaleDateString(
-                      "en-US",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      },
-                    )}
-                  </p>
-                </div>
-              </div>
+              {/* Trust Score */}
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                <CardContent className="p-5">
+                  <div className="flex items-center mb-3">
+                    <Handshake className="w-5 h-5 text-blue-600 mr-2" />
+                    <span className="text-sm font-semibold text-gray-900">Trust Score</span>
+                  </div>
+                  <div className="text-2xl font-bold text-blue-700">{trustScore}%</div>
+                  <Progress value={trustScore} className="h-2 mt-2 bg-gray-200/50" />
+                </CardContent>
+              </Card>
+
+              {/* Risk Score */}
+              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-rose-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                <CardContent className="p-5">
+                  <div className="flex items-center mb-3">
+                    <Scale className="w-5 h-5 text-rose-600 mr-2" />
+                    <span className="text-sm font-semibold text-gray-900">Risk Score</span>
+                  </div>
+                  <div className="text-2xl font-bold text-rose-700">{riskScore}%</div>
+                  <Progress value={riskScore} className="h-2 mt-2 bg-gray-200/50" />
+                </CardContent>
+              </Card>
             </div>
           </div>
 
           {/* Right Column - Detailed Info */}
           <div className="lg:col-span-2">
-            <Tabs
-              value={activeTab}
-              onValueChange={setActiveTab}
-              className="w-full"
-            >
-              <TabsList className="grid w-full grid-cols-4 mb-8 bg-gradient-to-r from-gray-100/50 to-gray-200/50 backdrop-blur-sm border border-gray-200/50 p-1 rounded-2xl">
+            {/* Enhanced Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 p-1 rounded-2xl shadow-lg">
                 {[
                   { value: "overview", label: "Overview", icon: Eye },
-                  { value: "financial", label: "Financial", icon: BarChart },
-                  { value: "operations", label: "Operations", icon: Zap },
-                  { value: "compliance", label: "Compliance", icon: Shield },
+                  { value: "financial", label: "Financial", icon: LineChart },
+                  { value: "operations", label: "Operations", icon: Cpu },
+                  { value: "compliance", label: "Compliance", icon: ShieldCheck },
                 ].map((tab) => (
                   <TabsTrigger
                     key={tab.value}
                     value={tab.value}
-                    className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all"
+                    className="data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:border data-[state=active]:border-gray-200/50 rounded-xl transition-all duration-200 group"
                   >
-                    <tab.icon className="w-4 h-4 mr-2" />
-                    {tab.label}
+                    <tab.icon className="w-4 h-4 mr-2 text-gray-500 group-data-[state=active]:text-blue-600" />
+                    <span className="font-medium text-gray-700 group-data-[state=active]:text-blue-700">
+                      {tab.label}
+                    </span>
                   </TabsTrigger>
                 ))}
               </TabsList>
 
+              {/* Overview Tab */}
               <TabsContent value="overview" className="space-y-6">
-                {/* Enhanced Stats Card */}
-                <Card className="border-2 border-blue-100/50 bg-gradient-to-b from-white to-blue-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <BarChart className="w-5 h-5 mr-2 text-blue-600" />
-                      Company Statistics
-                    </CardTitle>
-                    <CardDescription>
-                      Key metrics and performance indicators
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {[
-                        {
-                          value: detailedCompany.employees,
-                          label: "Employees",
-                          color: "blue",
-                          icon: Users,
-                        },
-                        {
-                          value: detailedCompany.revenue,
-                          label: "Annual Revenue",
-                          color: "green",
-                          icon: TrendingUp,
-                        },
-                        {
-                          value: "14",
-                          label: "Years Operating",
-                          color: "purple",
-                          icon: Calendar,
-                        },
-                        {
-                          value: "98%",
-                          label: "Service Coverage",
-                          color: "amber",
-                          icon: Target,
-                        },
-                      ].map((stat, index) => (
-                        <div
-                          key={index}
-                          className={`relative p-4 rounded-xl bg-gradient-to-br from-${stat.color}-50 to-white border border-${stat.color}-200/50 group hover:scale-[1.02] transition-transform`}
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div
-                              className={`w-10 h-10 rounded-lg bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 flex items-center justify-center`}
-                            >
-                              <stat.icon className="w-5 h-5 text-white" />
-                            </div>
-                            <div className="text-2xl font-bold text-gray-900">
-                              {stat.value}
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium text-gray-700">
-                            {stat.label}
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
+                {/* Services & Offerings */}
+                {displayServices.length > 0 && (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
+                          <Zap className="w-6 h-6 text-white" />
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Enhanced Services Card */}
-                <Card className="border-2 border-green-100/50 bg-gradient-to-b from-white to-green-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Zap className="w-5 h-5 mr-2 text-green-600" />
-                      Services & Offerings
-                    </CardTitle>
-                    <CardDescription>
-                      Core business services provided
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {detailedCompany.services.map((service, index) => (
-                        <div
-                          key={index}
-                          className="group flex items-center p-3 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-lg hover:border-green-300 hover:bg-green-50/30 transition-all"
-                        >
-                          <div className="w-8 h-8 rounded-md bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mr-3 flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-white" />
-                          </div>
-                          <span className="text-sm font-medium text-gray-900 group-hover:text-green-700 transition-colors">
-                            {service}
-                          </span>
+                        <div>
+                          <span>Services & Offerings</span>
+                          <CardDescription>Core business services provided</CardDescription>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Enhanced Tags Card */}
-                <Card className="border-2 border-purple-100/50 bg-gradient-to-b from-white to-purple-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Building2 className="w-5 h-5 mr-2 text-purple-600" />
-                      Business Categories
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {detailedCompany.tags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="px-3 py-1.5 backdrop-blur-sm bg-white/50 border-purple-200/50 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:border-purple-300 transition-all group"
-                        >
-                          <span className="text-purple-700 group-hover:text-purple-800">
-                            {tag}
-                          </span>
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="financial" className="space-y-6">
-                {/* Financial Overview Card */}
-                <Card className="border-2 border-emerald-100/50 bg-gradient-to-b from-white to-emerald-50/30 shadow-lg overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-full -translate-y-16 translate-x-16" />
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <TrendingUp className="w-5 h-5 mr-2 text-emerald-600" />
-                      Financial Overview
-                    </CardTitle>
-                    <CardDescription>
-                      Revenue, growth, and financial health
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-sm text-gray-500 mb-1">
-                          Annual Revenue
-                        </p>
-                        <p className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                          {detailedCompany.revenue}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500 mb-1">
-                          Financial Summary
-                        </p>
-                        <p className="text-gray-700 leading-relaxed">
-                          {detailedCompany.financialSummary}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Enhanced Growth Chart */}
-                    <div className="border border-emerald-200/50 rounded-xl p-5 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm">
-                      <div className="flex items-center justify-between mb-6">
-                        <h4 className="font-semibold text-gray-900 flex items-center">
-                          <TrendingUp className="w-5 h-5 mr-2 text-emerald-600" />
-                          Revenue Growth (Last 5 Years)
-                        </h4>
-                        <div className="text-sm font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-                          +20% CAGR
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        {[
-                          { year: "2023", growth: 20, amount: "$120M" },
-                          { year: "2022", growth: 18, amount: "$100M" },
-                          { year: "2021", growth: 15, amount: "$85M" },
-                          { year: "2020", growth: 12, amount: "$74M" },
-                          { year: "2019", growth: 10, amount: "$66M" },
-                        ].map((item) => (
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {displayServices.map((service, index) => (
                           <div
-                            key={item.year}
-                            className="flex items-center group"
+                            key={index}
+                            className="group flex items-center p-4 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50/30 transition-all duration-200"
                           >
-                            <span className="w-16 text-sm font-medium text-gray-700">
-                              {item.year}
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/10 to-green-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                              <CheckCircle className="w-5 h-5 text-emerald-600" />
+                            </div>
+                            <span className="font-medium text-gray-900 group-hover:text-emerald-700 transition-colors">
+                              {service}
                             </span>
-                            <div className="flex-1 ml-4">
-                              <div className="relative h-3 bg-gray-200/50 rounded-full overflow-hidden">
-                                <div
-                                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full transition-all duration-500 group-hover:opacity-90"
-                                  style={{ width: `${item.growth * 3}%` }}
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </div>
-                            </div>
-                            <div className="w-28 text-right">
-                              <span className="text-sm font-semibold text-emerald-700">
-                                {item.amount}
-                              </span>
-                              <span className="text-xs text-emerald-600 ml-2">
-                                (+{item.growth}%)
-                              </span>
-                            </div>
                           </div>
                         ))}
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                )}
 
-                {/* Subsidiaries Card */}
-                {detailedCompany.subsidiaries &&
-                  detailedCompany.subsidiaries.length > 0 && (
-                    <Card className="border-2 border-blue-100/50 bg-gradient-to-b from-white to-blue-50/30 shadow-lg overflow-hidden">
-                      <CardHeader>
-                        <CardTitle className="flex items-center">
-                          <Building2 className="w-5 h-5 mr-2 text-blue-600" />
-                          Subsidiaries & Affiliates
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          {detailedCompany.subsidiaries.map(
-                            (subsidiary, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center p-4 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all group"
-                              >
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-4 flex-shrink-0">
-                                  <Building2 className="w-5 h-5 text-white" />
-                                </div>
-                                <span className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
-                                  {subsidiary}
-                                </span>
-                                <ChevronRight className="w-4 h-4 ml-auto text-gray-400 group-hover:text-blue-600 transition-colors" />
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-              </TabsContent>
-
-              <TabsContent value="operations" className="space-y-6">
-                {/* Operations Card */}
-                <Card className="border-2 border-amber-100/50 bg-gradient-to-b from-white to-amber-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Zap className="w-5 h-5 mr-2 text-amber-600" />
-                      Operational Details
-                    </CardTitle>
-                    <CardDescription>
-                      Business operations and structure
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[
-                        {
-                          label: "Business Type",
-                          value: detailedCompany.businessType,
-                          icon: BuildingIcon,
-                        },
-                        {
-                          label: "Ownership Structure",
-                          value: detailedCompany.ownership,
-                          icon: UsersIcon,
-                        },
-                        {
-                          label: "Year Established",
-                          value: detailedCompany.foundedYear,
-                          icon: Calendar,
-                        },
-                        {
-                          label: "Primary Location",
-                          value: detailedCompany.location,
-                          icon: MapPin,
-                        },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="p-4 bg-white/50 backdrop-blur-sm border border-amber-200/50 rounded-xl"
-                        >
-                          <div className="flex items-center mb-2">
-                            <item.icon className="w-4 h-4 text-amber-600 mr-2" />
-                            <p className="text-sm font-medium text-gray-700">
-                              {item.label}
-                            </p>
-                          </div>
-                          <p className="text-lg font-semibold text-gray-900">
-                            {item.value}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Certifications Card */}
-                <Card className="border-2 border-indigo-100/50 bg-gradient-to-b from-white to-indigo-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Award className="w-5 h-5 mr-2 text-indigo-600" />
-                      Certifications & Memberships
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {detailedCompany.certifications.map((cert, index) => (
-                        <div
-                          key={index}
-                          className="group relative overflow-hidden p-4 bg-gradient-to-br from-white to-indigo-50/50 rounded-xl border border-indigo-200/50 hover:border-indigo-300 transition-all"
-                        >
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mr-3 flex-shrink-0">
-                              <Award className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-sm font-medium text-gray-900 group-hover:text-indigo-700 transition-colors">
-                              {cert}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 transform translate-y-full group-hover:translate-y-0 transition-transform" />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="compliance" className="space-y-6">
-                {/* Compliance Status Card */}
-                <Card className="border-2 border-green-100/50 bg-gradient-to-b from-white to-green-50/30 shadow-lg overflow-hidden">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Shield className="w-5 h-5 mr-2 text-green-600" />
-                      Regulatory Compliance
-                    </CardTitle>
-                    <CardDescription>
-                      Legal and regulatory standing
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {[
-                      {
-                        title: "Tax Compliance",
-                        status: "Active",
-                        description: "Fully compliant - All taxes paid",
-                        score: 95,
-                      },
-                      {
-                        title: "Business License",
-                        status: "Active",
-                        description: "Valid until December 2024",
-                        score: 100,
-                      },
-                      {
-                        title: "Environmental Compliance",
-                        status: "Active",
-                        description: "All standards met",
-                        score: 90,
-                      },
-                      {
-                        title: "Labor Regulations",
-                        status: "Active",
-                        description: "Compliant with all labor laws",
-                        score: 88,
-                      },
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-4 bg-white/50 backdrop-blur-sm border border-green-200/50 rounded-xl hover:border-green-300 transition-all"
-                      >
-                        <div className="flex items-center">
-                          <div
-                            className={`w-3 h-3 rounded-full mr-3 ${item.score > 90 ? "bg-green-500 animate-pulse" : "bg-amber-500"}`}
-                          />
-                          <div>
-                            <p className="font-semibold text-gray-900">
-                              {item.title}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-green-700">
-                              {item.score}%
-                            </div>
-                            <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                              {item.status}
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Recent News Card */}
-                {detailedCompany.recentNews && (
-                  <Card className="border-2 border-cyan-100/50 bg-gradient-to-b from-white to-cyan-50/30 shadow-lg overflow-hidden">
+                {/* Business Categories */}
+                {displayTags.length > 0 && (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <FileText className="w-5 h-5 mr-2 text-cyan-600" />
-                        Recent News & Updates
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mr-3 shadow-lg">
+                          <Layers className="w-6 h-6 text-white" />
+                        </div>
+                        <span>Business Categories</span>
                       </CardTitle>
-                      <CardDescription>
-                        Latest company developments
-                      </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        {detailedCompany.recentNews.map((news, index) => (
+                      <div className="flex flex-wrap gap-2">
+                        {displayTags.map((tag, index) => (
+                          <Badge
+                            key={index}
+                            className="px-4 py-2 rounded-full backdrop-blur-sm bg-white/50 border border-purple-200/50 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:border-purple-300 transition-all duration-200 group"
+                          >
+                            <span className="text-purple-700 group-hover:text-purple-800 font-medium">
+                              {tag}
+                            </span>
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Certifications */}
+                {displayCertifications.length > 0 && (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-amber-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mr-3 shadow-lg">
+                          <Award className="w-6 h-6 text-white" />
+                        </div>
+                        <span>Certifications & Awards</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {displayCertifications.map((cert, index) => (
                           <div
                             key={index}
-                            className="group p-4 bg-white/50 backdrop-blur-sm border border-cyan-200/50 rounded-xl hover:border-cyan-300 hover:bg-cyan-50/30 transition-all"
+                            className="group p-4 bg-white/50 backdrop-blur-sm border border-amber-200/50 rounded-xl hover:border-amber-300 hover:bg-amber-50/30 transition-all duration-200"
                           >
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors">
-                                {news.title}
-                              </h4>
-                              <span className="text-xs font-medium text-cyan-700 bg-cyan-100/50 px-2 py-1 rounded-full">
-                                {news.source}
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/10 to-orange-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                                <BadgeCheck className="w-5 h-5 text-amber-600" />
+                              </div>
+                              <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
+                                {cert}
                               </span>
-                            </div>
-                            <div className="flex items-center text-sm text-gray-500">
-                              <Calendar className="w-3 h-3 mr-1.5" />
-                              {new Date(news.date).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
                             </div>
                           </div>
                         ))}
@@ -922,29 +949,303 @@ export default function CompanyDetailPage() {
                   </Card>
                 )}
               </TabsContent>
+
+              {/* Financial Tab */}
+              <TabsContent value="financial" className="space-y-6">
+                {/* Financial Overview */}
+                <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-full -translate-y-24 translate-x-24" />
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
+                        <LineChart className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <span>Financial Overview</span>
+                        <CardDescription>Revenue, growth, and financial health</CardDescription>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Revenue Display */}
+                    <div className="p-6 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-2xl border border-emerald-200/50">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-500 mb-1">Annual Revenue</p>
+                          <p className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                            {displayRevenue}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500 mb-1">Growth Trend</p>
+                          {displayRevenueGrowth.length > 0 && (
+                            <div className="text-2xl font-bold text-emerald-700 flex items-center">
+                              {displayRevenueGrowth[displayRevenueGrowth.length - 1].growth > 0 ? (
+                                <>
+                                  <TrendingUp className="w-6 h-6 mr-1" />
+                                  +{displayRevenueGrowth[displayRevenueGrowth.length - 1].growth}%
+                                </>
+                              ) : (
+                                <>
+                                  <TrendingDown className="w-6 h-6 mr-1 text-rose-600" />
+                                  {displayRevenueGrowth[displayRevenueGrowth.length - 1].growth}%
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Revenue Growth Chart */}
+                    {displayRevenueGrowth.length > 0 && (
+                      <div className="border border-emerald-200/50 rounded-2xl p-6 bg-white/50 backdrop-blur-sm">
+                        <h4 className="font-semibold text-gray-900 mb-6 flex items-center">
+                          <TrendingUp className="w-5 h-5 text-emerald-600 mr-2" />
+                          Revenue Growth Timeline
+                        </h4>
+                        <div className="space-y-4">
+                          {displayRevenueGrowth.map((item, index) => (
+                            <div key={index} className="flex items-center group">
+                              <span className="w-16 text-sm font-medium text-gray-700">
+                                {item.year}
+                              </span>
+                              <div className="flex-1 ml-4">
+                                <div className="relative h-4 bg-gray-200/50 rounded-full overflow-hidden">
+                                  <div
+                                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full transition-all duration-500 group-hover:opacity-90"
+                                    style={{ width: `${Math.min(item.growth * 2, 100)}%` }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="w-32 text-right">
+                                <span className="text-sm font-semibold text-emerald-700">
+                                  {item.amount}
+                                </span>
+                                <span className={`text-xs ml-2 ${item.growth >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                                  ({item.growth >= 0 ? '+' : ''}{item.growth}%)
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Operations Tab */}
+              <TabsContent value="operations" className="space-y-6">
+                {/* Operational Structure */}
+                <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mr-3 shadow-lg">
+                        <Cpu className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <span>Operational Structure</span>
+                        <CardDescription>Business operations and organizational details</CardDescription>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        { label: "Business Type", value: displayBusinessType, icon: Building },
+                        { label: "Ownership Structure", value: displayOwnership, icon: Users },
+                        { label: "Years Operating", value: `${yearsOperating} years`, icon: Calendar },
+                        { label: "Primary Location", value: displayLocation, icon: MapPin },
+                        { label: "Employee Count", value: displayEmployees, icon: UsersIcon },
+                        { label: "Industry", value: displayIndustry, icon: Building }, {/* Changed from BuildingOffice */}
+                      ].map((item, index) => (
+                        <div
+                          key={index}
+                          className="p-5 bg-white/50 backdrop-blur-sm border border-blue-200/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                              {item.icon && <item.icon className="w-5 h-5 text-blue-600" />}
+                            </div>
+                            <p className="text-sm font-medium text-gray-700">{item.label}</p>
+                          </div>
+                          <p className="text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                            {item.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Subsidiaries */}
+                {displaySubsidiaries.length > 0 && (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-purple-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mr-3 shadow-lg">
+                          <Building2 className="w-6 h-6 text-white" />
+                        </div>
+                        <span>Subsidiaries & Affiliates</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {displaySubsidiaries.map((subsidiary, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center p-4 bg-white/50 backdrop-blur-sm border border-purple-200/50 rounded-xl hover:border-purple-300 hover:bg-purple-50/30 transition-all duration-200 group"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
+                              <Building2 className="w-5 h-5 text-purple-600" />
+                            </div>
+                            <span className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">
+                              {subsidiary}
+                            </span>
+                            <ChevronRight className="w-4 h-4 ml-auto text-gray-400 group-hover:text-purple-600 transition-colors" />
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              {/* Compliance Tab */}
+              <TabsContent value="compliance" className="space-y-6">
+                {/* Compliance Status */}
+                {displayComplianceRecords.length > 0 ? (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3 shadow-lg">
+                          <ShieldCheck className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <span>Regulatory Compliance</span>
+                          <CardDescription>Legal and regulatory standing</CardDescription>
+                        </div>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {displayComplianceRecords.map((record, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-5 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-3 h-3 rounded-full mr-4 ${
+                              (record.score || 0) > 90
+                                ? "bg-emerald-500 animate-pulse"
+                                : (record.score || 0) > 70
+                                  ? "bg-amber-500"
+                                  : "bg-rose-500"
+                            }`} />
+                            <div>
+                              <p className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                {record.type}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Status: {record.status}
+                                {record.completedDate && (
+                                  <span className="ml-3">
+                                    Completed: {new Date(record.completedDate).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            {record.score && (
+                              <div className="text-right">
+                                <div className="text-2xl font-bold text-emerald-700">
+                                  {record.score}%
+                                </div>
+                                <Badge
+                                  className={`mt-1 ${
+                                    record.status === "Active"
+                                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                                      : record.status === "Pending"
+                                        ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
+                                        : "bg-rose-100 text-rose-700 hover:bg-rose-100"
+                                  }`}
+                                >
+                                  {record.status}
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardContent className="py-12">
+                      <div className="text-center">
+                        <FileWarning className="w-16 h-16 text-gray-400 mx-auto mb-6" />
+                        <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                          No Compliance Data Available
+                        </h3>
+                        <p className="text-gray-600 max-w-md mx-auto">
+                          Compliance information for this company is not yet available in our records.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
             </Tabs>
 
-            {/* Enhanced Verification Status */}
-            <div className="mt-8 bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-green-500/10 backdrop-blur-sm rounded-2xl border-2 border-green-200/50 p-6 shadow-lg">
-              <div className="flex flex-col lg:flex-row items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
-                  <Shield className="w-8 h-8 text-white" />
+            {/* Verification Banner */}
+            <div className={`mt-8 backdrop-blur-sm rounded-2xl border-2 p-8 shadow-xl overflow-hidden ${
+              verificationColors[company.verificationLevel].border
+            } ${verificationColors[company.verificationLevel].bg}`}>
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className={`relative w-20 h-20 rounded-full shadow-2xl flex items-center justify-center ${
+                  verificationColors[company.verificationLevel].gradient
+                }`}>
+                  <ShieldCheck className="w-10 h-10 text-white" />
+                  <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-ping" />
                 </div>
                 <div className="flex-1 text-center lg:text-left">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Officially Verified Business
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    {company.verificationLevel === "verified"
+                      ? "✅ Officially Verified Business"
+                      : company.verificationLevel === "pending"
+                        ? "⏳ Verification In Progress"
+                        : "❌ Unverified Business"}
                   </h3>
-                  <p className="text-gray-700">
-                    This company has been verified by the Sierra Leone Corporate
-                    Affairs Commission. All registration details are current and
-                    up-to-date as of {detailedCompany.lastUpdated}.
+                  <p className="text-gray-700 text-lg">
+                    {company.verificationLevel === "verified"
+                      ? "This company has been officially verified by the Sierra Leone Corporate Affairs Commission. All registration details are current, validated, and up-to-date."
+                      : company.verificationLevel === "pending"
+                        ? "This company's verification is currently being processed. Some details may require additional verification before full validation."
+                        : "This company has not yet completed the official verification process. Details should be independently confirmed before business engagement."}
                   </p>
+                  {displayLastUpdated && (
+                    <div className="mt-4 flex items-center justify-center lg:justify-start text-sm text-gray-600">
+                      <Clock className="w-4 h-4 mr-2" />
+                      Last updated: {new Date(displayLastUpdated).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </div>
+                  )}
                 </div>
                 <Button
                   variant="outline"
-                  className="border-green-300 text-green-700 hover:bg-green-50 hover:border-green-400 shadow-sm"
+                  className={`border-2 px-6 py-3 rounded-xl shadow-sm ${
+                    company.verificationLevel === "verified"
+                      ? "border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400"
+                      : company.verificationLevel === "pending"
+                        ? "border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400"
+                        : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                  }`}
                 >
-                  <FileText className="w-4 h-4 mr-2" />
+                  <FileText className="w-5 h-5 mr-2" />
                   View Certificate
                 </Button>
               </div>
