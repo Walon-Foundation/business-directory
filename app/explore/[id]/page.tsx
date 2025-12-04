@@ -45,6 +45,10 @@ import {
   ChevronDown,
   Layers,
   Hash,
+  Flag,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -167,7 +171,6 @@ function IconContainer({ children, className = "", variant = "default" }: {
 }
 
 // Responsive Tab Navigation Component with prominent complaint button
-// Responsive Tab Navigation Component with prominent complaint button
 function ResponsiveTabs({ 
   activeTab, 
   setActiveTab,
@@ -190,6 +193,7 @@ function ResponsiveTabs({
     { value: "financial", label: "Financial", icon: LineChart },
     { value: "operations", label: "Operations", icon: Cpu },
     { value: "compliance", label: "Compliance", icon: ShieldCheck },
+    { value: "complaints", label: "Complaints", icon: Flag },
   ];
 
   const handleTabChange = (value: string) => {
@@ -218,7 +222,7 @@ function ResponsiveTabs({
       <div className="hidden lg:block">
         <div className="flex items-center justify-between mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 rounded-2xl p-1 shadow-lg">
           <div className="flex-1">
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-5 gap-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.value}
@@ -241,11 +245,6 @@ function ResponsiveTabs({
               ))}
             </div>
           </div>
-          {/* {showComplaintButton && companyId && companyName && (
-            <div className="ml-4">
-              <ComplaintModal companyId={companyId} companyName={companyName} />
-            </div>
-          )} */}
         </div>
       </div>
 
@@ -268,9 +267,6 @@ function ResponsiveTabs({
             </div>
             <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
           </Button>
-          {/* {showComplaintButton && companyId && companyName && (
-            <ComplaintModal companyId={companyId} companyName={companyName} />
-          )} */}
         </div>
 
         {/* Mobile Dropdown Menu - Fixed positioning */}
@@ -391,6 +387,10 @@ export default function CompanyDetailPage() {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [complaints, setComplaints] = useState<any[]>([]);
+  const [complaintsLoading, setComplaintsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const complaintsPerPage = 2;
 
   // Fetch company details
   useEffect(() => {
@@ -412,6 +412,8 @@ export default function CompanyDetailPage() {
         
         if (data.success) {
           setCompany(data.data);
+          // Fetch complaints when company data is loaded
+          fetchComplaints(data.data.id);
         } else {
           setError('Failed to load company data');
         }
@@ -427,6 +429,25 @@ export default function CompanyDetailPage() {
       fetchCompany();
     }
   }, [params.id]);
+
+  // Function to fetch complaints
+  const fetchComplaints = async (companyId: string) => {
+    try {
+      setComplaintsLoading(true);
+      const response = await fetch(`/api/explore/${companyId}/complaint`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setComplaints(data.data || []);
+      } 
+    } catch (err) {
+      console.error('Error fetching complaints:', err);
+      // Use mock data if API fails
+      setComplaints([]);
+    } finally {
+      setComplaintsLoading(false);
+    }
+  };
 
   if (loading) return <LoadingState />;
   if (error || !company) return <ErrorState error={error} router={router} />;
@@ -471,6 +492,40 @@ export default function CompanyDetailPage() {
   const trustScore = company.trustScore || 85;
   const riskScore = company.riskAssessment?.overallRisk || 25;
   const esgScore = company.esgScores?.overall || 78;
+
+  // Calculate complaint statistics
+  const totalComplaints = complaints.length;
+  const resolvedComplaints = complaints.filter(c => c.status === "resolved").length;
+  const pendingComplaints = complaints.filter(c => c.status === "pending" || c.status === "under_review").length;
+  const resolutionRate = totalComplaints > 0 ? Math.round((resolvedComplaints / totalComplaints) * 100) : 0;
+
+  // Format complaint type
+  const formatComplaintType = (type: string) => {
+    return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(complaints.length / complaintsPerPage);
+  const indexOfLastComplaint = currentPage * complaintsPerPage;
+  const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
+  const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
+
+  // Pagination handlers
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50/50 via-white to-blue-50/20">
@@ -1038,7 +1093,7 @@ export default function CompanyDetailPage() {
                         <div className="ml-3">
                           <span>Operational Structure</span>
                           <CardDescription>Business operations and organizational details</CardDescription>
-                        </div>
+                          </div>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -1158,6 +1213,218 @@ export default function CompanyDetailPage() {
                       </CardContent>
                     </Card>
                   )}
+                </div>
+              )}
+
+              {/* Complaints Tab */}
+              {activeTab === "complaints" && (
+                <div className="space-y-6">
+                  {/* Complaint Statistics */}
+                  <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-amber-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="flex items-center text-lg">
+                        <IconContainer variant="warning">
+                          <Flag className="w-6 h-6" />
+                        </IconContainer>
+                        <span className="ml-3">Complaint Statistics</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="text-center p-4 bg-gradient-to-br from-rose-50/50 to-pink-50/30 rounded-xl border border-rose-200/50">
+                          <div className="text-3xl font-bold text-rose-700">{totalComplaints}</div>
+                          <div className="text-sm text-rose-600 font-medium mt-1">Total Complaints</div>
+                        </div>
+                        <div className="text-center p-4 bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-xl border border-emerald-200/50">
+                          <div className="text-3xl font-bold text-emerald-700">{resolvedComplaints}</div>
+                          <div className="text-sm text-emerald-600 font-medium mt-1">Resolved</div>
+                        </div>
+                        <div className="text-center p-4 bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-xl border border-amber-200/50">
+                          <div className="text-3xl font-bold text-amber-700">{pendingComplaints}</div>
+                          <div className="text-sm text-amber-600 font-medium mt-1">Pending</div>
+                        </div>
+                        <div className="text-center p-4 bg-gradient-to-br from-blue-50/50 to-cyan-50/30 rounded-xl border border-blue-200/50">
+                          <div className="text-3xl font-bold text-blue-700">{resolutionRate}%</div>
+                          <div className="text-sm text-blue-600 font-medium mt-1">Resolution Rate</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* File Complaint Button */}
+                  <div className="flex justify-end">
+                    {company && (
+                      <ComplaintModal 
+                        companyId={company.id} 
+                        companyName={displayName}
+                      />
+                    )}
+                  </div>
+
+                  {/* Complaints List */}
+                  {complaintsLoading ? (
+                    <div className="flex justify-center py-12">
+                      <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                    </div>
+                  ) : complaints.length > 0 ? (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Showing {currentComplaints.length} of {totalComplaints} complaints
+                      </h3>
+                      
+                      {currentComplaints.map((complaint, index) => (
+                        <Card key={index} className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                          <CardContent className="p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
+                                  <AlertTriangle className="w-5 h-5 text-rose-600" />
+                                </div>
+                                <div>
+                                  <Badge className={`mb-1 ${
+                                    complaint.status === "resolved" 
+                                      ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                                      : complaint.status === "pending"
+                                        ? "bg-amber-100 text-amber-800 border-amber-200"
+                                        : "bg-blue-100 text-blue-800 border-blue-200"
+                                  }`}>
+                                    {complaint.status.charAt(0).toUpperCase() + complaint.status.slice(1)}
+                                  </Badge>
+                                  <h4 className="font-semibold text-gray-900">
+                                    {formatComplaintType(complaint.type) || 'Complaint'}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                    {complaint.description || 'No description available'}
+                                  </p>
+                                  <div className="flex items-center gap-4 mt-2">
+                                    <span className="text-xs text-gray-500">
+                                      {complaint.createdAt ? new Date(complaint.createdAt).toLocaleDateString() : 'Date not available'}
+                                    </span>
+                                    {complaint.username && (
+                                      <span className="text-xs text-gray-600">By {complaint.username}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {complaint.resolution && complaint.status === "resolved" && (
+                              <div className="mt-4 p-3 bg-gradient-to-br from-emerald-50 to-green-50/30 rounded-xl border border-emerald-200/50">
+                                <div className="flex items-center mb-1">
+                                  <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
+                                  <span className="text-sm font-medium text-emerald-700">Resolution</span>
+                                </div>
+                                <p className="text-sm text-emerald-800">{complaint.resolution}</p>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+
+                      {/* Pagination Controls */}
+                      {totalPages > 1 && (
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200/50">
+                          <div className="text-sm text-gray-600">
+                            Page {currentPage} of {totalPages}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handlePrevPage}
+                              disabled={currentPage === 1}
+                              className="h-9 w-9 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              <ChevronLeft className="w-4 h-4" />
+                            </Button>
+                            
+                            {/* Page Numbers */}
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                // Calculate page numbers to show (centered around current page)
+                                let pageNumber;
+                                if (totalPages <= 5) {
+                                  pageNumber = i + 1;
+                                } else if (currentPage <= 3) {
+                                  pageNumber = i + 1;
+                                } else if (currentPage >= totalPages - 2) {
+                                  pageNumber = totalPages - 4 + i;
+                                } else {
+                                  pageNumber = currentPage - 2 + i;
+                                }
+                                
+                                return (
+                                  <Button
+                                    key={pageNumber}
+                                    variant={currentPage === pageNumber ? "default" : "outline"}
+                                    size="sm"
+                                    className={`h-9 w-9 ${
+                                      currentPage === pageNumber 
+                                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white" 
+                                        : ""
+                                    }`}
+                                    onClick={() => handlePageClick(pageNumber)}
+                                  >
+                                    {pageNumber}
+                                  </Button>
+                                );
+                              })}
+                            </div>
+                            
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleNextPage}
+                              disabled={currentPage === totalPages}
+                              className="h-9 w-9 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              <ChevronRight className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {complaintsPerPage} complaints per page
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Card className="border-2 border-dashed border-gray-300/50 bg-gradient-to-br from-white to-gray-50/30 shadow-sm backdrop-blur-sm">
+                      <CardContent className="py-12">
+                        <div className="text-center">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-6">
+                            <Flag className="w-8 h-8 text-gray-400" />
+                          </div>
+                          <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                            No Complaints Yet
+                          </h3>
+                          <p className="text-gray-600 max-w-md mx-auto mb-8">
+                            This company currently has no recorded complaints. Be the first to report an issue.
+                          </p>
+                          {company && (
+                            <ComplaintModal 
+                              companyId={company.id} 
+                              companyName={displayName}
+                            />
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Important Notice */}
+                  <Card className="border-2 border-amber-200/50 bg-gradient-to-br from-amber-50/30 to-orange-50/30 shadow-sm backdrop-blur-sm">
+                    <CardContent className="p-6">
+                      <div className="flex items-start">
+                        <AlertTriangle className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-amber-900 mb-2">Important Notice</h4>
+                          <p className="text-sm text-amber-800">
+                            All complaints are treated confidentially. We review complaints within 5-7 business days. 
+                            False complaints may result in legal action. For immediate assistance, contact our support team.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               )}
             </div>
