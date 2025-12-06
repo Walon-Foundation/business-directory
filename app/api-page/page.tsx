@@ -45,7 +45,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function APIPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950">
       {/* Animated Background Effects */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl" />
@@ -55,24 +55,24 @@ export default function APIPage() {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-violet-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-violet-600/10 dark:from-purple-600/5 dark:via-transparent dark:to-violet-600/5" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.08),transparent_50%)]" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 text-purple-700 border-purple-200/50 backdrop-blur-sm shadow-lg animate-pulse-subtle">
+            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 dark:from-purple-500/30 dark:to-violet-500/30 text-purple-700 dark:text-purple-400 border-purple-200/50 dark:border-purple-800/50 backdrop-blur-sm shadow-lg animate-pulse-subtle">
               <Code className="w-4 h-4 mr-2" />
               Open Business Intelligence API
             </Badge>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               Power Your Apps with{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-600 animate-gradient">
                 Sierra Leone Business Data
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed">
               Access the complete Sierra Leone business registry through our RESTful API. 
               No authentication required. Build powerful applications with verified, 
               real-time business intelligence.
@@ -110,15 +110,15 @@ export default function APIPage() {
           ].map((stat, index) => (
             <div
               key={index}
-              className="relative p-6 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+              className="relative p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 flex items-center justify-center shadow-lg`}>
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
               </div>
-              <div className="text-sm font-semibold text-gray-900">{stat.label}</div>
+              <div className="text-sm font-semibold text-gray-900 dark:text-white">{stat.label}</div>
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
             </div>
           ))}
@@ -153,17 +153,17 @@ export default function APIPage() {
           ].map((feature, index) => (
             <Card
               key={index}
-              className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group overflow-hidden"
+              className="border-2 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-white to-gray-50/30 dark:from-gray-900 dark:to-gray-800/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group overflow-hidden"
             >
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`} />
               <CardContent className="p-6">
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -172,20 +172,20 @@ export default function APIPage() {
         {/* API Endpoints */}
         <div className="mb-12 sm:mb-16">
           <div className="text-center mb-10">
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700 border-blue-200/50 backdrop-blur-sm">
+            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 text-blue-700 dark:text-blue-400 border-blue-200/50 dark:border-blue-800/50 backdrop-blur-sm">
               <Server className="w-4 h-4 mr-2" />
               RESTful API Endpoints
             </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Powerful Query Parameters
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Advanced filtering and sorting capabilities for precise data retrieval
             </p>
           </div>
 
           <Tabs defaultValue="list" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/80 backdrop-blur-sm border-2 border-white/50 p-1 rounded-2xl shadow-lg">
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-white/50 dark:border-gray-700/50 p-1 rounded-2xl shadow-lg">
               <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all">
                 <Filter className="w-4 h-4 mr-2" />
                 List Businesses
@@ -197,7 +197,7 @@ export default function APIPage() {
             </TabsList>
 
             <TabsContent value="list" className="space-y-6">
-              <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-blue-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+              <Card className="border-2 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-900 dark:to-blue-950/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500" />
                 <CardHeader>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -215,10 +215,10 @@ export default function APIPage() {
                           Public Access
                         </Badge>
                       </div>
-                      <CardTitle className="text-xl font-bold text-gray-900">
+                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
                         List All Businesses
                       </CardTitle>
-                      <CardDescription className="text-gray-600">
+                      <CardDescription className="text-gray-600 dark:text-gray-400">
                         Retrieve paginated business data with advanced filtering options
                       </CardDescription>
                     </div>

@@ -304,7 +304,7 @@ function ResponsiveTabs({
 // Loading Component
 function LoadingState() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50/20 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col items-center justify-center space-y-8">
           <div className="relative">
@@ -315,7 +315,7 @@ function LoadingState() {
             <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
               Loading Company Profile
             </h2>
-            <p className="text-gray-600 max-w-md">
+            <p className="text-gray-600 dark:text-gray-400 max-w-md">
               Fetching comprehensive business intelligence and analytics...
             </p>
             <div className="w-64 h-2 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-cyan-500/20 rounded-full overflow-hidden">
@@ -340,7 +340,7 @@ function LoadingState() {
 // Error Component
 function ErrorState({ error, router }: { error: string | null; router: any }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
           <div className="relative w-32 h-32 mx-auto mb-6">
@@ -349,10 +349,10 @@ function ErrorState({ error, router }: { error: string | null; router: any }) {
               <AlertCircle className="w-16 h-16 text-rose-600" />
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
             {error?.includes('not found') ? 'Company Not Found' : 'Error Loading Profile'}
           </h2>
-          <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg">
+          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg">
             {error || 'The requested company profile could not be found in our registry.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -528,7 +528,7 @@ export default function CompanyDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50/50 via-white to-blue-50/20">
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950">
       {/* Background Effects */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
@@ -538,20 +538,20 @@ export default function CompanyDetailPage() {
 
       {/* Header with Gradient Background */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/10 dark:from-blue-600/5 dark:via-blue-500/3 dark:to-cyan-500/5" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
         
         {/* Navigation with prominent complaint button */}
-        <div className="relative border-b border-white/20 bg-white/80 backdrop-blur-xl shadow-sm">
+        <div className="relative border-b border-white/20 dark:border-gray-700/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <Button
                 variant="ghost"
                 onClick={() => router.back()}
-                className="group px-4 h-10 bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-blue-300 hover:bg-white/80 rounded-xl transition-all duration-200"
+                className="group px-4 h-10 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-white/80 dark:hover:bg-gray-800/80 rounded-xl transition-all duration-200"
               >
-                <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                <span className="text-sm font-medium text-gray-700 group-hover:text-blue-700 transition-colors">
+                <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
                   Back
                 </span>
               </Button>
@@ -565,8 +565,8 @@ export default function CompanyDetailPage() {
                         onClick={() => setIsFavorite(!isFavorite)}
                         className={`h-10 w-10 rounded-xl backdrop-blur-sm border ${
                           isFavorite
-                            ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100"
-                            : "bg-white/50 border-gray-200/50 text-gray-600 hover:border-rose-200 hover:bg-rose-50/50"
+                            ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-950/50"
+                            : "bg-white/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 text-gray-600 dark:text-gray-400 hover:border-rose-200 dark:hover:border-rose-800 hover:bg-rose-50/50 dark:hover:bg-rose-950/30"
                         } transition-all duration-200`}
                       >
                         <Heart
@@ -586,7 +586,7 @@ export default function CompanyDetailPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-600 transition-all duration-200"
+                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200"
                       >
                         <Share2 className="w-5 h-5" />
                       </Button>
@@ -660,7 +660,7 @@ export default function CompanyDetailPage() {
                   </div>
 
                   {/* Company Name */}
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                     {displayName}
                     <span className="block text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 font-medium mt-2">
                       {company.tradingName || company.registrationNumber}
@@ -669,11 +669,11 @@ export default function CompanyDetailPage() {
 
                   {/* Quick Info with better icons */}
                   <div className="flex flex-wrap items-center gap-4 mb-8">
-                    <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-blue-300 transition-all duration-200">
+                    <div className="flex items-center px-4 py-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl group hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200">
                       <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
                         <MapPin className="w-4 h-4" />
                       </IconContainer>
-                      <span className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">{displayLocation}</span>
+                      <span className="font-medium text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{displayLocation}</span>
                     </div>
                     <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-purple-300 transition-all duration-200">
                       <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
@@ -693,7 +693,7 @@ export default function CompanyDetailPage() {
 
                   {/* Description */}
                   <div className="prose prose-lg max-w-none">
-                    <p className="text-gray-700 text-lg leading-relaxed bg-gradient-to-r from-gray-900 to-gray-800 bg-clip-text text-transparent">
+                    <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
                       {displayDescription}
                     </p>
                   </div>
@@ -708,7 +708,7 @@ export default function CompanyDetailPage() {
                 {displayWebsite && (
                   <Button
                     variant="outline"
-                    className="h-14 bg-white/80 backdrop-blur-sm border-gray-300/50 hover:border-blue-300 hover:bg-white rounded-xl group transition-all duration-200"
+                    className="h-14 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-300/50 dark:border-gray-700/50 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-white dark:hover:bg-gray-800 rounded-xl group transition-all duration-200"
                     onClick={() => window.open(displayWebsite, "_blank", "noopener,noreferrer")}
                   >
                     <div className="flex items-center justify-center w-full">
@@ -716,7 +716,7 @@ export default function CompanyDetailPage() {
                         <Globe className="w-5 h-5" />
                       </IconContainer>
                       <div className="text-left">
-                        <div className="text-sm font-semibold text-gray-900">Website</div>
+                        <div className="text-sm font-semibold text-gray-900 dark:text-white">Website</div>
                         <div className="text-xs text-gray-500 truncate">Visit</div>
                       </div>
                     </div>
@@ -739,9 +739,9 @@ export default function CompanyDetailPage() {
               </div>
 
               {/* Key Metrics with better icons */}
-              <Card className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <CardHeader className="p-0 pb-4">
-                  <CardTitle className="flex items-center text-sm font-semibold text-gray-900">
+                  <CardTitle className="flex items-center text-sm font-semibold text-gray-900 dark:text-white">
                     <IconContainer variant="primary" className="w-8 h-8 mr-2">
                       <TargetIcon className="w-4 h-4" />
                     </IconContainer>
@@ -751,7 +751,7 @@ export default function CompanyDetailPage() {
                 <CardContent className="p-0">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center group">
-                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">{displayEmployees}</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{displayEmployees}</div>
                       <div className="text-xs text-gray-500 flex items-center justify-center">
                         <Users className="w-3 h-3 mr-1" />
                         Employees
