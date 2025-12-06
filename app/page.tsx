@@ -98,9 +98,9 @@ const formatVerificationLevel = (level: string) => {
 
 const formatIndustry = (industry: string) => {
   return industry
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export default function Home() {
@@ -127,22 +127,26 @@ export default function Home() {
 
     try {
       // Make API call to search endpoint
-      const response = await fetch(`/api/explore?search=${encodeURIComponent(query)}&limit=6`);
-      
+      const response = await fetch(
+        `/api/explore?search=${encodeURIComponent(query)}&limit=6`,
+      );
+
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
       }
 
       const data: ApiResponse = await response.json();
-      
+
       if (data.success) {
         setSearchResults(data.data.businesses);
         setTotalResults(data.data.pagination.total);
       } else {
-        throw new Error('Failed to load search results');
+        throw new Error("Failed to load search results");
       }
     } catch (error) {
-      setSearchError("Search service temporarily unavailable. Please try again later.");
+      setSearchError(
+        "Search service temporarily unavailable. Please try again later.",
+      );
       console.error("Search error:", error);
       setSearchResults([]);
       setTotalResults(0);
@@ -319,7 +323,9 @@ export default function Home() {
                       ) : searchError ? (
                         <div className="text-center py-8">
                           <AlertCircle className="w-8 h-8 text-rose-500 mx-auto mb-2" />
-                          <p className="text-rose-600 font-medium">{searchError}</p>
+                          <p className="text-rose-600 font-medium">
+                            {searchError}
+                          </p>
                           <p className="text-sm text-gray-500 mt-1">
                             Please try again or contact support
                           </p>
@@ -338,7 +344,8 @@ export default function Home() {
                                     {result.name}
                                   </div>
                                   <div className="text-sm text-gray-600 truncate">
-                                    {formatIndustry(result.industry)} • {result.city || result.location}
+                                    {formatIndustry(result.industry)} •{" "}
+                                    {result.city || result.location}
                                   </div>
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     <Badge
@@ -352,12 +359,15 @@ export default function Home() {
                                         "text-xs px-2",
                                         result.verificationLevel === "verified"
                                           ? "bg-green-100 text-green-700 hover:bg-green-100"
-                                          : result.verificationLevel === "pending"
+                                          : result.verificationLevel ===
+                                              "pending"
                                             ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
-                                            : "bg-gray-100 text-gray-700 hover:bg-gray-100"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-100",
                                       )}
                                     >
-                                      {formatVerificationLevel(result.verificationLevel)}
+                                      {formatVerificationLevel(
+                                        result.verificationLevel,
+                                      )}
                                     </Badge>
                                     <Badge
                                       className={cn(
@@ -366,7 +376,7 @@ export default function Home() {
                                           ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
                                           : result.status === "pending"
                                             ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
-                                            : "bg-gray-100 text-gray-700 hover:bg-gray-100"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-100",
                                       )}
                                     >
                                       {formatStatus(result.status)}
@@ -375,18 +385,20 @@ export default function Home() {
                                 </div>
                                 <div className="flex items-center ml-4">
                                   {result.rating && (
-                                    <StarRating rating={parseFloat(result.rating)} />
+                                    <StarRating
+                                      rating={parseFloat(result.rating)}
+                                    />
                                   )}
                                   <ArrowRight className="w-4 h-4 ml-2 text-gray-400 group-hover:text-blue-600 transition-colors" />
                                 </div>
                               </div>
-                              
+
                               {result.description && (
                                 <p className="text-xs text-gray-500 mt-2 line-clamp-2">
                                   {result.description}
                                 </p>
                               )}
-                              
+
                               <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
                                 <div className="flex items-center gap-3">
                                   {result.employees && (
@@ -423,24 +435,26 @@ export default function Home() {
                             variant="outline"
                             size="sm"
                             className="mt-4"
-                            onClick={() => router.push('/explore')}
+                            onClick={() => router.push("/explore")}
                           >
                             Browse All Businesses
                           </Button>
                         </div>
                       )}
 
-                      {!isSearching && searchResults.length > 0 && totalResults > searchResults.length && (
-                        <div className="mt-4 pt-4 border-t border-gray-100">
-                          <Button
-                            onClick={handleSearch}
-                            variant="outline"
-                            className="w-full border-blue-200 text-blue-700 hover:bg-blue-50"
-                          >
-                            View all {totalResults} results
-                          </Button>
-                        </div>
-                      )}
+                      {!isSearching &&
+                        searchResults.length > 0 &&
+                        totalResults > searchResults.length && (
+                          <div className="mt-4 pt-4 border-t border-gray-100">
+                            <Button
+                              onClick={handleSearch}
+                              variant="outline"
+                              className="w-full border-blue-200 text-blue-700 hover:bg-blue-50"
+                            >
+                              View all {totalResults} results
+                            </Button>
+                          </div>
+                        )}
                     </div>
                   </div>
                 )}
@@ -488,7 +502,9 @@ export default function Home() {
                     <Zap className="w-5 h-5 text-amber-600" />
                   </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Response Time</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  Response Time
+                </div>
                 <div className="mt-2 h-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full w-3/4" />
                 </div>
@@ -510,7 +526,8 @@ export default function Home() {
               Why Verification Fails
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Current systems create friction at every level of business interaction
+              Current systems create friction at every level of business
+              interaction
             </p>
           </div>
 
@@ -520,7 +537,8 @@ export default function Home() {
               {
                 icon: Users,
                 title: "Consumer Fraud Risk",
-                description: "No way to verify online businesses before transactions",
+                description:
+                  "No way to verify online businesses before transactions",
                 gradient: "from-rose-500 to-pink-500",
                 bg: "bg-gradient-to-br from-rose-50 to-pink-50",
                 border: "border-rose-200",
@@ -530,7 +548,8 @@ export default function Home() {
               {
                 icon: Banknote,
                 title: "Slow Due Diligence",
-                description: "Banks take 2-3 weeks for basic business verification",
+                description:
+                  "Banks take 2-3 weeks for basic business verification",
                 gradient: "from-blue-500 to-cyan-500",
                 bg: "bg-gradient-to-br from-blue-50 to-cyan-50",
                 border: "border-blue-200",
@@ -540,7 +559,8 @@ export default function Home() {
               {
                 icon: Globe,
                 title: "Investor Uncertainty",
-                description: "Foreign investors hesitate without reliable partner verification",
+                description:
+                  "Foreign investors hesitate without reliable partner verification",
                 gradient: "from-emerald-500 to-green-500",
                 bg: "bg-gradient-to-br from-emerald-50 to-green-50",
                 border: "border-emerald-200",
@@ -550,7 +570,8 @@ export default function Home() {
               {
                 icon: LineChart,
                 title: "Economic Inefficiency",
-                description: "Every delayed transaction reduces economic velocity",
+                description:
+                  "Every delayed transaction reduces economic velocity",
                 gradient: "from-violet-500 to-purple-500",
                 bg: "bg-gradient-to-br from-violet-50 to-purple-50",
                 border: "border-violet-200",
@@ -685,11 +706,13 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <Button 
+                  <Button
                     onClick={() => {
                       setSearchQuery("");
                       setShowSearchResults(true);
-                      const searchInput = document.querySelector('input[placeholder*="Search business"]') as HTMLInputElement;
+                      const searchInput = document.querySelector(
+                        'input[placeholder*="Search business"]',
+                      ) as HTMLInputElement;
                       if (searchInput) {
                         searchInput.focus();
                       }
@@ -710,7 +733,8 @@ export default function Home() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <p className="text-sm text-gray-600 mb-4">
-                        Real-time search results from Sierra Leone Business Registry
+                        Real-time search results from Sierra Leone Business
+                        Registry
                       </p>
                       <div className="space-y-3">
                         {[
@@ -719,9 +743,14 @@ export default function Home() {
                           "View detailed business profiles",
                           "Real-time verification status",
                         ].map((item, i) => (
-                          <div key={i} className="flex items-center p-3 bg-blue-50/50 rounded-lg">
+                          <div
+                            key={i}
+                            className="flex items-center p-3 bg-blue-50/50 rounded-lg"
+                          >
                             <CheckCircle className="w-4 h-4 text-blue-600 mr-3" />
-                            <span className="text-sm text-gray-700">{item}</span>
+                            <span className="text-sm text-gray-700">
+                              {item}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -785,8 +814,8 @@ export default function Home() {
                     you get the most current business status. No outdated
                     records, no manual verification delays.
                   </p>
-                  <Button 
-                    onClick={() => router.push('/explore')}
+                  <Button
+                    onClick={() => router.push("/explore")}
                     className="px-8 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-lg"
                   >
                     Browse Verified Businesses
@@ -826,8 +855,8 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    onClick={() => router.push('/api')}
+                  <Button
+                    onClick={() => router.push("/api")}
                     className="px-8 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 shadow-lg"
                   >
                     Access API Data
@@ -853,10 +882,15 @@ export default function Home() {
                           "Healthcare expansion: +32% YoY",
                           "Construction industry: 721 registered companies",
                         ].map((item, i) => (
-                          <div key={i} className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                            <div className="text-sm text-gray-700">{item.split(':')[0]}:</div>
+                          <div
+                            key={i}
+                            className="flex items-center justify-between p-3 bg-white rounded-lg border"
+                          >
+                            <div className="text-sm text-gray-700">
+                              {item.split(":")[0]}:
+                            </div>
                             <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-                              {item.split(':')[1].trim()}
+                              {item.split(":")[1].trim()}
                             </Badge>
                           </div>
                         ))}
@@ -874,7 +908,8 @@ export default function Home() {
               {
                 icon: Sparkles,
                 title: "AI-Powered Matching",
-                description: "Smart algorithms that understand your search intent",
+                description:
+                  "Smart algorithms that understand your search intent",
                 color: "text-purple-600",
                 bg: "bg-purple-100",
               },
@@ -952,32 +987,23 @@ const StarRating = ({ rating }: { rating: number }) => {
       {[...Array(5)].map((_, i) => (
         <div key={i} className="relative">
           <div className="text-gray-300">
-            <svg
-              className="w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
           </div>
           {i < fullStars && (
             <div className="absolute top-0 left-0 text-amber-500">
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             </div>
           )}
           {hasHalfStar && i === fullStars && (
-            <div className="absolute top-0 left-0 text-amber-500" style={{ width: '50%', overflow: 'hidden' }}>
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+            <div
+              className="absolute top-0 left-0 text-amber-500"
+              style={{ width: "50%", overflow: "hidden" }}
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             </div>

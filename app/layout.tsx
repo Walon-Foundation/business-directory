@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Business Directory",
-  description: "A modern, comprehensive business verification and directory platform for Sierra Leone. Built to transform how businesses are verified, discovered, and trusted in the Sierra Leonean economy.",
+  description:
+    "A modern, comprehensive business verification and directory platform for Sierra Leone. Built to transform how businesses are verified, discovered, and trusted in the Sierra Leonean economy.",
 };
 
 export default function RootLayout({

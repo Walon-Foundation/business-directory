@@ -20,7 +20,7 @@ export function FloatingOrbs() {
         top: Math.random() * 100,
         delay: Math.random() * 5,
         duration: 10 + Math.random() * 10,
-      }))
+      })),
     );
   }, []);
 

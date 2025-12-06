@@ -556,9 +556,7 @@
         "business_registration_number_unique": {
           "name": "business_registration_number_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "registration_number"
-          ]
+          "columns": ["registration_number"]
         }
       },
       "policies": {},
@@ -679,12 +677,7 @@
     "public.business_status": {
       "name": "business_status",
       "schema": "public",
-      "values": [
-        "active",
-        "pending",
-        "suspended",
-        "inactive"
-      ]
+      "values": ["active", "pending", "suspended", "inactive"]
     },
     "public.business_type": {
       "name": "business_type",
@@ -729,30 +722,17 @@
     "public.ownership_type": {
       "name": "ownership_type",
       "schema": "public",
-      "values": [
-        "local",
-        "foreign",
-        "joint_venture",
-        "government",
-        "mixed"
-      ]
+      "values": ["local", "foreign", "joint_venture", "government", "mixed"]
     },
     "public.source": {
       "name": "source",
       "schema": "public",
-      "values": [
-        "web",
-        "whatsapp"
-      ]
+      "values": ["web", "whatsapp"]
     },
     "public.verification_level": {
       "name": "verification_level",
       "schema": "public",
-      "values": [
-        "verified",
-        "pending",
-        "unverified"
-      ]
+      "values": ["verified", "pending", "unverified"]
     }
   },
   "schemas": {},

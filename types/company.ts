@@ -30,7 +30,7 @@ export interface Company {
   financialSummary?: string;
   yearEnd?: string;
   taxId?: string;
-  
+
   // JSON fields
   tags: string[];
   services: string[];
@@ -105,7 +105,7 @@ export interface Company {
     status: string;
     documentUrl?: string;
   }>;
-  
+
   // Timestamps
   cacRegistrationDate?: string;
   cacExpiryDate?: string;

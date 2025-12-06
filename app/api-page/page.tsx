@@ -57,7 +57,7 @@ export default function APIPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-violet-600/10 dark:from-purple-600/5 dark:via-transparent dark:to-violet-600/5" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.08),transparent_50%)]" />
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 dark:from-purple-500/30 dark:to-violet-500/30 text-purple-700 dark:text-purple-400 border-purple-200/50 dark:border-purple-800/50 backdrop-blur-sm shadow-lg animate-pulse-subtle">
@@ -73,9 +73,9 @@ export default function APIPage() {
             </h1>
 
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Access the complete Sierra Leone business registry through our RESTful API. 
-              No authentication required. Build powerful applications with verified, 
-              real-time business intelligence.
+              Access the complete Sierra Leone business registry through our
+              RESTful API. No authentication required. Build powerful
+              applications with verified, real-time business intelligence.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -103,22 +103,38 @@ export default function APIPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-12 sm:mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "50K+", label: "Businesses", icon: Building2, color: "purple" },
+            {
+              value: "50K+",
+              label: "Businesses",
+              icon: Building2,
+              color: "purple",
+            },
             { value: "24/7", label: "Uptime", icon: Clock, color: "green" },
             { value: "0ms", label: "Latency", icon: Zap, color: "blue" },
-            { value: "100%", label: "Free Access", icon: LockOpen, color: "amber" },
+            {
+              value: "100%",
+              label: "Free Access",
+              icon: LockOpen,
+              color: "amber",
+            },
           ].map((stat, index) => (
             <div
               key={index}
               className="relative p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 flex items-center justify-center shadow-lg`}>
+                <div
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 flex items-center justify-center shadow-lg`}
+                >
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {stat.value}
+                </div>
               </div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-white">{stat.label}</div>
+              <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                {stat.label}
+              </div>
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
             </div>
           ))}
@@ -132,21 +148,24 @@ export default function APIPage() {
             {
               icon: LockOpen,
               title: "Zero Authentication",
-              description: "No API keys, no registration. Instant access to all endpoints.",
+              description:
+                "No API keys, no registration. Instant access to all endpoints.",
               color: "emerald",
               gradient: "from-emerald-500 to-green-500",
             },
             {
               icon: Zap,
               title: "Real-time Data",
-              description: "Live sync with Corporate Affairs Commission database.",
+              description:
+                "Live sync with Corporate Affairs Commission database.",
               color: "blue",
               gradient: "from-blue-500 to-cyan-500",
             },
             {
               icon: ShieldCheck,
               title: "Government Verified",
-              description: "All data is officially verified and legally accurate.",
+              description:
+                "All data is officially verified and legally accurate.",
               color: "purple",
               gradient: "from-purple-500 to-violet-500",
             },
@@ -155,15 +174,21 @@ export default function APIPage() {
               key={index}
               className="border-2 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-white to-gray-50/30 dark:from-gray-900 dark:to-gray-800/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group overflow-hidden"
             >
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`} />
+              <div
+                className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`}
+              />
               <CardContent className="p-6">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                <div
+                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                >
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {feature.description}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -180,17 +205,24 @@ export default function APIPage() {
               Powerful Query Parameters
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Advanced filtering and sorting capabilities for precise data retrieval
+              Advanced filtering and sorting capabilities for precise data
+              retrieval
             </p>
           </div>
 
           <Tabs defaultValue="list" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-white/50 dark:border-gray-700/50 p-1 rounded-2xl shadow-lg">
-              <TabsTrigger value="list" className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all">
+              <TabsTrigger
+                value="list"
+                className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all"
+              >
                 <Filter className="w-4 h-4 mr-2" />
                 List Businesses
               </TabsTrigger>
-              <TabsTrigger value="single" className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all">
+              <TabsTrigger
+                value="single"
+                className="data-[state=active]:bg-white data-[state=active]:shadow-lg rounded-xl transition-all"
+              >
                 <Search className="w-4 h-4 mr-2" />
                 Single Business
               </TabsTrigger>
@@ -219,7 +251,8 @@ export default function APIPage() {
                         List All Businesses
                       </CardTitle>
                       <CardDescription className="text-gray-600 dark:text-gray-400">
-                        Retrieve paginated business data with advanced filtering options
+                        Retrieve paginated business data with advanced filtering
+                        options
                       </CardDescription>
                     </div>
                     <Badge className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-700">
@@ -240,9 +273,7 @@ export default function APIPage() {
                       </div>
                       <div className="relative bg-gradient-to-r from-blue-900 to-gray-900 text-gray-100 rounded-xl p-5 font-mono text-sm overflow-x-auto shadow-inner">
                         <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-cyan-500 rounded-l-xl" />
-                        <div className="pl-4">
-                          GET /api/explore
-                        </div>
+                        <div className="pl-4">GET /api/explore</div>
                       </div>
                     </div>
 
@@ -254,27 +285,99 @@ export default function APIPage() {
                           Available Parameters
                         </span>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                         {[
-                          { param: "page", type: "number", desc: "Page number (default: 1)" },
-                          { param: "limit", type: "number", desc: "Items per page (max: 100)" },
-                          { param: "search", type: "string", desc: "Search across multiple fields" },
-                          { param: "status", type: "string", desc: "active, pending, suspended, inactive" },
-                          { param: "industry", type: "string", desc: "Filter by industry" },
-                          { param: "businessType", type: "string", desc: "Type of business" },
-                          { param: "ownership", type: "string", desc: "Ownership structure" },
-                          { param: "location", type: "string", desc: "General location" },
-                          { param: "city", type: "string", desc: "Specific city" },
-                          { param: "province", type: "string", desc: "Province/region" },
-                          { param: "minRating", type: "number", desc: "Minimum rating (1-5)" },
-                          { param: "maxRating", type: "number", desc: "Maximum rating (1-5)" },
-                          { param: "minCompliance", type: "number", desc: "Minimum compliance score" },
-                          { param: "maxCompliance", type: "number", desc: "Maximum compliance score" },
-                          { param: "sortBy", type: "string", desc: "Field to sort by" },
-                          { param: "sortOrder", type: "string", desc: "asc or desc" },
-                          { param: "tags", type: "string", desc: "Comma-separated tags" },
-                          { param: "verificationLevel", type: "string", desc: "verified, pending, unverified" },
+                          {
+                            param: "page",
+                            type: "number",
+                            desc: "Page number (default: 1)",
+                          },
+                          {
+                            param: "limit",
+                            type: "number",
+                            desc: "Items per page (max: 100)",
+                          },
+                          {
+                            param: "search",
+                            type: "string",
+                            desc: "Search across multiple fields",
+                          },
+                          {
+                            param: "status",
+                            type: "string",
+                            desc: "active, pending, suspended, inactive",
+                          },
+                          {
+                            param: "industry",
+                            type: "string",
+                            desc: "Filter by industry",
+                          },
+                          {
+                            param: "businessType",
+                            type: "string",
+                            desc: "Type of business",
+                          },
+                          {
+                            param: "ownership",
+                            type: "string",
+                            desc: "Ownership structure",
+                          },
+                          {
+                            param: "location",
+                            type: "string",
+                            desc: "General location",
+                          },
+                          {
+                            param: "city",
+                            type: "string",
+                            desc: "Specific city",
+                          },
+                          {
+                            param: "province",
+                            type: "string",
+                            desc: "Province/region",
+                          },
+                          {
+                            param: "minRating",
+                            type: "number",
+                            desc: "Minimum rating (1-5)",
+                          },
+                          {
+                            param: "maxRating",
+                            type: "number",
+                            desc: "Maximum rating (1-5)",
+                          },
+                          {
+                            param: "minCompliance",
+                            type: "number",
+                            desc: "Minimum compliance score",
+                          },
+                          {
+                            param: "maxCompliance",
+                            type: "number",
+                            desc: "Maximum compliance score",
+                          },
+                          {
+                            param: "sortBy",
+                            type: "string",
+                            desc: "Field to sort by",
+                          },
+                          {
+                            param: "sortOrder",
+                            type: "string",
+                            desc: "asc or desc",
+                          },
+                          {
+                            param: "tags",
+                            type: "string",
+                            desc: "Comma-separated tags",
+                          },
+                          {
+                            param: "verificationLevel",
+                            type: "string",
+                            desc: "verified, pending, unverified",
+                          },
                         ].map((param, idx) => (
                           <div
                             key={idx}
@@ -289,11 +392,16 @@ export default function APIPage() {
                                   <span className="font-mono text-sm font-semibold text-blue-700">
                                     {param.param}
                                   </span>
-                                  <Badge variant="outline" className="text-xs px-2 py-0.5">
+                                  <Badge
+                                    variant="outline"
+                                    className="text-xs px-2 py-0.5"
+                                  >
                                     {param.type}
                                   </Badge>
                                 </div>
-                                <p className="text-xs text-gray-600">{param.desc}</p>
+                                <p className="text-xs text-gray-600">
+                                  {param.desc}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -347,38 +455,67 @@ const fetchBusinesses = async () => {
                     <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-2xl border-2 border-blue-200/50 p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <Zap className="w-6 h-6 text-blue-600" />
-                        <h3 className="text-lg font-semibold text-gray-900">Try It Yourself</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          Try It Yourself
+                        </h3>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700">Quick Examples:</label>
+                          <label className="text-sm font-medium text-gray-700">
+                            Quick Examples:
+                          </label>
                           <div className="space-y-2">
                             {[
-                              { label: "Top Rated Businesses", query: "?sortBy=rating&sortOrder=desc&minRating=4" },
-                              { label: "Newest Companies", query: "?sortBy=foundedYear&sortOrder=desc" },
-                              { label: "High Compliance", query: "?minCompliance=90&verificationLevel=verified" },
+                              {
+                                label: "Top Rated Businesses",
+                                query:
+                                  "?sortBy=rating&sortOrder=desc&minRating=4",
+                              },
+                              {
+                                label: "Newest Companies",
+                                query: "?sortBy=foundedYear&sortOrder=desc",
+                              },
+                              {
+                                label: "High Compliance",
+                                query:
+                                  "?minCompliance=90&verificationLevel=verified",
+                              },
                             ].map((example, idx) => (
                               <div
                                 key={idx}
                                 className="p-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-lg hover:border-blue-300 transition-all group cursor-pointer"
-                                onClick={() => navigator.clipboard.writeText(`/api/explore${example.query}`)}
+                                onClick={() =>
+                                  navigator.clipboard.writeText(
+                                    `/api/explore${example.query}`,
+                                  )
+                                }
                               >
                                 <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-900">{example.label}</span>
+                                  <span className="text-sm font-medium text-gray-900">
+                                    {example.label}
+                                  </span>
                                   <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
                                     Click to copy
                                   </span>
                                 </div>
-                                <code className="text-xs text-gray-600 font-mono">{example.query}</code>
+                                <code className="text-xs text-gray-600 font-mono">
+                                  {example.query}
+                                </code>
                               </div>
                             ))}
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700">Response Preview:</label>
+                          <label className="text-sm font-medium text-gray-700">
+                            Response Preview:
+                          </label>
                           <div className="p-4 bg-gray-900/90 backdrop-blur-sm rounded-lg border border-gray-700/50">
-                            <div className="text-xs text-gray-400 mb-2">Pagination included</div>
-                            <div className="text-sm text-green-400 font-mono">✓ 200 OK</div>
+                            <div className="text-xs text-gray-400 mb-2">
+                              Pagination included
+                            </div>
+                            <div className="text-sm text-green-400 font-mono">
+                              ✓ 200 OK
+                            </div>
                             <div className="text-xs text-gray-300 mt-2">
                               Returns paginated array with metadata
                             </div>
@@ -392,7 +529,7 @@ const fetchBusinesses = async () => {
                   <Button
                     variant="ghost"
                     className="text-blue-700 hover:text-blue-800 hover:bg-blue-100/50"
-                    onClick={() => window.open('/api/explore', '_blank')}
+                    onClick={() => window.open("/api/explore", "_blank")}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Test Endpoint Live
@@ -424,7 +561,8 @@ const fetchBusinesses = async () => {
                         Get Business Details
                       </CardTitle>
                       <CardDescription className="text-gray-600">
-                        Retrieve comprehensive information about a specific business
+                        Retrieve comprehensive information about a specific
+                        business
                       </CardDescription>
                     </div>
                     <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700">
@@ -445,12 +583,13 @@ const fetchBusinesses = async () => {
                       </div>
                       <div className="relative bg-gradient-to-r from-emerald-900 to-gray-900 text-gray-100 rounded-xl p-5 font-mono text-sm overflow-x-auto shadow-inner">
                         <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-emerald-500 to-green-500 rounded-l-xl" />
-                        <div className="pl-4">
-                          GET /api/explore/{"{id}"}
-                        </div>
+                        <div className="pl-4">GET /api/explore/{"{id}"}</div>
                       </div>
                       <p className="text-sm text-gray-500 mt-3">
-                        <span className="font-medium text-emerald-700">ID can be:</span> Database ID, Registration Number, or Business Name
+                        <span className="font-medium text-emerald-700">
+                          ID can be:
+                        </span>{" "}
+                        Database ID, Registration Number, or Business Name
                       </p>
                     </div>
 
@@ -464,31 +603,37 @@ const fetchBusinesses = async () => {
                           </span>
                         </div>
                         <div className="flex gap-2">
-                          <Badge className="bg-emerald-500/10 text-emerald-700">ID</Badge>
-                          <Badge className="bg-blue-500/10 text-blue-700">Registration</Badge>
-                          <Badge className="bg-purple-500/10 text-purple-700">Name</Badge>
+                          <Badge className="bg-emerald-500/10 text-emerald-700">
+                            ID
+                          </Badge>
+                          <Badge className="bg-blue-500/10 text-blue-700">
+                            Registration
+                          </Badge>
+                          <Badge className="bg-purple-500/10 text-purple-700">
+                            Name
+                          </Badge>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[
                           {
                             type: "By ID",
                             color: "emerald",
                             code: "/api/explore/abc123-def456-789",
-                            desc: "Internal database identifier"
+                            desc: "Internal database identifier",
                           },
                           {
                             type: "By Registration",
                             color: "blue",
                             code: "/api/explore/C123456",
-                            desc: "Official registration number"
+                            desc: "Official registration number",
                           },
                           {
                             type: "By Name",
                             color: "purple",
                             code: "/api/explore/Africell Sierra Leone",
-                            desc: "URL-encoded business name"
+                            desc: "URL-encoded business name",
                           },
                         ].map((example, idx) => (
                           <div
@@ -496,7 +641,9 @@ const fetchBusinesses = async () => {
                             className="group relative p-4 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-xl hover:border-emerald-300 hover:bg-emerald-50/30 transition-all duration-200"
                           >
                             <div className="flex items-center gap-2 mb-3">
-                              <div className={`w-3 h-3 rounded-full bg-${example.color}-500`} />
+                              <div
+                                className={`w-3 h-3 rounded-full bg-${example.color}-500`}
+                              />
                               <span className="text-sm font-semibold text-gray-900">
                                 {example.type}
                               </span>
@@ -504,7 +651,9 @@ const fetchBusinesses = async () => {
                             <div className="bg-gray-900 text-gray-100 rounded-lg p-3 font-mono text-xs overflow-x-auto mb-2">
                               {example.code}
                             </div>
-                            <p className="text-xs text-gray-600">{example.desc}</p>
+                            <p className="text-xs text-gray-600">
+                              {example.desc}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -518,17 +667,35 @@ const fetchBusinesses = async () => {
                           Rich Data Response
                         </span>
                       </div>
-                      
+
                       <div className="bg-gradient-to-br from-emerald-50/30 to-green-50/30 border-2 border-emerald-200/50 rounded-2xl p-6">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                           {[
-                            { label: "Basic Info", icon: Building2, color: "emerald" },
-                            { label: "Financial", icon: TrendingUp, color: "blue" },
-                            { label: "Compliance", icon: Shield, color: "green" },
-                            { label: "Operations", icon: Target, color: "purple" },
+                            {
+                              label: "Basic Info",
+                              icon: Building2,
+                              color: "emerald",
+                            },
+                            {
+                              label: "Financial",
+                              icon: TrendingUp,
+                              color: "blue",
+                            },
+                            {
+                              label: "Compliance",
+                              icon: Shield,
+                              color: "green",
+                            },
+                            {
+                              label: "Operations",
+                              icon: Target,
+                              color: "purple",
+                            },
                           ].map((section, idx) => (
                             <div key={idx} className="text-center group">
-                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${section.color}-500 to-${section.color}-600 mx-auto mb-2 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                              <div
+                                className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${section.color}-500 to-${section.color}-600 mx-auto mb-2 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}
+                              >
                                 <section.icon className="w-6 h-6 text-white" />
                               </div>
                               <div className="text-sm font-semibold text-gray-900">
@@ -537,23 +704,39 @@ const fetchBusinesses = async () => {
                             </div>
                           ))}
                         </div>
-                        
+
                         <div className="space-y-3">
                           <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
-                            <div className="text-sm font-medium text-gray-900">Full Company Profile</div>
-                            <Badge className="bg-emerald-100 text-emerald-700">40+ Fields</Badge>
+                            <div className="text-sm font-medium text-gray-900">
+                              Full Company Profile
+                            </div>
+                            <Badge className="bg-emerald-100 text-emerald-700">
+                              40+ Fields
+                            </Badge>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
-                            <div className="text-sm font-medium text-gray-900">Directors & Leadership</div>
-                            <Badge className="bg-blue-100 text-blue-700">Array Data</Badge>
+                            <div className="text-sm font-medium text-gray-900">
+                              Directors & Leadership
+                            </div>
+                            <Badge className="bg-blue-100 text-blue-700">
+                              Array Data
+                            </Badge>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
-                            <div className="text-sm font-medium text-gray-900">Financial Metrics</div>
-                            <Badge className="bg-purple-100 text-purple-700">Growth Data</Badge>
+                            <div className="text-sm font-medium text-gray-900">
+                              Financial Metrics
+                            </div>
+                            <Badge className="bg-purple-100 text-purple-700">
+                              Growth Data
+                            </Badge>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-100">
-                            <div className="text-sm font-medium text-gray-900">Compliance Records</div>
-                            <Badge className="bg-green-100 text-green-700">Live Status</Badge>
+                            <div className="text-sm font-medium text-gray-900">
+                              Compliance Records
+                            </div>
+                            <Badge className="bg-green-100 text-green-700">
+                              Live Status
+                            </Badge>
                           </div>
                         </div>
                       </div>
@@ -575,15 +758,37 @@ const fetchBusinesses = async () => {
                 <Zap className="w-6 h-6 mr-2 text-amber-600" />
                 Performance & Limits
               </CardTitle>
-              <CardDescription>Optimized for high-performance applications</CardDescription>
+              <CardDescription>
+                Optimized for high-performance applications
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 {[
-                  { label: "Requests per Second", value: "10", color: "green", icon: "⚡" },
-                  { label: "Response Time", value: "< 100ms", color: "blue", icon: "🚀" },
-                  { label: "Cache Duration", value: "5 minutes", color: "purple", icon: "💾" },
-                  { label: "Max Page Size", value: "100 items", color: "amber", icon: "📄" },
+                  {
+                    label: "Requests per Second",
+                    value: "10",
+                    color: "green",
+                    icon: "⚡",
+                  },
+                  {
+                    label: "Response Time",
+                    value: "< 100ms",
+                    color: "blue",
+                    icon: "🚀",
+                  },
+                  {
+                    label: "Cache Duration",
+                    value: "5 minutes",
+                    color: "purple",
+                    icon: "💾",
+                  },
+                  {
+                    label: "Max Page Size",
+                    value: "100 items",
+                    color: "amber",
+                    icon: "📄",
+                  },
                 ].map((metric, idx) => (
                   <div
                     key={idx}
@@ -592,16 +797,22 @@ const fetchBusinesses = async () => {
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{metric.icon}</span>
                       <div>
-                        <div className="font-semibold text-gray-900">{metric.label}</div>
-                        <div className="text-sm text-gray-600">Production ready</div>
+                        <div className="font-semibold text-gray-900">
+                          {metric.label}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Production ready
+                        </div>
                       </div>
                     </div>
-                    <div className={`text-2xl font-bold text-${metric.color}-600`}>
+                    <div
+                      className={`text-2xl font-bold text-${metric.color}-600`}
+                    >
                       {metric.value}
                     </div>
                   </div>
                 ))}
-                
+
                 <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/5 to-orange-500/5 rounded-xl border border-amber-200/50">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -610,7 +821,8 @@ const fetchBusinesses = async () => {
                         Need Higher Limits?
                       </p>
                       <p className="text-sm text-gray-600">
-                        Contact us for enterprise access with increased rate limits and priority support.
+                        Contact us for enterprise access with increased rate
+                        limits and priority support.
                       </p>
                     </div>
                   </div>
@@ -636,31 +848,31 @@ const fetchBusinesses = async () => {
                     feature: "GraphQL API",
                     status: "In Development",
                     desc: "Flexible querying with GraphQL",
-                    eta: "Q1 2024"
+                    eta: "Q1 2024",
                   },
                   {
                     feature: "WebSocket Stream",
                     status: "Planned",
                     desc: "Real-time business updates",
-                    eta: "Q2 2024"
+                    eta: "Q2 2024",
                   },
                   {
                     feature: "Bulk Export",
                     status: "Planned",
                     desc: "CSV/JSON full dataset export",
-                    eta: "Q2 2024"
+                    eta: "Q2 2024",
                   },
                   {
                     feature: "Advanced Analytics",
                     status: "Research",
                     desc: "Industry trends and insights",
-                    eta: "Q3 2024"
+                    eta: "Q3 2024",
                   },
                   {
                     feature: "Webhook Support",
                     status: "Planned",
                     desc: "Real-time event notifications",
-                    eta: "Q2 2024"
+                    eta: "Q2 2024",
                   },
                 ].map((item, index) => (
                   <div
@@ -672,7 +884,9 @@ const fetchBusinesses = async () => {
                         <Cpu className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900">{item.feature}</div>
+                        <div className="font-semibold text-gray-900">
+                          {item.feature}
+                        </div>
                         <div className="text-sm text-gray-600">{item.desc}</div>
                       </div>
                     </div>
@@ -743,13 +957,14 @@ const fetchBusinesses = async () => {
                   <Button
                     size="lg"
                     className="px-10 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
-                    onClick={() => window.open('/api/explore', '_blank')}
+                    onClick={() => window.open("/api/explore", "_blank")}
                   >
                     <Terminal className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                     Try Live API Endpoint
                   </Button>
                   <p className="text-sm text-gray-500 mt-4">
-                    No API key required • Rate limited per IP • Commercial use allowed
+                    No API key required • Rate limited per IP • Commercial use
+                    allowed
                   </p>
                 </div>
               </div>

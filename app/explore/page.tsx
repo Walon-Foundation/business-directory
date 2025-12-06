@@ -126,7 +126,7 @@ const industries = [
   "transportation",
   "media_entertainment",
   "professional_services",
-  "other"
+  "other",
 ];
 
 // Business type options
@@ -140,7 +140,7 @@ const businessTypes = [
   "ngo",
   "cooperative",
   "foreign_branch",
-  "other"
+  "other",
 ];
 
 // Ownership options
@@ -150,7 +150,7 @@ const ownershipTypes = [
   "foreign",
   "joint_venture",
   "government",
-  "mixed"
+  "mixed",
 ];
 
 // Get industry icon
@@ -220,7 +220,7 @@ function ExplorePageSkeleton() {
 function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // State
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
@@ -230,80 +230,118 @@ function ExplorePageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
-  const [industryStats, setIndustryStats] = useState<Array<{ industry: string; count: number }>>([]);
+  const [industryStats, setIndustryStats] = useState<
+    Array<{ industry: string; count: number }>
+  >([]);
   const [isFavorite, setIsFavorite] = useState<string[]>([]);
 
   // Filters from URL or default
-  const [searchQuery, setSearchQuery] = useState(searchParams?.get('search') || "");
-  const [selectedIndustry, setSelectedIndustry] = useState(searchParams?.get('industry') || "all");
-  const [selectedBusinessType, setSelectedBusinessType] = useState(searchParams?.get('businessType') || "all");
-  const [selectedOwnership, setSelectedOwnership] = useState(searchParams?.get('ownership') || "all");
-  const [selectedLocation, setSelectedLocation] = useState(searchParams?.get('location') || "all");
-  const [showVerifiedOnly, setShowVerifiedOnly] = useState(searchParams?.get('verifiedOnly') === 'true');
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams?.get("search") || "",
+  );
+  const [selectedIndustry, setSelectedIndustry] = useState(
+    searchParams?.get("industry") || "all",
+  );
+  const [selectedBusinessType, setSelectedBusinessType] = useState(
+    searchParams?.get("businessType") || "all",
+  );
+  const [selectedOwnership, setSelectedOwnership] = useState(
+    searchParams?.get("ownership") || "all",
+  );
+  const [selectedLocation, setSelectedLocation] = useState(
+    searchParams?.get("location") || "all",
+  );
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(
+    searchParams?.get("verifiedOnly") === "true",
+  );
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [sortBy, setSortBy] = useState(searchParams?.get('sortBy') || "name");
-  const [sortOrder, setSortOrder] = useState(searchParams?.get('sortOrder') || "asc");
-  const [minRating, setMinRating] = useState(searchParams?.get('minRating') || "0");
-  const [maxRating, setMaxRating] = useState(searchParams?.get('maxRating') || "5");
+  const [sortBy, setSortBy] = useState(searchParams?.get("sortBy") || "name");
+  const [sortOrder, setSortOrder] = useState(
+    searchParams?.get("sortOrder") || "asc",
+  );
+  const [minRating, setMinRating] = useState(
+    searchParams?.get("minRating") || "0",
+  );
+  const [maxRating, setMaxRating] = useState(
+    searchParams?.get("maxRating") || "5",
+  );
 
   // Fetch companies from API
-  const fetchCompanies = useCallback(async (page = 1) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const fetchCompanies = useCallback(
+    async (page = 1) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Build query parameters
-      const params = new URLSearchParams();
-      
-      // Add filters
-      if (searchQuery) params.set('search', searchQuery);
-      if (selectedIndustry !== 'all') params.set('industry', selectedIndustry);
-      if (selectedBusinessType !== 'all') params.set('businessType', selectedBusinessType);
-      if (selectedOwnership !== 'all') params.set('ownership', selectedOwnership);
-      if (selectedLocation !== 'all') params.set('location', selectedLocation);
-      if (showVerifiedOnly) params.set('verificationLevel', 'verified');
-      if (sortBy) params.set('sortBy', sortBy);
-      if (sortOrder) params.set('sortOrder', sortOrder);
-      if (minRating !== "0") params.set('minRating', minRating);
-      if (maxRating !== "5") params.set('maxRating', maxRating);
-      
-      // Pagination
-      params.set('page', page.toString());
-      params.set('limit', '12');
+        // Build query parameters
+        const params = new URLSearchParams();
 
-      const response = await fetch(`/api/explore?${params.toString()}`);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch companies: ${response.status}`);
+        // Add filters
+        if (searchQuery) params.set("search", searchQuery);
+        if (selectedIndustry !== "all")
+          params.set("industry", selectedIndustry);
+        if (selectedBusinessType !== "all")
+          params.set("businessType", selectedBusinessType);
+        if (selectedOwnership !== "all")
+          params.set("ownership", selectedOwnership);
+        if (selectedLocation !== "all")
+          params.set("location", selectedLocation);
+        if (showVerifiedOnly) params.set("verificationLevel", "verified");
+        if (sortBy) params.set("sortBy", sortBy);
+        if (sortOrder) params.set("sortOrder", sortOrder);
+        if (minRating !== "0") params.set("minRating", minRating);
+        if (maxRating !== "5") params.set("maxRating", maxRating);
+
+        // Pagination
+        params.set("page", page.toString());
+        params.set("limit", "12");
+
+        const response = await fetch(`/api/explore?${params.toString()}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch companies: ${response.status}`);
+        }
+
+        const data: ApiResponse = await response.json();
+
+        if (data.success) {
+          setCompanies(data.data.businesses);
+          setTotalCount(data.data.pagination.total);
+          setTotalPages(data.data.pagination.totalPages);
+          setCurrentPage(data.data.pagination.page);
+          setHasNextPage(data.data.pagination.hasNextPage);
+          setHasPreviousPage(data.data.pagination.hasPreviousPage);
+          setIndustryStats(data.data.filters.industries || []);
+        } else {
+          setError("Failed to load companies");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching companies:", err);
+      } finally {
+        setLoading(false);
       }
-
-      const data: ApiResponse = await response.json();
-      
-      if (data.success) {
-        setCompanies(data.data.businesses);
-        setTotalCount(data.data.pagination.total);
-        setTotalPages(data.data.pagination.totalPages);
-        setCurrentPage(data.data.pagination.page);
-        setHasNextPage(data.data.pagination.hasNextPage);
-        setHasPreviousPage(data.data.pagination.hasPreviousPage);
-        setIndustryStats(data.data.filters.industries || []);
-      } else {
-        setError("Failed to load companies");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      console.error("Error fetching companies:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
+    },
+    [
+      searchQuery,
+      selectedIndustry,
+      selectedBusinessType,
+      selectedOwnership,
+      selectedLocation,
+      showVerifiedOnly,
+      sortBy,
+      sortOrder,
+      minRating,
+      maxRating,
+    ],
+  );
 
   // Debounced search to avoid too many API calls
   const debouncedFetch = useCallback(
     debounce((page: number) => {
       fetchCompanies(page);
     }, 500),
-    [fetchCompanies]
+    [fetchCompanies],
   );
 
   // Initial fetch and when filters change
@@ -316,19 +354,32 @@ function ExplorePageContent() {
   // Update URL with current filters
   const updateURL = useCallback(() => {
     const params = new URLSearchParams();
-    if (searchQuery) params.set('search', searchQuery);
-    if (selectedIndustry !== 'all') params.set('industry', selectedIndustry);
-    if (selectedBusinessType !== 'all') params.set('businessType', selectedBusinessType);
-    if (selectedOwnership !== 'all') params.set('ownership', selectedOwnership);
-    if (selectedLocation !== 'all') params.set('location', selectedLocation);
-    if (showVerifiedOnly) params.set('verifiedOnly', 'true');
-    if (sortBy !== 'name') params.set('sortBy', sortBy);
-    if (sortOrder !== 'asc') params.set('sortOrder', sortOrder);
-    if (minRating !== '0') params.set('minRating', minRating);
-    if (maxRating !== '5') params.set('maxRating', maxRating);
-    
+    if (searchQuery) params.set("search", searchQuery);
+    if (selectedIndustry !== "all") params.set("industry", selectedIndustry);
+    if (selectedBusinessType !== "all")
+      params.set("businessType", selectedBusinessType);
+    if (selectedOwnership !== "all") params.set("ownership", selectedOwnership);
+    if (selectedLocation !== "all") params.set("location", selectedLocation);
+    if (showVerifiedOnly) params.set("verifiedOnly", "true");
+    if (sortBy !== "name") params.set("sortBy", sortBy);
+    if (sortOrder !== "asc") params.set("sortOrder", sortOrder);
+    if (minRating !== "0") params.set("minRating", minRating);
+    if (maxRating !== "5") params.set("maxRating", maxRating);
+
     router.replace(`/explore?${params.toString()}`, { scroll: false });
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating, router]);
+  }, [
+    searchQuery,
+    selectedIndustry,
+    selectedBusinessType,
+    selectedOwnership,
+    selectedLocation,
+    showVerifiedOnly,
+    sortBy,
+    sortOrder,
+    minRating,
+    maxRating,
+    router,
+  ]);
 
   // Handle search input with debouncing
   const handleSearch = (value: string) => {
@@ -366,16 +417,16 @@ function ExplorePageContent() {
 
   // Handle favorite toggle
   const toggleFavorite = (companyId: string) => {
-    setIsFavorite(prev =>
+    setIsFavorite((prev) =>
       prev.includes(companyId)
-        ? prev.filter(id => id !== companyId)
-        : [...prev, companyId]
+        ? prev.filter((id) => id !== companyId)
+        : [...prev, companyId],
     );
   };
 
   // Get unique locations from current companies
   const uniqueLocations = useMemo(() => {
-    const locations = companies.map(c => c.location).filter(Boolean);
+    const locations = companies.map((c) => c.location).filter(Boolean);
     return ["All Locations", ...Array.from(new Set(locations))];
   }, [companies]);
 
@@ -393,7 +444,18 @@ function ExplorePageContent() {
       minRating !== "0" ? 1 : 0,
       maxRating !== "5" ? 1 : 0,
     ].reduce((a, b) => a + b, 0);
-  }, [searchQuery, selectedIndustry, selectedBusinessType, selectedOwnership, selectedLocation, showVerifiedOnly, sortBy, sortOrder, minRating, maxRating]);
+  }, [
+    searchQuery,
+    selectedIndustry,
+    selectedBusinessType,
+    selectedOwnership,
+    selectedLocation,
+    showVerifiedOnly,
+    sortBy,
+    sortOrder,
+    minRating,
+    maxRating,
+  ]);
 
   // Format status for display
   const formatStatus = (status: string) => {
@@ -408,9 +470,9 @@ function ExplorePageContent() {
   // Format industry for display
   const formatIndustry = (industry: string) => {
     return industry
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   // Get status color
@@ -489,9 +551,13 @@ function ExplorePageContent() {
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500/10 to-rose-500/10 flex items-center justify-center mx-auto mb-6">
               <AlertCircle className="w-10 h-10 text-red-500" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Error Loading Data</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">{error}</p>
-            <Button 
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              Error Loading Data
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+              {error}
+            </p>
+            <Button
               onClick={() => fetchCompanies(1)}
               className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 shadow-lg"
             >
@@ -504,10 +570,7 @@ function ExplorePageContent() {
         {!loading && !error && (
           <>
             {/* Enhanced Stats Cards */}
-            <EnhancedStatsCards 
-              totalCount={totalCount}
-              companies={companies}
-            />
+            <EnhancedStatsCards totalCount={totalCount} companies={companies} />
 
             {/* Enhanced View Controls */}
             <EnhancedViewControls
@@ -614,7 +677,7 @@ function EnhancedHeader({
     <div className="relative overflow-hidden">
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-purple-500/10 dark:from-blue-500/5 dark:via-cyan-500/3 dark:to-purple-500/5 animate-gradient-x" />
-      
+
       {/* Floating Elements */}
       <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-blue-500/5 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-tl from-cyan-500/5 to-transparent rounded-full blur-3xl" />
@@ -628,16 +691,17 @@ function EnhancedHeader({
               Discover {totalCount}+ Registered Businesses
             </span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
             Explore Sierra Leone's
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600">
               Business Ecosystem
             </span>
           </h1>
-          
+
           <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Find verified businesses, compare services, and connect with leading companies across all industries
+            Find verified businesses, compare services, and connect with leading
+            companies across all industries
           </p>
         </div>
 
@@ -695,7 +759,10 @@ function EnhancedHeader({
                 <Building2 className="w-4 h-4 mr-2 text-blue-600" />
                 Industry
               </label>
-              <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
+              <Select
+                value={selectedIndustry}
+                onValueChange={setSelectedIndustry}
+              >
                 <SelectTrigger className="w-full h-12 rounded-xl border-2 border-blue-200/50 dark:border-blue-800/50 bg-white/50 dark:bg-gray-800/50 group-hover:border-blue-300 dark:group-hover:border-blue-700 transition-colors">
                   <SelectValue placeholder="All Industries" />
                 </SelectTrigger>
@@ -716,13 +783,19 @@ function EnhancedHeader({
                 <MapPin className="w-4 h-4 mr-2 text-green-600" />
                 Location
               </label>
-              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+              <Select
+                value={selectedLocation}
+                onValueChange={setSelectedLocation}
+              >
                 <SelectTrigger className="w-full h-12 rounded-xl border-2 border-green-200/50 dark:border-green-800/50 bg-white/50 dark:bg-gray-800/50 group-hover:border-green-300 dark:group-hover:border-green-700 transition-colors">
                   <SelectValue placeholder="All Locations" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                   {uniqueLocations.map((location: string) => (
-                    <SelectItem key={location} value={location === "All Locations" ? "all" : location}>
+                    <SelectItem
+                      key={location}
+                      value={location === "All Locations" ? "all" : location}
+                    >
                       {location}
                     </SelectItem>
                   ))}
@@ -742,7 +815,7 @@ function EnhancedHeader({
                     <SelectValue placeholder="Min" />
                   </SelectTrigger>
                   <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-                    {[0, 1, 2, 3, 4].map(rating => (
+                    {[0, 1, 2, 3, 4].map((rating) => (
                       <SelectItem key={rating} value={rating.toString()}>
                         {rating}+ Stars
                       </SelectItem>
@@ -754,7 +827,7 @@ function EnhancedHeader({
                     <SelectValue placeholder="Max" />
                   </SelectTrigger>
                   <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-                    {[1, 2, 3, 4, 5].map(rating => (
+                    {[1, 2, 3, 4, 5].map((rating) => (
                       <SelectItem key={rating} value={rating.toString()}>
                         Up to {rating}
                       </SelectItem>
@@ -771,7 +844,9 @@ function EnhancedHeader({
                 Verification
               </label>
               <div className="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-50/50 dark:from-purple-950/30 dark:to-purple-950/20 rounded-xl p-2 border border-purple-200/50 dark:border-purple-800/50">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Verified Only</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Verified Only
+                </span>
                 <Switch
                   checked={showVerifiedOnly}
                   onCheckedChange={setShowVerifiedOnly}
@@ -788,7 +863,8 @@ function EnhancedHeader({
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <Badge className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
-                      {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
+                      {activeFiltersCount} filter
+                      {activeFiltersCount !== 1 ? "s" : ""} active
                     </Badge>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Showing {companies.length} of {totalCount} results
@@ -817,19 +893,32 @@ function EnhancedHeader({
           </div>
           <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-green-200/50">
             <div className="text-2xl font-bold text-green-600">
-              {companies.filter((c: { status: string; }) => c.status === "active").length}
+              {
+                companies.filter(
+                  (c: { status: string }) => c.status === "active",
+                ).length
+              }
             </div>
             <div className="text-sm text-gray-600">Active</div>
           </div>
           <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-purple-200/50">
             <div className="text-2xl font-bold text-purple-600">
-              {Array.from(new Set(companies.map((c: { industry: any; }) => c.industry))).length}
+              {
+                Array.from(
+                  new Set(companies.map((c: { industry: any }) => c.industry)),
+                ).length
+              }
             </div>
             <div className="text-sm text-gray-600">Industries</div>
           </div>
           <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-amber-200/50">
             <div className="text-2xl font-bold text-amber-600">
-              {companies.filter((c: { verificationLevel: string; }) => c.verificationLevel === "verified").length}
+              {
+                companies.filter(
+                  (c: { verificationLevel: string }) =>
+                    c.verificationLevel === "verified",
+                ).length
+              }
             </div>
             <div className="text-sm text-gray-600">Verified</div>
           </div>
@@ -861,7 +950,7 @@ function EnhancedCompanyCard({
     <Card className="group relative overflow-hidden border-2 border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-b from-white to-gray-50/30 dark:from-gray-900 dark:to-gray-800/30 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
       {/* Background Gradient */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
-      
+
       {/* Favorite Button */}
       <Button
         size="icon"
@@ -869,7 +958,9 @@ function EnhancedCompanyCard({
         className="absolute top-3 right-3 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800"
         onClick={onToggleFavorite}
       >
-        <Heart className={`w-4 h-4 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+        <Heart
+          className={`w-4 h-4 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`}
+        />
       </Button>
 
       <CardHeader className="pb-3 pt-6 px-5">
@@ -880,7 +971,9 @@ function EnhancedCompanyCard({
               <IndustryIcon className="w-7 h-7 text-white" />
             </div>
             {/* Status Dot */}
-            <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white dark:border-gray-900`} />
+            <div
+              className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white dark:border-gray-900`}
+            />
           </div>
 
           {/* Company Info */}
@@ -891,14 +984,17 @@ function EnhancedCompanyCard({
                   {company.name}
                 </CardTitle>
                 <CardDescription className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
-                  {company.registrationNumber} • {formatIndustry(company.industry)}
+                  {company.registrationNumber} •{" "}
+                  {formatIndustry(company.industry)}
                 </CardDescription>
               </div>
             </div>
 
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
-              <Badge className={`text-xs px-2 py-1 bg-gradient-to-r ${statusColor} text-white border-0`}>
+              <Badge
+                className={`text-xs px-2 py-1 bg-gradient-to-r ${statusColor} text-white border-0`}
+              >
                 {formatStatus(company.status)}
               </Badge>
               <Badge variant="outline" className="text-xs px-2 py-1">
@@ -945,7 +1041,9 @@ function EnhancedCompanyCard({
             </div>
             {company.complianceScore > 0 && (
               <div className="ml-3 flex items-center">
-                <div className="w-8 text-xs font-medium text-gray-600 dark:text-gray-400">Comp:</div>
+                <div className="w-8 text-xs font-medium text-gray-600 dark:text-gray-400">
+                  Comp:
+                </div>
                 <div className="text-sm pl-1 font-bold text-green-700 dark:text-green-400 ml-1">
                   {company.complianceScore}%
                 </div>
@@ -1028,7 +1126,9 @@ function EnhancedCompanyRow({
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
                   <IndustryIcon className="w-6 h-6 text-white" />
                 </div>
-                <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white`} />
+                <div
+                  className={`absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gradient-to-r ${statusColor} border-2 border-white`}
+                />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -1042,7 +1142,9 @@ function EnhancedCompanyRow({
                     className="h-6 w-6"
                     onClick={onToggleFavorite}
                   >
-                    <Heart className={`w-3 h-3 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+                    <Heart
+                      className={`w-3 h-3 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-gray-400"}`}
+                    />
                   </Button>
                 </div>
 
@@ -1050,7 +1152,9 @@ function EnhancedCompanyRow({
                   <Badge variant="outline" className="text-xs">
                     {formatIndustry(company.industry)}
                   </Badge>
-                  <Badge className={`text-xs bg-gradient-to-r ${statusColor} text-white border-0`}>
+                  <Badge
+                    className={`text-xs bg-gradient-to-r ${statusColor} text-white border-0`}
+                  >
                     {formatStatus(company.status)}
                   </Badge>
                   <Badge variant="outline" className="text-xs">
@@ -1135,27 +1239,39 @@ function EnhancedStatsCards({ totalCount, companies }: any) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-2xl p-5 border border-blue-200/50 backdrop-blur-sm">
-        <div className="text-3xl font-bold text-blue-700 mb-2">{totalCount}</div>
-        <div className="text-sm font-medium text-blue-800">Total Businesses</div>
+        <div className="text-3xl font-bold text-blue-700 mb-2">
+          {totalCount}
+        </div>
+        <div className="text-sm font-medium text-blue-800">
+          Total Businesses
+        </div>
         <div className="text-xs text-blue-600 mt-1">Registered & Verified</div>
       </div>
       <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-2xl p-5 border border-green-200/50 backdrop-blur-sm">
         <div className="text-3xl font-bold text-green-700 mb-2">
           {companies.filter((c: Company) => c.status === "active").length}
         </div>
-        <div className="text-sm font-medium text-green-800">Active Companies</div>
+        <div className="text-sm font-medium text-green-800">
+          Active Companies
+        </div>
         <div className="text-xs text-green-600 mt-1">Currently Operating</div>
       </div>
       <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-2xl p-5 border border-purple-200/50 backdrop-blur-sm">
         <div className="text-3xl font-bold text-purple-700 mb-2">
-          {Array.from(new Set(companies.map((c: Company) => c.industry))).length}
+          {
+            Array.from(new Set(companies.map((c: Company) => c.industry)))
+              .length
+          }
         </div>
         <div className="text-sm font-medium text-purple-800">Industries</div>
         <div className="text-xs text-purple-600 mt-1">Diverse Sectors</div>
       </div>
       <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 rounded-2xl p-5 border border-amber-200/50 backdrop-blur-sm">
         <div className="text-3xl font-bold text-amber-700 mb-2">
-          {companies.filter((c: Company) => c.verificationLevel === "verified").length}
+          {
+            companies.filter((c: Company) => c.verificationLevel === "verified")
+              .length
+          }
         </div>
         <div className="text-sm font-medium text-amber-800">Verified</div>
         <div className="text-xs text-amber-600 mt-1">Fully Compliant</div>
@@ -1180,7 +1296,8 @@ function EnhancedViewControls({
         </h2>
         <p className="text-sm text-gray-600">
           Showing {companies.length} of {totalCount} results
-          {activeFiltersCount > 0 && ` (${activeFiltersCount} filter${activeFiltersCount !== 1 ? 's' : ''} active)`}
+          {activeFiltersCount > 0 &&
+            ` (${activeFiltersCount} filter${activeFiltersCount !== 1 ? "s" : ""} active)`}
         </p>
       </div>
 
@@ -1217,9 +1334,12 @@ function EnhancedEmptyState({ clearFilters }: any) {
       <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex items-center justify-center mx-auto mb-6">
         <Search className="w-10 h-10 text-blue-500" />
       </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-3">No businesses found</h3>
+      <h3 className="text-2xl font-bold text-gray-900 mb-3">
+        No businesses found
+      </h3>
       <p className="text-gray-600 mb-8 max-w-md mx-auto">
-        Try adjusting your search criteria or filters to find what you're looking for.
+        Try adjusting your search criteria or filters to find what you're
+        looking for.
       </p>
       <Button
         onClick={clearFilters}
@@ -1255,7 +1375,7 @@ function EnhancedPagination({
         >
           Previous
         </Button>
-        
+
         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
           let pageNum;
           if (totalPages <= 5) {
@@ -1267,20 +1387,20 @@ function EnhancedPagination({
           } else {
             pageNum = currentPage - 2 + i;
           }
-          
+
           return (
             <Button
               key={pageNum}
               variant={currentPage === pageNum ? "default" : "outline"}
               size="sm"
               onClick={() => goToPage(pageNum)}
-              className={`h-9 w-9 rounded-xl ${currentPage === pageNum ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'border-gray-300'}`}
+              className={`h-9 w-9 rounded-xl ${currentPage === pageNum ? "bg-gradient-to-r from-blue-600 to-cyan-600" : "border-gray-300"}`}
             >
               {pageNum}
             </Button>
           );
         })}
-        
+
         <Button
           variant="outline"
           size="sm"
@@ -1308,22 +1428,29 @@ function EnhancedDataQualityNote() {
             Trusted & Verified Business Data
           </h3>
           <p className="text-gray-700 mb-6 leading-relaxed">
-            All business information is sourced directly from the Sierra Leone Corporate Affairs Commission 
-            and verified through official channels. Our verification process ensures you get accurate, 
-            up-to-date information for confident business decisions.
+            All business information is sourced directly from the Sierra Leone
+            Corporate Affairs Commission and verified through official channels.
+            Our verification process ensures you get accurate, up-to-date
+            information for confident business decisions.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 mr-3"></div>
-              <span className="text-sm font-medium text-gray-900">✓ Official Registration Data</span>
+              <span className="text-sm font-medium text-gray-900">
+                ✓ Official Registration Data
+              </span>
             </div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mr-3"></div>
-              <span className="text-sm font-medium text-gray-900">⏳ Real-time Updates</span>
+              <span className="text-sm font-medium text-gray-900">
+                ⏳ Real-time Updates
+              </span>
             </div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 mr-3"></div>
-              <span className="text-sm font-medium text-gray-900">🔒 Secure & Verified Sources</span>
+              <span className="text-sm font-medium text-gray-900">
+                🔒 Secure & Verified Sources
+              </span>
             </div>
           </div>
         </div>
@@ -1341,11 +1468,11 @@ function EnhancedHeaderSkeleton() {
           <div className="h-6 bg-gray-300 rounded w-48 mx-auto mb-4"></div>
           <div className="h-12 bg-gray-300 rounded w-3/4 mx-auto mb-3"></div>
           <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto mb-8"></div>
-          
+
           <div className="bg-white/50 rounded-2xl p-6 mb-6">
             <div className="h-14 bg-gray-300 rounded mb-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map(i => (
+              {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-12 bg-gray-300 rounded"></div>
               ))}
             </div>
@@ -1361,18 +1488,18 @@ function EnhancedContentSkeleton() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="animate-pulse">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[1, 2, 3, 4].map(i => (
+          {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-24 bg-gray-300 rounded-2xl"></div>
           ))}
         </div>
-        
+
         <div className="flex justify-between mb-6">
           <div className="h-8 bg-gray-300 rounded w-48"></div>
           <div className="h-8 bg-gray-300 rounded w-32"></div>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map(i => (
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="h-96 bg-gray-300 rounded-xl"></div>
           ))}
         </div>

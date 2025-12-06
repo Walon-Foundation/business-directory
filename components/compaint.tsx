@@ -10,51 +10,51 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { 
-  AlertTriangle, 
-  FileWarning, 
-  Scale, 
-  FileText, 
-  CreditCard, 
-  Shield, 
-  Globe, 
-  AlertCircle, 
-  Bell, 
-  UsersIcon, 
-  Phone, 
-  Briefcase, 
-  Upload, 
-  Camera, 
-  CheckCircle, 
-  Loader2, 
-  Send, 
+import {
+  AlertTriangle,
+  FileWarning,
+  Scale,
+  FileText,
+  CreditCard,
+  Shield,
+  Globe,
+  AlertCircle,
+  Bell,
+  UsersIcon,
+  Phone,
+  Briefcase,
+  Upload,
+  Camera,
+  CheckCircle,
+  Loader2,
+  Send,
   X,
   Copy,
   Check,
   Mail,
   Calendar,
   FileSearch,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Switch } from "@radix-ui/react-switch";
-import axios from "axios"
+import axios from "axios";
 
-type ComplaintStatus = 'form' | 'submitting' | 'success' | 'error';
+type ComplaintStatus = "form" | "submitting" | "success" | "error";
 
-export default function ComplaintModal({ 
-  companyId, 
-  companyName, 
-  onOpenChange 
-}: { 
-  companyId: string; 
+export default function ComplaintModal({
+  companyId,
+  companyName,
+  onOpenChange,
+}: {
+  companyId: string;
   companyName: string;
   onOpenChange?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState<ComplaintStatus>('form');
+  const [status, setStatus] = useState<ComplaintStatus>("form");
   const [submissionData, setSubmissionData] = useState<{
     referenceNumber: string;
     complaintId: string;
@@ -62,7 +62,7 @@ export default function ComplaintModal({
     submittedAt: string;
   } | null>(null);
   const [copied, setCopied] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     type: "",
     description: "",
@@ -75,7 +75,11 @@ export default function ComplaintModal({
 
   const complaintTypes = [
     { value: "fraud", label: "Fraudulent Activity", icon: AlertTriangle },
-    { value: "non_compliance", label: "Regulatory Non-Compliance", icon: FileWarning },
+    {
+      value: "non_compliance",
+      label: "Regulatory Non-Compliance",
+      icon: FileWarning,
+    },
     { value: "poor_service", label: "Poor Service Quality", icon: Scale },
     { value: "contract_breach", label: "Contract Breach", icon: FileText },
     { value: "financial", label: "Financial Issues", icon: CreditCard },
@@ -86,10 +90,13 @@ export default function ComplaintModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('submitting');
+    setStatus("submitting");
 
     try {
-      const res = await axios.post(`/api/explore/${companyId}/complaint`, formData);
+      const res = await axios.post(
+        `/api/explore/${companyId}/complaint`,
+        formData,
+      );
 
       if (res.status !== 201) throw new Error("Failed to submit complaint");
 
@@ -101,8 +108,8 @@ export default function ComplaintModal({
         submittedAt: new Date().toLocaleString(),
       });
 
-      setStatus('success');
-      
+      setStatus("success");
+
       toast.success("Complaint submitted successfully!", {
         description: `Reference: ${res.data.data.referenceNumber}`,
         duration: 5000,
@@ -119,10 +126,11 @@ export default function ComplaintModal({
         anonymous: false,
       });
     } catch (error) {
-      setStatus('error');
+      setStatus("error");
       toast.error("Failed to submit complaint", {
-        description: axios.isAxiosError(error) 
-          ? error.response?.data?.error?.message || "Please try again or contact support."
+        description: axios.isAxiosError(error)
+          ? error.response?.data?.error?.message ||
+            "Please try again or contact support."
           : "Please try again or contact support.",
       });
     }
@@ -131,11 +139,11 @@ export default function ComplaintModal({
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (onOpenChange) onOpenChange(newOpen);
-    
+
     // Reset status when closing
     if (!newOpen) {
       setTimeout(() => {
-        setStatus('form');
+        setStatus("form");
         setSubmissionData(null);
         setCopied(false);
       }, 300);
@@ -152,22 +160,20 @@ export default function ComplaintModal({
   };
 
   const handleNewComplaint = () => {
-    setStatus('form');
+    setStatus("form");
     setSubmissionData(null);
   };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          className="h-12 px-6 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-200 group"
-        >
+        <Button className="h-12 px-6 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-200 group">
           <Bell className="w-5 h-5 mr-2 group-hover:animate-pulse" />
           <span className="font-semibold">File Complaint</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white border-0 shadow-2xl">
-        {status === 'success' && submissionData ? (
+        {status === "success" && submissionData ? (
           <div className="py-6">
             {/* Success Header */}
             <div className="text-center mb-8">
@@ -178,7 +184,11 @@ export default function ComplaintModal({
                 Complaint Submitted Successfully!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Your complaint against <span className="font-semibold text-emerald-700">{companyName}</span> has been recorded.
+                Your complaint against{" "}
+                <span className="font-semibold text-emerald-700">
+                  {companyName}
+                </span>{" "}
+                has been recorded.
               </DialogDescription>
             </div>
 
@@ -192,7 +202,9 @@ export default function ComplaintModal({
                 {submissionData.nextSteps.map((step, index) => (
                   <li key={index} className="flex items-start">
                     <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
-                      <span className="text-xs font-semibold text-blue-600">{index + 1}</span>
+                      <span className="text-xs font-semibold text-blue-600">
+                        {index + 1}
+                      </span>
                     </div>
                     <span className="text-sm text-gray-700">{step}</span>
                   </li>
@@ -205,10 +217,12 @@ export default function ComplaintModal({
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <div className="flex items-center mb-2">
                   <Mail className="w-4 h-4 mr-2 text-gray-600" />
-                  <h4 className="font-medium text-gray-900 text-sm">Email Confirmation</h4>
+                  <h4 className="font-medium text-gray-900 text-sm">
+                    Email Confirmation
+                  </h4>
                 </div>
                 <p className="text-xs text-gray-600">
-                  {formData.anonymous || !formData.username 
+                  {formData.anonymous || !formData.username
                     ? "No email will be sent (anonymous submission)"
                     : "Check your email for confirmation and updates"}
                 </p>
@@ -216,10 +230,13 @@ export default function ComplaintModal({
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <div className="flex items-center mb-2">
                   <Calendar className="w-4 h-4 mr-2 text-gray-600" />
-                  <h4 className="font-medium text-gray-900 text-sm">Review Timeline</h4>
+                  <h4 className="font-medium text-gray-900 text-sm">
+                    Review Timeline
+                  </h4>
                 </div>
                 <p className="text-xs text-gray-600">
-                  Initial review within 24 hours, full review in 5-7 business days
+                  Initial review within 24 hours, full review in 5-7 business
+                  days
                 </p>
               </div>
             </div>
@@ -263,12 +280,15 @@ export default function ComplaintModal({
                     File a Complaint
                   </DialogTitle>
                   <DialogDescription className="text-gray-600">
-                    Report an issue with <span className="font-semibold text-rose-700">{companyName}</span>
+                    Report an issue with{" "}
+                    <span className="font-semibold text-rose-700">
+                      {companyName}
+                    </span>
                   </DialogDescription>
                 </div>
               </div>
             </DialogHeader>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6 py-4">
               {/* Complaint Type */}
               <div className="space-y-3">
@@ -283,15 +303,21 @@ export default function ComplaintModal({
                       <button
                         key={type.value}
                         type="button"
-                        onClick={() => setFormData({ ...formData, type: type.value })}
+                        onClick={() =>
+                          setFormData({ ...formData, type: type.value })
+                        }
                         className={`p-4 rounded-xl border-2 transition-all duration-200 flex flex-col items-center justify-center gap-2 ${
                           formData.type === type.value
                             ? "border-rose-300 bg-gradient-to-br from-rose-50 to-pink-50 text-rose-700 shadow-sm"
                             : "border-gray-200 bg-white hover:border-rose-200 hover:bg-rose-50/50 text-gray-700"
                         }`}
                       >
-                        <Icon className={`w-5 h-5 ${formData.type === type.value ? "text-rose-600" : "text-gray-500"}`} />
-                        <div className="text-xs font-medium text-center">{type.label}</div>
+                        <Icon
+                          className={`w-5 h-5 ${formData.type === type.value ? "text-rose-600" : "text-gray-500"}`}
+                        />
+                        <div className="text-xs font-medium text-center">
+                          {type.label}
+                        </div>
                       </button>
                     );
                   })}
@@ -302,18 +328,22 @@ export default function ComplaintModal({
               <div className="space-y-3">
                 <Label className="text-sm font-semibold text-gray-900 flex items-center">
                   <FileText className="w-4 h-4 mr-2 text-rose-600" />
-                  Detailed Description <span className="text-rose-500 ml-1">*</span>
+                  Detailed Description{" "}
+                  <span className="text-rose-500 ml-1">*</span>
                 </Label>
                 <Textarea
                   placeholder="Please provide detailed information about your complaint..."
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   className="min-h-[120px] border-2 border-gray-200 focus:border-rose-300 focus:ring-2 focus:ring-rose-200/50 rounded-xl bg-gray-50/50"
                   required
                 />
                 <p className="text-xs text-gray-500 flex items-start">
                   <CheckCircle className="w-3 h-3 mr-1.5 mt-0.5 flex-shrink-0 text-gray-400" />
-                  Be specific about dates, amounts, and people involved if possible
+                  Be specific about dates, amounts, and people involved if
+                  possible
                 </p>
               </div>
 
@@ -332,7 +362,9 @@ export default function ComplaintModal({
                       }
                       className="data-[state=checked]:bg-rose-600"
                     />
-                    <Label className="text-sm text-gray-700">Submit anonymously</Label>
+                    <Label className="text-sm text-gray-700">
+                      Submit anonymously
+                    </Label>
                   </div>
                 </div>
 
@@ -346,7 +378,9 @@ export default function ComplaintModal({
                       <Input
                         placeholder="John Doe"
                         value={formData.username}
-                        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, username: e.target.value })
+                        }
                         className="border-2 border-gray-200 focus:border-rose-300 focus:ring-2 focus:ring-rose-200/50 rounded-xl"
                       />
                     </div>
@@ -358,7 +392,12 @@ export default function ComplaintModal({
                       <Input
                         placeholder="+232 XX XXX XXX"
                         value={formData.userPhone}
-                        onChange={(e) => setFormData({ ...formData, userPhone: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            userPhone: e.target.value,
+                          })
+                        }
                         className="border-2 border-gray-200 focus:border-rose-300 focus:ring-2 focus:ring-rose-200/50 rounded-xl"
                       />
                     </div>
@@ -381,7 +420,8 @@ export default function ComplaintModal({
                       Upload supporting documents
                     </p>
                     <p className="text-xs text-gray-500 mb-4 max-w-xs mx-auto">
-                      Screenshots, photos, contracts, receipts, etc. Max file size: 10MB
+                      Screenshots, photos, contracts, receipts, etc. Max file
+                      size: 10MB
                     </p>
                     <Input
                       type="file"
@@ -409,15 +449,21 @@ export default function ComplaintModal({
                         <div className="flex items-center">
                           <FileText className="w-5 h-5 text-emerald-600 mr-3" />
                           <div>
-                            <span className="text-sm font-medium text-gray-900 block">{formData.evidenceUrl}</span>
-                            <span className="text-xs text-emerald-600">Ready to upload</span>
+                            <span className="text-sm font-medium text-gray-900 block">
+                              {formData.evidenceUrl}
+                            </span>
+                            <span className="text-xs text-emerald-600">
+                              Ready to upload
+                            </span>
                           </div>
                         </div>
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          onClick={() => setFormData({ ...formData, evidenceUrl: "" })}
+                          onClick={() =>
+                            setFormData({ ...formData, evidenceUrl: "" })
+                          }
                           className="h-8 w-8 p-0 hover:bg-white"
                         >
                           <X className="w-4 h-4" />
@@ -439,25 +485,33 @@ export default function ComplaintModal({
                     <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mr-3 flex-shrink-0">
                       <CheckCircle className="w-3 h-3 text-amber-600" />
                     </div>
-                    <span className="text-sm text-amber-800">All complaints are treated confidentially</span>
+                    <span className="text-sm text-amber-800">
+                      All complaints are treated confidentially
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mr-3 flex-shrink-0">
                       <CheckCircle className="w-3 h-3 text-amber-600" />
                     </div>
-                    <span className="text-sm text-amber-800">We review complaints within 5-7 business days</span>
+                    <span className="text-sm text-amber-800">
+                      We review complaints within 5-7 business days
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mr-3 flex-shrink-0">
                       <CheckCircle className="w-3 h-3 text-amber-600" />
                     </div>
-                    <span className="text-sm text-amber-800">You may be contacted for additional information</span>
+                    <span className="text-sm text-amber-800">
+                      You may be contacted for additional information
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mr-3 flex-shrink-0">
                       <CheckCircle className="w-3 h-3 text-amber-600" />
                     </div>
-                    <span className="text-sm text-amber-800">False complaints may result in legal action</span>
+                    <span className="text-sm text-amber-800">
+                      False complaints may result in legal action
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -473,10 +527,14 @@ export default function ComplaintModal({
                 </Button>
                 <Button
                   type="submit"
-                  disabled={!formData.type || !formData.description || status === 'submitting'}
+                  disabled={
+                    !formData.type ||
+                    !formData.description ||
+                    status === "submitting"
+                  }
                   className="flex-1 h-12 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {status === 'submitting' ? (
+                  {status === "submitting" ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Submitting...

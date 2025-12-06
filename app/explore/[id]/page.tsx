@@ -70,7 +70,6 @@ import {
 import ComplaintModal from "@/components/compaint";
 import { Company } from "@/types/company";
 
-
 interface ApiResponse {
   success: boolean;
   data: Company;
@@ -88,9 +87,9 @@ const formatVerificationLevel = (level: string) => {
 
 const formatIndustry = (industry: string) => {
   return industry
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 // Color themes for different statuses
@@ -150,8 +149,12 @@ const verificationColors = {
 };
 
 // Enhanced Icon Component with better styling
-function IconContainer({ children, className = "", variant = "default" }: { 
-  children: React.ReactNode; 
+function IconContainer({
+  children,
+  className = "",
+  variant = "default",
+}: {
+  children: React.ReactNode;
   className?: string;
   variant?: "default" | "primary" | "success" | "warning" | "danger";
 }) {
@@ -164,20 +167,22 @@ function IconContainer({ children, className = "", variant = "default" }: {
   };
 
   return (
-    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${variantClasses[variant]} ${className}`}>
+    <div
+      className={`w-12 h-12 rounded-xl flex items-center justify-center ${variantClasses[variant]} ${className}`}
+    >
       {children}
     </div>
   );
 }
 
 // Responsive Tab Navigation Component with prominent complaint button
-function ResponsiveTabs({ 
-  activeTab, 
+function ResponsiveTabs({
+  activeTab,
   setActiveTab,
   showComplaintButton = false,
   companyId,
-  companyName 
-}: { 
+  companyName,
+}: {
   activeTab: string;
   setActiveTab: (value: string) => void;
   showComplaintButton?: boolean;
@@ -207,13 +212,16 @@ function ResponsiveTabs({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -233,12 +241,20 @@ function ResponsiveTabs({
                       : "hover:bg-gray-50/50"
                   }`}
                 >
-                  <tab.icon className={`w-5 h-5 mr-2 ${
-                    activeTab === tab.value ? "text-blue-600" : "text-gray-500 group-hover:text-blue-500"
-                  }`} />
-                  <span className={`font-medium ${
-                    activeTab === tab.value ? "text-blue-700" : "text-gray-700 group-hover:text-blue-600"
-                  }`}>
+                  <tab.icon
+                    className={`w-5 h-5 mr-2 ${
+                      activeTab === tab.value
+                        ? "text-blue-600"
+                        : "text-gray-500 group-hover:text-blue-500"
+                    }`}
+                  />
+                  <span
+                    className={`font-medium ${
+                      activeTab === tab.value
+                        ? "text-blue-700"
+                        : "text-gray-700 group-hover:text-blue-600"
+                    }`}
+                  >
                     {tab.label}
                   </span>
                 </button>
@@ -258,14 +274,17 @@ function ResponsiveTabs({
           >
             <div className="flex items-center">
               {(() => {
-                const Icon = tabs.find(t => t.value === mobileTab)?.icon || Eye;
+                const Icon =
+                  tabs.find((t) => t.value === mobileTab)?.icon || Eye;
                 return <Icon className="w-5 h-5 mr-2 text-blue-600" />;
               })()}
               <span className="font-medium text-gray-900">
-                {tabs.find(t => t.value === mobileTab)?.label || "Overview"}
+                {tabs.find((t) => t.value === mobileTab)?.label || "Overview"}
               </span>
             </div>
-            <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+            <ChevronDown
+              className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            />
           </Button>
         </div>
 
@@ -284,9 +303,13 @@ function ResponsiveTabs({
                       : "hover:bg-gray-50 text-gray-700"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 mr-3 ${
-                    mobileTab === tab.value ? "text-blue-600" : "text-gray-500"
-                  }`} />
+                  <Icon
+                    className={`w-5 h-5 mr-3 ${
+                      mobileTab === tab.value
+                        ? "text-blue-600"
+                        : "text-gray-500"
+                    }`}
+                  />
                   <span className="font-medium">{tab.label}</span>
                   {mobileTab === tab.value && (
                     <div className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500" />
@@ -350,22 +373,25 @@ function ErrorState({ error, router }: { error: string | null; router: any }) {
             </div>
           </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-            {error?.includes('not found') ? 'Company Not Found' : 'Error Loading Profile'}
+            {error?.includes("not found")
+              ? "Company Not Found"
+              : "Error Loading Profile"}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg">
-            {error || 'The requested company profile could not be found in our registry.'}
+            {error ||
+              "The requested company profile could not be found in our registry."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
+            <Button
               onClick={() => router.back()}
               className="h-12 px-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Return to Previous
             </Button>
-            <Button 
+            <Button
               variant="outline"
-              onClick={() => router.push('/explore')}
+              onClick={() => router.push("/explore")}
               className="h-12 px-6 border-2"
             >
               <Building2 className="w-5 h-5 mr-2" />
@@ -400,26 +426,26 @@ export default function CompanyDetailPage() {
         setError(null);
 
         const response = await fetch(`/api/explore/${params.id}`);
-        
+
         if (!response.ok) {
           if (response.status === 404) {
-            throw new Error('Company not found');
+            throw new Error("Company not found");
           }
           throw new Error(`Failed to fetch company: ${response.status}`);
         }
 
         const data: ApiResponse = await response.json();
-        
+
         if (data.success) {
           setCompany(data.data);
           // Fetch complaints when company data is loaded
           fetchComplaints(data.data.id);
         } else {
-          setError('Failed to load company data');
+          setError("Failed to load company data");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching company:', err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching company:", err);
       } finally {
         setLoading(false);
       }
@@ -435,13 +461,13 @@ export default function CompanyDetailPage() {
     try {
       setComplaintsLoading(true);
       const response = await fetch(`/api/explore/${companyId}/complaint`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setComplaints(data.data || []);
-      } 
+      }
     } catch (err) {
-      console.error('Error fetching complaints:', err);
+      console.error("Error fetching complaints:", err);
       // Use mock data if API fails
       setComplaints([]);
     } finally {
@@ -456,16 +482,20 @@ export default function CompanyDetailPage() {
   const yearsOperating = new Date().getFullYear() - company.foundedYear;
 
   // Get display values with fallbacks
-  const displayName = company.name || 'Unknown Company';
+  const displayName = company.name || "Unknown Company";
   const displayIndustry = formatIndustry(company.industry);
-  const displayLocation = company.city || company.location || 'Location not specified';
-  const displayDescription = company.description || 'No description available.';
+  const displayLocation =
+    company.city || company.location || "Location not specified";
+  const displayDescription = company.description || "No description available.";
   const displayStatus = formatStatus(company.status);
-  const displayVerificationLevel = formatVerificationLevel(company.verificationLevel);
-  const displayRating = company.rating || 'N/A';
+  const displayVerificationLevel = formatVerificationLevel(
+    company.verificationLevel,
+  );
+  const displayRating = company.rating || "N/A";
   const displayComplianceScore = company.complianceScore || 0;
-  const displayRevenue = company.revenue || company.annualRevenueRange || 'Not available';
-  const displayEmployees = company.employees || 'Not specified';
+  const displayRevenue =
+    company.revenue || company.annualRevenueRange || "Not available";
+  const displayEmployees = company.employees || "Not specified";
   const displayWebsite = company.website;
   const displayContactEmail = company.contactEmail;
   const displayContactPhone = company.contactPhone;
@@ -475,7 +505,8 @@ export default function CompanyDetailPage() {
   const displayBusinessType = formatIndustry(company.businessType);
   const displayOwnership = formatIndustry(company.ownership);
   const displayYearEnd = company.yearEnd;
-  const displayLastUpdated = company.lastUpdated || company.updatedAt || company.lastVerifiedAt;
+  const displayLastUpdated =
+    company.lastUpdated || company.updatedAt || company.lastVerifiedAt;
 
   // Get arrays (with fallback)
   const displayServices = company.services || [];
@@ -495,20 +526,33 @@ export default function CompanyDetailPage() {
 
   // Calculate complaint statistics
   const totalComplaints = complaints.length;
-  const resolvedComplaints = complaints.filter(c => c.status === "resolved").length;
-  const pendingComplaints = complaints.filter(c => c.status === "pending" || c.status === "under_review").length;
-  const resolutionRate = totalComplaints > 0 ? Math.round((resolvedComplaints / totalComplaints) * 100) : 0;
+  const resolvedComplaints = complaints.filter(
+    (c) => c.status === "resolved",
+  ).length;
+  const pendingComplaints = complaints.filter(
+    (c) => c.status === "pending" || c.status === "under_review",
+  ).length;
+  const resolutionRate =
+    totalComplaints > 0
+      ? Math.round((resolvedComplaints / totalComplaints) * 100)
+      : 0;
 
   // Format complaint type
   const formatComplaintType = (type: string) => {
-    return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    return type
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   // Pagination calculations
   const totalPages = Math.ceil(complaints.length / complaintsPerPage);
   const indexOfLastComplaint = currentPage * complaintsPerPage;
   const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
-  const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
+  const currentComplaints = complaints.slice(
+    indexOfFirstComplaint,
+    indexOfLastComplaint,
+  );
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -540,7 +584,7 @@ export default function CompanyDetailPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/10 dark:from-blue-600/5 dark:via-blue-500/3 dark:to-cyan-500/5" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
-        
+
         {/* Navigation with prominent complaint button */}
         <div className="relative border-b border-white/20 dark:border-gray-700/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -575,7 +619,11 @@ export default function CompanyDetailPage() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+                      <p>
+                        {isFavorite
+                          ? "Remove from favorites"
+                          : "Add to favorites"}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -599,7 +647,10 @@ export default function CompanyDetailPage() {
 
                 {/* Prominent complaint button in header */}
                 {company && (
-                  <ComplaintModal companyId={company.id} companyName={displayName} />
+                  <ComplaintModal
+                    companyId={company.id}
+                    companyName={displayName}
+                  />
                 )}
               </div>
             </div>
@@ -617,11 +668,17 @@ export default function CompanyDetailPage() {
                   <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 shadow-2xl shadow-blue-500/30 flex items-center justify-center overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
                     <Building2 className="w-16 h-16 sm:w-20 sm:h-20 text-white z-10" />
-                    
+
                     {/* Animated rings */}
-                    <div className="absolute inset-0 border-2 border-white/20 rounded-3xl animate-ping" style={{ animationDelay: '0.5s' }} />
-                    <div className="absolute inset-4 border-2 border-white/10 rounded-2xl animate-ping" style={{ animationDelay: '1s' }} />
-                    
+                    <div
+                      className="absolute inset-0 border-2 border-white/20 rounded-3xl animate-ping"
+                      style={{ animationDelay: "0.5s" }}
+                    />
+                    <div
+                      className="absolute inset-4 border-2 border-white/10 rounded-2xl animate-ping"
+                      style={{ animationDelay: "1s" }}
+                    />
+
                     {/* Verification Badge */}
                     {company.verificationLevel === "verified" && (
                       <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-20 animate-bounce-subtle">
@@ -635,21 +692,33 @@ export default function CompanyDetailPage() {
                 <div className="flex-1">
                   {/* Status Badges */}
                   <div className="flex flex-wrap items-center gap-3 mb-5">
-                    <div className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${statusColors[company.status].border} ${statusColors[company.status].bg}`}>
-                      <div className={`w-2 h-2 rounded-full ${statusColors[company.status].icon} mr-2 animate-pulse`} />
-                      <span className={`text-sm font-semibold ${statusColors[company.status].text}`}>
+                    <div
+                      className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${statusColors[company.status].border} ${statusColors[company.status].bg}`}
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full ${statusColors[company.status].icon} mr-2 animate-pulse`}
+                      />
+                      <span
+                        className={`text-sm font-semibold ${statusColors[company.status].text}`}
+                      >
                         {displayStatus}
                       </span>
                     </div>
-                    
-                    <div className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${verificationColors[company.verificationLevel].border} ${verificationColors[company.verificationLevel].bg}`}>
-                      <Shield className={`w-4 h-4 ${verificationColors[company.verificationLevel].icon} mr-2`} />
-                      <span className={`text-sm font-semibold ${verificationColors[company.verificationLevel].text}`}>
+
+                    <div
+                      className={`inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm border ${verificationColors[company.verificationLevel].border} ${verificationColors[company.verificationLevel].bg}`}
+                    >
+                      <Shield
+                        className={`w-4 h-4 ${verificationColors[company.verificationLevel].icon} mr-2`}
+                      />
+                      <span
+                        className={`text-sm font-semibold ${verificationColors[company.verificationLevel].text}`}
+                      >
                         {displayVerificationLevel}
                       </span>
                     </div>
-                    
-                    {displayRating !== 'N/A' && (
+
+                    {displayRating !== "N/A" && (
                       <div className="inline-flex items-center px-4 py-2 rounded-full backdrop-blur-sm bg-gradient-to-r from-amber-500/10 to-orange-500/5 border border-amber-200/50">
                         <Star className="w-4 h-4 fill-amber-500 text-amber-500 mr-2" />
                         <span className="text-sm font-semibold text-amber-700">
@@ -670,19 +739,32 @@ export default function CompanyDetailPage() {
                   {/* Quick Info with better icons */}
                   <div className="flex flex-wrap items-center gap-4 mb-8">
                     <div className="flex items-center px-4 py-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl group hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200">
-                      <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                      <IconContainer
+                        variant="primary"
+                        className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform"
+                      >
                         <MapPin className="w-4 h-4" />
                       </IconContainer>
-                      <span className="font-medium text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{displayLocation}</span>
+                      <span className="font-medium text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                        {displayLocation}
+                      </span>
                     </div>
                     <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-purple-300 transition-all duration-200">
-                      <IconContainer variant="primary" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                      <IconContainer
+                        variant="primary"
+                        className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform"
+                      >
                         <Building className="w-4 h-4" />
                       </IconContainer>
-                      <span className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">{displayIndustry}</span>
+                      <span className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">
+                        {displayIndustry}
+                      </span>
                     </div>
                     <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl group hover:border-amber-300 transition-all duration-200">
-                      <IconContainer variant="warning" className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform">
+                      <IconContainer
+                        variant="warning"
+                        className="w-8 h-8 mr-3 group-hover:scale-110 transition-transform"
+                      >
                         <Calendar className="w-4 h-4" />
                       </IconContainer>
                       <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
@@ -709,29 +791,45 @@ export default function CompanyDetailPage() {
                   <Button
                     variant="outline"
                     className="h-14 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-300/50 dark:border-gray-700/50 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-white dark:hover:bg-gray-800 rounded-xl group transition-all duration-200"
-                    onClick={() => window.open(displayWebsite, "_blank", "noopener,noreferrer")}
+                    onClick={() =>
+                      window.open(
+                        displayWebsite,
+                        "_blank",
+                        "noopener,noreferrer",
+                      )
+                    }
                   >
                     <div className="flex items-center justify-center w-full">
-                      <IconContainer variant="primary" className="mr-3 group-hover:scale-110 transition-transform">
+                      <IconContainer
+                        variant="primary"
+                        className="mr-3 group-hover:scale-110 transition-transform"
+                      >
                         <Globe className="w-5 h-5" />
                       </IconContainer>
                       <div className="text-left">
-                        <div className="text-sm font-semibold text-gray-900 dark:text-white">Website</div>
-                        <div className="text-xs text-gray-500 truncate">Visit</div>
+                        <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                          Website
+                        </div>
+                        <div className="text-xs text-gray-500 truncate">
+                          Visit
+                        </div>
                       </div>
                     </div>
                   </Button>
                 )}
-                
-                <Button
-                  className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group"
-                >
+
+                <Button className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group">
                   <div className="flex items-center justify-center w-full">
-                    <IconContainer variant="primary" className="bg-white/20 mr-3 group-hover:scale-110 transition-transform">
+                    <IconContainer
+                      variant="primary"
+                      className="bg-white/20 mr-3 group-hover:scale-110 transition-transform"
+                    >
                       <FileText className="w-5 h-5 text-white" />
                     </IconContainer>
                     <div className="text-left">
-                      <div className="text-sm font-semibold text-white">Full Report</div>
+                      <div className="text-sm font-semibold text-white">
+                        Full Report
+                      </div>
                       <div className="text-xs text-white/80">Download PDF</div>
                     </div>
                   </div>
@@ -751,28 +849,36 @@ export default function CompanyDetailPage() {
                 <CardContent className="p-0">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center group">
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{displayEmployees}</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                        {displayEmployees}
+                      </div>
                       <div className="text-xs text-gray-500 flex items-center justify-center">
                         <Users className="w-3 h-3 mr-1" />
                         Employees
                       </div>
                     </div>
                     <div className="text-center group">
-                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-green-700 transition-colors">{displayRevenue}</div>
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-green-700 transition-colors">
+                        {displayRevenue}
+                      </div>
                       <div className="text-xs text-gray-500 flex items-center justify-center">
                         <TrendingUp className="w-3 h-3 mr-1" />
                         Annual Revenue
                       </div>
                     </div>
                     <div className="text-center group">
-                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-emerald-700 transition-colors">{displayComplianceScore}%</div>
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-emerald-700 transition-colors">
+                        {displayComplianceScore}%
+                      </div>
                       <div className="text-xs text-gray-500 flex items-center justify-center">
                         <ShieldCheck className="w-3 h-3 mr-1" />
                         Compliance
                       </div>
                     </div>
                     <div className="text-center group">
-                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">{trustScore}%</div>
+                      <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">
+                        {trustScore}%
+                      </div>
                       <div className="text-xs text-gray-500 flex items-center justify-center">
                         <Handshake className="w-3 h-3 mr-1" />
                         Trust Score
@@ -805,19 +911,57 @@ export default function CompanyDetailPage() {
               </CardHeader>
               <CardContent className="relative space-y-5">
                 {[
-                  { label: "Registration Number", value: company.registrationNumber, icon: CreditCard, variant: "primary" as const },
-                  { label: "Business Type", value: displayBusinessType, icon: BuildingIcon, variant: "primary" as const },
-                  { label: "Ownership", value: displayOwnership, icon: UsersIcon, variant: "primary" as const },
-                  { label: "Year End", value: displayYearEnd || 'Not specified', icon: Calendar, variant: "warning" as const },
-                  { label: "Tax ID", value: displayTaxId || 'Not specified', icon: Wallet, variant: "success" as const },
-                  { label: "Industry", value: displayIndustry, icon: Hash, variant: "primary" as const },
+                  {
+                    label: "Registration Number",
+                    value: company.registrationNumber,
+                    icon: CreditCard,
+                    variant: "primary" as const,
+                  },
+                  {
+                    label: "Business Type",
+                    value: displayBusinessType,
+                    icon: BuildingIcon,
+                    variant: "primary" as const,
+                  },
+                  {
+                    label: "Ownership",
+                    value: displayOwnership,
+                    icon: UsersIcon,
+                    variant: "primary" as const,
+                  },
+                  {
+                    label: "Year End",
+                    value: displayYearEnd || "Not specified",
+                    icon: Calendar,
+                    variant: "warning" as const,
+                  },
+                  {
+                    label: "Tax ID",
+                    value: displayTaxId || "Not specified",
+                    icon: Wallet,
+                    variant: "success" as const,
+                  },
+                  {
+                    label: "Industry",
+                    value: displayIndustry,
+                    icon: Hash,
+                    variant: "primary" as const,
+                  },
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-blue-50/50 transition-all duration-200">
-                    <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                  <div
+                    key={index}
+                    className="flex items-center group p-3 rounded-lg hover:bg-blue-50/50 transition-all duration-200"
+                  >
+                    <IconContainer
+                      variant={item.variant}
+                      className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform"
+                    >
                       <item.icon className="w-5 h-5" />
                     </IconContainer>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
+                      <p className="text-xs font-medium text-gray-500 mb-1">
+                        {item.label}
+                      </p>
                       <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
                         {item.value}
                       </p>
@@ -828,7 +972,10 @@ export default function CompanyDetailPage() {
             </Card>
 
             {/* Contact Card */}
-            {(displayCEO || displayContactPhone || displayContactEmail || displayAddress) && (
+            {(displayCEO ||
+              displayContactPhone ||
+              displayContactEmail ||
+              displayAddress) && (
               <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-cyan-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5" />
                 <CardHeader className="relative">
@@ -842,19 +989,51 @@ export default function CompanyDetailPage() {
                 </CardHeader>
                 <CardContent className="relative space-y-5">
                   {[
-                    { label: "CEO", value: displayCEO, icon: Briefcase, variant: "primary" as const, show: !!displayCEO },
-                    { label: "Phone", value: displayContactPhone, icon: Phone, variant: "success" as const, show: !!displayContactPhone },
-                    { label: "Email", value: displayContactEmail, icon: Mail, variant: "primary" as const, show: !!displayContactEmail },
-                    { label: "Address", value: displayAddress, icon: Home, variant: "warning" as const, show: !!displayAddress },
+                    {
+                      label: "CEO",
+                      value: displayCEO,
+                      icon: Briefcase,
+                      variant: "primary" as const,
+                      show: !!displayCEO,
+                    },
+                    {
+                      label: "Phone",
+                      value: displayContactPhone,
+                      icon: Phone,
+                      variant: "success" as const,
+                      show: !!displayContactPhone,
+                    },
+                    {
+                      label: "Email",
+                      value: displayContactEmail,
+                      icon: Mail,
+                      variant: "primary" as const,
+                      show: !!displayContactEmail,
+                    },
+                    {
+                      label: "Address",
+                      value: displayAddress,
+                      icon: Home,
+                      variant: "warning" as const,
+                      show: !!displayAddress,
+                    },
                   ]
-                    .filter(item => item.show)
+                    .filter((item) => item.show)
                     .map((item, index) => (
-                      <div key={index} className="flex items-center group p-3 rounded-lg hover:bg-cyan-50/50 transition-all duration-200">
-                        <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                      <div
+                        key={index}
+                        className="flex items-center group p-3 rounded-lg hover:bg-cyan-50/50 transition-all duration-200"
+                      >
+                        <IconContainer
+                          variant={item.variant}
+                          className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform"
+                        >
                           <item.icon className="w-5 h-5" />
                         </IconContainer>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-gray-500 mb-1">{item.label}</p>
+                          <p className="text-xs font-medium text-gray-500 mb-1">
+                            {item.label}
+                          </p>
                           <p className="font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors truncate">
                             {item.value}
                           </p>
@@ -881,10 +1060,17 @@ export default function CompanyDetailPage() {
                 </CardHeader>
                 <CardContent className="relative">
                   <div className="text-center mb-4">
-                    <div className="text-4xl font-bold text-emerald-700 mb-2">{displayComplianceScore}%</div>
-                    <p className="text-sm text-gray-600">Regulatory Compliance Score</p>
+                    <div className="text-4xl font-bold text-emerald-700 mb-2">
+                      {displayComplianceScore}%
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Regulatory Compliance Score
+                    </p>
                   </div>
-                  <Progress value={displayComplianceScore} className="h-3 bg-gray-200/50" />
+                  <Progress
+                    value={displayComplianceScore}
+                    className="h-3 bg-gray-200/50"
+                  />
                 </CardContent>
               </Card>
 
@@ -895,10 +1081,17 @@ export default function CompanyDetailPage() {
                     <IconContainer variant="primary" className="w-8 h-8 mr-2">
                       <Handshake className="w-4 h-4" />
                     </IconContainer>
-                    <span className="text-sm font-semibold text-gray-900">Trust Score</span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      Trust Score
+                    </span>
                   </div>
-                  <div className="text-2xl font-bold text-blue-700">{trustScore}%</div>
-                  <Progress value={trustScore} className="h-2 mt-2 bg-gray-200/50" />
+                  <div className="text-2xl font-bold text-blue-700">
+                    {trustScore}%
+                  </div>
+                  <Progress
+                    value={trustScore}
+                    className="h-2 mt-2 bg-gray-200/50"
+                  />
                 </CardContent>
               </Card>
 
@@ -909,10 +1102,17 @@ export default function CompanyDetailPage() {
                     <IconContainer variant="danger" className="w-8 h-8 mr-2">
                       <Scale className="w-4 h-4" />
                     </IconContainer>
-                    <span className="text-sm font-semibold text-gray-900">Risk Score</span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      Risk Score
+                    </span>
                   </div>
-                  <div className="text-2xl font-bold text-rose-700">{riskScore}%</div>
-                  <Progress value={riskScore} className="h-2 mt-2 bg-gray-200/50" />
+                  <div className="text-2xl font-bold text-rose-700">
+                    {riskScore}%
+                  </div>
+                  <Progress
+                    value={riskScore}
+                    className="h-2 mt-2 bg-gray-200/50"
+                  />
                 </CardContent>
               </Card>
             </div>
@@ -921,8 +1121,8 @@ export default function CompanyDetailPage() {
           {/* Right Column - Detailed Info */}
           <div className="lg:col-span-2">
             {/* Enhanced Tabs */}
-            <ResponsiveTabs 
-              activeTab={activeTab} 
+            <ResponsiveTabs
+              activeTab={activeTab}
               setActiveTab={setActiveTab}
               showComplaintButton={true}
               companyId={company.id}
@@ -944,7 +1144,9 @@ export default function CompanyDetailPage() {
                           </IconContainer>
                           <div className="ml-3">
                             <span>Services & Offerings</span>
-                            <CardDescription>Core business services provided</CardDescription>
+                            <CardDescription>
+                              Core business services provided
+                            </CardDescription>
                           </div>
                         </CardTitle>
                       </CardHeader>
@@ -955,7 +1157,10 @@ export default function CompanyDetailPage() {
                               key={index}
                               className="group flex items-center p-4 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50/30 transition-all duration-200"
                             >
-                              <IconContainer variant="success" className="mr-3 group-hover:scale-110 transition-transform">
+                              <IconContainer
+                                variant="success"
+                                className="mr-3 group-hover:scale-110 transition-transform"
+                              >
                                 <CheckCircle className="w-5 h-5" />
                               </IconContainer>
                               <span className="font-medium text-gray-900 group-hover:text-emerald-700 transition-colors">
@@ -1015,7 +1220,10 @@ export default function CompanyDetailPage() {
                               className="group p-4 bg-white/50 backdrop-blur-sm border border-amber-200/50 rounded-xl hover:border-amber-300 hover:bg-amber-50/30 transition-all duration-200"
                             >
                               <div className="flex items-center">
-                                <IconContainer variant="warning" className="mr-3 group-hover:scale-110 transition-transform">
+                                <IconContainer
+                                  variant="warning"
+                                  className="mr-3 group-hover:scale-110 transition-transform"
+                                >
                                   <BadgeCheck className="w-5 h-5" />
                                 </IconContainer>
                                 <span className="font-medium text-gray-900 group-hover:text-amber-700 transition-colors">
@@ -1042,7 +1250,9 @@ export default function CompanyDetailPage() {
                       </IconContainer>
                       <div className="ml-3">
                         <span>Financial Overview</span>
-                        <CardDescription>Revenue, growth, and financial health</CardDescription>
+                        <CardDescription>
+                          Revenue, growth, and financial health
+                        </CardDescription>
                       </div>
                     </CardTitle>
                   </CardHeader>
@@ -1051,24 +1261,40 @@ export default function CompanyDetailPage() {
                     <div className="p-6 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-2xl border border-emerald-200/50">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-500 mb-1">Annual Revenue</p>
+                          <p className="text-sm text-gray-500 mb-1">
+                            Annual Revenue
+                          </p>
                           <p className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                             {displayRevenue}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-500 mb-1">Growth Trend</p>
+                          <p className="text-sm text-gray-500 mb-1">
+                            Growth Trend
+                          </p>
                           {displayRevenueGrowth.length > 0 && (
                             <div className="text-2xl font-bold text-emerald-700 flex items-center">
-                              {displayRevenueGrowth[displayRevenueGrowth.length - 1].growth > 0 ? (
+                              {displayRevenueGrowth[
+                                displayRevenueGrowth.length - 1
+                              ].growth > 0 ? (
                                 <>
-                                  <TrendingUp className="w-6 h-6 mr-1" />
-                                  +{displayRevenueGrowth[displayRevenueGrowth.length - 1].growth}%
+                                  <TrendingUp className="w-6 h-6 mr-1" />+
+                                  {
+                                    displayRevenueGrowth[
+                                      displayRevenueGrowth.length - 1
+                                    ].growth
+                                  }
+                                  %
                                 </>
                               ) : (
                                 <>
                                   <TrendingDown className="w-6 h-6 mr-1 text-rose-600" />
-                                  {displayRevenueGrowth[displayRevenueGrowth.length - 1].growth}%
+                                  {
+                                    displayRevenueGrowth[
+                                      displayRevenueGrowth.length - 1
+                                    ].growth
+                                  }
+                                  %
                                 </>
                               )}
                             </div>
@@ -1092,29 +1318,66 @@ export default function CompanyDetailPage() {
                         </IconContainer>
                         <div className="ml-3">
                           <span>Operational Structure</span>
-                          <CardDescription>Business operations and organizational details</CardDescription>
-                          </div>
+                          <CardDescription>
+                            Business operations and organizational details
+                          </CardDescription>
+                        </div>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
-                          { label: "Business Type", value: displayBusinessType, icon: Building, variant: "primary" as const },
-                          { label: "Ownership Structure", value: displayOwnership, icon: Users, variant: "primary" as const },
-                          { label: "Years Operating", value: `${yearsOperating} years`, icon: Calendar, variant: "warning" as const },
-                          { label: "Primary Location", value: displayLocation, icon: MapPin, variant: "primary" as const },
-                          { label: "Employee Count", value: displayEmployees, icon: UsersIcon, variant: "primary" as const },
-                          { label: "Industry", value: displayIndustry, icon: Building, variant: "primary" as const },
+                          {
+                            label: "Business Type",
+                            value: displayBusinessType,
+                            icon: Building,
+                            variant: "primary" as const,
+                          },
+                          {
+                            label: "Ownership Structure",
+                            value: displayOwnership,
+                            icon: Users,
+                            variant: "primary" as const,
+                          },
+                          {
+                            label: "Years Operating",
+                            value: `${yearsOperating} years`,
+                            icon: Calendar,
+                            variant: "warning" as const,
+                          },
+                          {
+                            label: "Primary Location",
+                            value: displayLocation,
+                            icon: MapPin,
+                            variant: "primary" as const,
+                          },
+                          {
+                            label: "Employee Count",
+                            value: displayEmployees,
+                            icon: UsersIcon,
+                            variant: "primary" as const,
+                          },
+                          {
+                            label: "Industry",
+                            value: displayIndustry,
+                            icon: Building,
+                            variant: "primary" as const,
+                          },
                         ].map((item, index) => (
                           <div
                             key={index}
                             className="p-5 bg-white/50 backdrop-blur-sm border border-blue-200/50 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-200 group"
                           >
                             <div className="flex items-center mb-3">
-                              <IconContainer variant={item.variant} className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform">
+                              <IconContainer
+                                variant={item.variant}
+                                className="w-10 h-10 mr-3 group-hover:scale-110 transition-transform"
+                              >
                                 <item.icon className="w-5 h-5" />
                               </IconContainer>
-                              <p className="text-sm font-medium text-gray-700">{item.label}</p>
+                              <p className="text-sm font-medium text-gray-700">
+                                {item.label}
+                              </p>
                             </div>
                             <p className="text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
                               {item.value}
@@ -1140,7 +1403,9 @@ export default function CompanyDetailPage() {
                           </IconContainer>
                           <div className="ml-3">
                             <span>Regulatory Compliance</span>
-                            <CardDescription>Legal and regulatory standing</CardDescription>
+                            <CardDescription>
+                              Legal and regulatory standing
+                            </CardDescription>
                           </div>
                         </CardTitle>
                       </CardHeader>
@@ -1151,13 +1416,15 @@ export default function CompanyDetailPage() {
                             className="flex items-center justify-between p-5 bg-white/50 backdrop-blur-sm border border-emerald-200/50 rounded-xl hover:border-emerald-300 transition-all duration-200 group"
                           >
                             <div className="flex items-center">
-                              <div className={`w-3 h-3 rounded-full mr-4 ${
-                                (record.score || 0) > 90
-                                  ? "bg-emerald-500 animate-pulse"
-                                  : (record.score || 0) > 70
-                                    ? "bg-amber-500"
-                                    : "bg-rose-500"
-                              }`} />
+                              <div
+                                className={`w-3 h-3 rounded-full mr-4 ${
+                                  (record.score || 0) > 90
+                                    ? "bg-emerald-500 animate-pulse"
+                                    : (record.score || 0) > 70
+                                      ? "bg-amber-500"
+                                      : "bg-rose-500"
+                                }`}
+                              />
                               <div>
                                 <p className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
                                   {record.type}
@@ -1166,7 +1433,10 @@ export default function CompanyDetailPage() {
                                   Status: {record.status}
                                   {record.completedDate && (
                                     <span className="ml-3">
-                                      Completed: {new Date(record.completedDate).toLocaleDateString()}
+                                      Completed:{" "}
+                                      {new Date(
+                                        record.completedDate,
+                                      ).toLocaleDateString()}
                                     </span>
                                   )}
                                 </p>
@@ -1200,14 +1470,18 @@ export default function CompanyDetailPage() {
                     <Card className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden backdrop-blur-sm">
                       <CardContent className="py-12">
                         <div className="text-center">
-                          <IconContainer variant="default" className="w-16 h-16 mx-auto mb-6">
+                          <IconContainer
+                            variant="default"
+                            className="w-16 h-16 mx-auto mb-6"
+                          >
                             <FileWarning className="w-8 h-8" />
                           </IconContainer>
                           <h3 className="text-xl font-semibold text-gray-900 mb-3">
                             No Compliance Data Available
                           </h3>
                           <p className="text-gray-600 max-w-md mx-auto">
-                            Compliance information for this company is not yet available in our records.
+                            Compliance information for this company is not yet
+                            available in our records.
                           </p>
                         </div>
                       </CardContent>
@@ -1232,20 +1506,36 @@ export default function CompanyDetailPage() {
                     <CardContent>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-4 bg-gradient-to-br from-rose-50/50 to-pink-50/30 rounded-xl border border-rose-200/50">
-                          <div className="text-3xl font-bold text-rose-700">{totalComplaints}</div>
-                          <div className="text-sm text-rose-600 font-medium mt-1">Total Complaints</div>
+                          <div className="text-3xl font-bold text-rose-700">
+                            {totalComplaints}
+                          </div>
+                          <div className="text-sm text-rose-600 font-medium mt-1">
+                            Total Complaints
+                          </div>
                         </div>
                         <div className="text-center p-4 bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-xl border border-emerald-200/50">
-                          <div className="text-3xl font-bold text-emerald-700">{resolvedComplaints}</div>
-                          <div className="text-sm text-emerald-600 font-medium mt-1">Resolved</div>
+                          <div className="text-3xl font-bold text-emerald-700">
+                            {resolvedComplaints}
+                          </div>
+                          <div className="text-sm text-emerald-600 font-medium mt-1">
+                            Resolved
+                          </div>
                         </div>
                         <div className="text-center p-4 bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-xl border border-amber-200/50">
-                          <div className="text-3xl font-bold text-amber-700">{pendingComplaints}</div>
-                          <div className="text-sm text-amber-600 font-medium mt-1">Pending</div>
+                          <div className="text-3xl font-bold text-amber-700">
+                            {pendingComplaints}
+                          </div>
+                          <div className="text-sm text-amber-600 font-medium mt-1">
+                            Pending
+                          </div>
                         </div>
                         <div className="text-center p-4 bg-gradient-to-br from-blue-50/50 to-cyan-50/30 rounded-xl border border-blue-200/50">
-                          <div className="text-3xl font-bold text-blue-700">{resolutionRate}%</div>
-                          <div className="text-sm text-blue-600 font-medium mt-1">Resolution Rate</div>
+                          <div className="text-3xl font-bold text-blue-700">
+                            {resolutionRate}%
+                          </div>
+                          <div className="text-sm text-blue-600 font-medium mt-1">
+                            Resolution Rate
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -1254,8 +1544,8 @@ export default function CompanyDetailPage() {
                   {/* File Complaint Button */}
                   <div className="flex justify-end">
                     {company && (
-                      <ComplaintModal 
-                        companyId={company.id} 
+                      <ComplaintModal
+                        companyId={company.id}
                         companyName={displayName}
                       />
                     )}
@@ -1269,11 +1559,15 @@ export default function CompanyDetailPage() {
                   ) : complaints.length > 0 ? (
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        Showing {currentComplaints.length} of {totalComplaints} complaints
+                        Showing {currentComplaints.length} of {totalComplaints}{" "}
+                        complaints
                       </h3>
-                      
+
                       {currentComplaints.map((complaint, index) => (
-                        <Card key={index} className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden backdrop-blur-sm">
+                        <Card
+                          key={index}
+                          className="border-2 border-white/50 bg-gradient-to-br from-white to-gray-50/30 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden backdrop-blur-sm"
+                        >
                           <CardContent className="p-6">
                             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                               <div className="flex items-start gap-3">
@@ -1281,41 +1575,57 @@ export default function CompanyDetailPage() {
                                   <AlertTriangle className="w-5 h-5 text-rose-600" />
                                 </div>
                                 <div>
-                                  <Badge className={`mb-1 ${
-                                    complaint.status === "resolved" 
-                                      ? "bg-emerald-100 text-emerald-800 border-emerald-200"
-                                      : complaint.status === "pending"
-                                        ? "bg-amber-100 text-amber-800 border-amber-200"
-                                        : "bg-blue-100 text-blue-800 border-blue-200"
-                                  }`}>
-                                    {complaint.status.charAt(0).toUpperCase() + complaint.status.slice(1)}
+                                  <Badge
+                                    className={`mb-1 ${
+                                      complaint.status === "resolved"
+                                        ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                                        : complaint.status === "pending"
+                                          ? "bg-amber-100 text-amber-800 border-amber-200"
+                                          : "bg-blue-100 text-blue-800 border-blue-200"
+                                    }`}
+                                  >
+                                    {complaint.status.charAt(0).toUpperCase() +
+                                      complaint.status.slice(1)}
                                   </Badge>
                                   <h4 className="font-semibold text-gray-900">
-                                    {formatComplaintType(complaint.type) || 'Complaint'}
+                                    {formatComplaintType(complaint.type) ||
+                                      "Complaint"}
                                   </h4>
                                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                                    {complaint.description || 'No description available'}
+                                    {complaint.description ||
+                                      "No description available"}
                                   </p>
                                   <div className="flex items-center gap-4 mt-2">
                                     <span className="text-xs text-gray-500">
-                                      {complaint.createdAt ? new Date(complaint.createdAt).toLocaleDateString() : 'Date not available'}
+                                      {complaint.createdAt
+                                        ? new Date(
+                                            complaint.createdAt,
+                                          ).toLocaleDateString()
+                                        : "Date not available"}
                                     </span>
                                     {complaint.username && (
-                                      <span className="text-xs text-gray-600">By {complaint.username}</span>
+                                      <span className="text-xs text-gray-600">
+                                        By {complaint.username}
+                                      </span>
                                     )}
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            {complaint.resolution && complaint.status === "resolved" && (
-                              <div className="mt-4 p-3 bg-gradient-to-br from-emerald-50 to-green-50/30 rounded-xl border border-emerald-200/50">
-                                <div className="flex items-center mb-1">
-                                  <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
-                                  <span className="text-sm font-medium text-emerald-700">Resolution</span>
+                            {complaint.resolution &&
+                              complaint.status === "resolved" && (
+                                <div className="mt-4 p-3 bg-gradient-to-br from-emerald-50 to-green-50/30 rounded-xl border border-emerald-200/50">
+                                  <div className="flex items-center mb-1">
+                                    <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
+                                    <span className="text-sm font-medium text-emerald-700">
+                                      Resolution
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-emerald-800">
+                                    {complaint.resolution}
+                                  </p>
                                 </div>
-                                <p className="text-sm text-emerald-800">{complaint.resolution}</p>
-                              </div>
-                            )}
+                              )}
                           </CardContent>
                         </Card>
                       ))}
@@ -1336,40 +1646,49 @@ export default function CompanyDetailPage() {
                             >
                               <ChevronLeft className="w-4 h-4" />
                             </Button>
-                            
+
                             {/* Page Numbers */}
                             <div className="flex items-center gap-1">
-                              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                                // Calculate page numbers to show (centered around current page)
-                                let pageNumber;
-                                if (totalPages <= 5) {
-                                  pageNumber = i + 1;
-                                } else if (currentPage <= 3) {
-                                  pageNumber = i + 1;
-                                } else if (currentPage >= totalPages - 2) {
-                                  pageNumber = totalPages - 4 + i;
-                                } else {
-                                  pageNumber = currentPage - 2 + i;
-                                }
-                                
-                                return (
-                                  <Button
-                                    key={pageNumber}
-                                    variant={currentPage === pageNumber ? "default" : "outline"}
-                                    size="sm"
-                                    className={`h-9 w-9 ${
-                                      currentPage === pageNumber 
-                                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white" 
-                                        : ""
-                                    }`}
-                                    onClick={() => handlePageClick(pageNumber)}
-                                  >
-                                    {pageNumber}
-                                  </Button>
-                                );
-                              })}
+                              {Array.from(
+                                { length: Math.min(5, totalPages) },
+                                (_, i) => {
+                                  // Calculate page numbers to show (centered around current page)
+                                  let pageNumber;
+                                  if (totalPages <= 5) {
+                                    pageNumber = i + 1;
+                                  } else if (currentPage <= 3) {
+                                    pageNumber = i + 1;
+                                  } else if (currentPage >= totalPages - 2) {
+                                    pageNumber = totalPages - 4 + i;
+                                  } else {
+                                    pageNumber = currentPage - 2 + i;
+                                  }
+
+                                  return (
+                                    <Button
+                                      key={pageNumber}
+                                      variant={
+                                        currentPage === pageNumber
+                                          ? "default"
+                                          : "outline"
+                                      }
+                                      size="sm"
+                                      className={`h-9 w-9 ${
+                                        currentPage === pageNumber
+                                          ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white"
+                                          : ""
+                                      }`}
+                                      onClick={() =>
+                                        handlePageClick(pageNumber)
+                                      }
+                                    >
+                                      {pageNumber}
+                                    </Button>
+                                  );
+                                },
+                              )}
                             </div>
-                            
+
                             <Button
                               variant="outline"
                               size="sm"
@@ -1397,11 +1716,12 @@ export default function CompanyDetailPage() {
                             No Complaints Yet
                           </h3>
                           <p className="text-gray-600 max-w-md mx-auto mb-8">
-                            This company currently has no recorded complaints. Be the first to report an issue.
+                            This company currently has no recorded complaints.
+                            Be the first to report an issue.
                           </p>
                           {company && (
-                            <ComplaintModal 
-                              companyId={company.id} 
+                            <ComplaintModal
+                              companyId={company.id}
                               companyName={displayName}
                             />
                           )}
@@ -1416,10 +1736,14 @@ export default function CompanyDetailPage() {
                       <div className="flex items-start">
                         <AlertTriangle className="w-6 h-6 text-amber-600 mr-3 flex-shrink-0 mt-1" />
                         <div>
-                          <h4 className="font-semibold text-amber-900 mb-2">Important Notice</h4>
+                          <h4 className="font-semibold text-amber-900 mb-2">
+                            Important Notice
+                          </h4>
                           <p className="text-sm text-amber-800">
-                            All complaints are treated confidentially. We review complaints within 5-7 business days. 
-                            False complaints may result in legal action. For immediate assistance, contact our support team.
+                            All complaints are treated confidentially. We review
+                            complaints within 5-7 business days. False
+                            complaints may result in legal action. For immediate
+                            assistance, contact our support team.
                           </p>
                         </div>
                       </div>
@@ -1430,13 +1754,17 @@ export default function CompanyDetailPage() {
             </div>
 
             {/* Verification Banner */}
-            <div className={`mt-8 backdrop-blur-sm rounded-2xl border-2 p-8 shadow-xl overflow-hidden ${
-              verificationColors[company.verificationLevel].border
-            } ${verificationColors[company.verificationLevel].bg}`}>
+            <div
+              className={`mt-8 backdrop-blur-sm rounded-2xl border-2 p-8 shadow-xl overflow-hidden ${
+                verificationColors[company.verificationLevel].border
+              } ${verificationColors[company.verificationLevel].bg}`}
+            >
               <div className="flex flex-col lg:flex-row items-center gap-8">
-                <div className={`relative w-20 h-20 rounded-full shadow-2xl flex items-center justify-center ${
-                  verificationColors[company.verificationLevel].gradient
-                }`}>
+                <div
+                  className={`relative w-20 h-20 rounded-full shadow-2xl flex items-center justify-center ${
+                    verificationColors[company.verificationLevel].gradient
+                  }`}
+                >
                   <ShieldCheck className="w-10 h-10 text-white" />
                   <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-ping" />
                 </div>
@@ -1458,11 +1786,15 @@ export default function CompanyDetailPage() {
                   {displayLastUpdated && (
                     <div className="mt-4 flex items-center justify-center lg:justify-start text-sm text-gray-600">
                       <Clock className="w-4 h-4 mr-2" />
-                      Last updated: {new Date(displayLastUpdated).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      Last updated:{" "}
+                      {new Date(displayLastUpdated).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        },
+                      )}
                     </div>
                   )}
                 </div>

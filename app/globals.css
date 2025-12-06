@@ -38,19 +38,22 @@ html.dark {
 
 /* Base styles */
 html {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   min-height: 100vh;
 }
 
 /* Add to your global CSS file */
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0) translateX(0);
@@ -74,7 +77,6 @@ body {
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 0.1;
