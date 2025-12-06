@@ -2,18 +2,68 @@
 @import "tw-animate-css";
 /* @import "@tailwindcss/line-clamp"; */
 
+/* Ensure light mode is default */
+html {
+  background-color: white;
+  color: black;
+  color-scheme: light;
+}
+
+/* Light mode styles */
+html.light {
+  --color-background: #ffffff;
+  /* --color-foreground: #000000; */
+  --color-border: #e5e7eb;
+  color-scheme: light;
+  background-color: white;
+  color: black;
+}
+
+/* Dark mode styles */
+html.dark {
+  --color-background: #1a1a1a;
+  --color-foreground: #ffffff;
+  --color-border: #27272a;
+  color-scheme: dark;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+:root {
+  /* Light mode defaults */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-border: #e5e7eb;
+}
+
+/* Base styles */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
 /* Add to your global CSS file */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0) translateX(0);
   }
+
   25% {
     transform: translateY(-20px) translateX(10px);
   }
+
   50% {
     transform: translateY(10px) translateX(-10px);
   }
+
   75% {
     transform: translateY(-10px) translateX(20px);
   }
@@ -24,10 +74,12 @@
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 0.1;
   }
+
   50% {
     opacity: 0.3;
   }
