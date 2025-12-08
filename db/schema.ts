@@ -74,9 +74,9 @@ export const business = pgTable(
   {
     // ========== IDENTIFICATION ==========
     id: uuid("id").primaryKey().defaultRandom(),
-    registrationNumber: varchar("registration_number", { length: 50 })
-      .unique()
-      .notNull(),
+    registrationNumber: varchar("registration_number", {
+      length: 50,
+    }).notNull(),
     taxId: varchar("tax_id", { length: 50 }),
 
     // ========== BASIC INFO ==========
