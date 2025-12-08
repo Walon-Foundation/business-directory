@@ -1,4 +1,4 @@
-# 🚀 Setup Guide - Sierra Leone Business Directory
+# 🚀 Setup Guide - Sierra Leone Business Directory (SLBizRegistry)
 
 This guide will walk you through setting up the Business Directory application from scratch, whether you're developing locally or deploying to production.
 

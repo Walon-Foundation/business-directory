@@ -1,4 +1,4 @@
-# Contributing to Sierra Leone Business Directory
+# Contributing to Sierra Leone Business Directory (SLBizRegistry)
 
 Thank you for your interest in contributing to the Sierra Leone Business Directory! We welcome contributions from the community to help improve business verification and transparency in Sierra Leone.
 

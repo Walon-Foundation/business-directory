@@ -1,4 +1,4 @@
-# 🏢 Sierra Leone Business Directory
+# 🏢 Sierra Leone Business Directory (SLBizRegistry)
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)

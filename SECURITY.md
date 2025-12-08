@@ -1,4 +1,4 @@
-# 🔐 Security Guide - Sierra Leone Business Directory
+# 🔐 Security Guide - Sierra Leone Business Directory (SLBizRegistry)
 
 This document outlines security practices, threat mitigation strategies, and compliance guidelines for the Sierra Leone Business Directory application.
 
