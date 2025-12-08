@@ -12,7 +12,7 @@ import { env } from "@/lib/env";
 import axios from "axios";
 
 
-const ONE_MINUTE = 60 * 1000
+// const ONE_MINUTE = 60 * 1000
 
 // =========================================================================
 // === 📞 OUTBOUND WASENDER MESSAGE HELPER (AXIOS) ==========================
@@ -260,9 +260,7 @@ Please double-check the spelling or try using the full **Registration Number**.
 
     // 5. Send the final response via Wasender API
 
-    setTimeout(async() => {
-      await sendWasenderMessage(recipientId as string, response_text);
-    }, ONE_MINUTE);
+    await sendWasenderMessage(recipientId, response_text);
 
     // 6. Return 200 OK to the webhook provider (Wasender) to acknowledge receipt
     return NextResponse.json(
