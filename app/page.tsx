@@ -656,7 +656,7 @@ export default function Home() {
             </div>
 
             {/* Right side - WhatsApp Card */}
-            <div className="relative">
+            <div className="relative overflow-hidden">
               {/* Background effect */}
               <div className="absolute -inset-4 bg-gradient-to-r from-emerald-400 to-green-400 rounded-3xl blur-xl opacity-10" />
 
