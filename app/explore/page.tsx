@@ -554,9 +554,7 @@ function ExplorePageContent() {
             <h3 className="text-2xl font-bold text-gray-900 mb-3">
               Error Loading Data
             </h3>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              {error}
-            </p>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">{error}</p>
             <Button
               onClick={() => fetchCompanies(1)}
               className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 shadow-lg"
@@ -844,9 +842,7 @@ function EnhancedHeader({
                 Verification
               </label>
               <div className="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-50/50 rounded-xl p-2 border border-purple-200/50">
-                <span className="text-sm text-gray-700">
-                  Verified Only
-                </span>
+                <span className="text-sm text-gray-700">Verified Only</span>
                 <Switch
                   checked={showVerifiedOnly}
                   onCheckedChange={setShowVerifiedOnly}

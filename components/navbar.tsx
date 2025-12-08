@@ -47,8 +47,7 @@ export default function Navbar() {
             </div>
 
             {/* Right side - Empty for now */}
-            <div className="hidden md:flex items-center gap-2">
-            </div>
+            <div className="hidden md:flex items-center gap-2"></div>
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-2">

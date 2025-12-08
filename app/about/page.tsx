@@ -185,9 +185,7 @@ export default function AboutPage() {
                     <div className="text-2xl font-bold text-green-600">
                       99.9%
                     </div>
-                    <div className="text-sm text-gray-600">
-                      Accuracy Rate
-                    </div>
+                    <div className="text-sm text-gray-600">Accuracy Rate</div>
                   </CardContent>
                 </Card>
               </div>
@@ -259,9 +257,7 @@ export default function AboutPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
-                    {value.description}
-                  </p>
+                  <p className="text-gray-600">{value.description}</p>
                 </CardContent>
               </Card>
             ))}

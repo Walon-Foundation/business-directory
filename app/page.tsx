@@ -22,6 +22,10 @@ import {
   X,
   Loader2,
   AlertCircle,
+  MessageCircle,
+  Smartphone,
+  Clock,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,6 +115,7 @@ export default function Home() {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [totalResults, setTotalResults] = useState(0);
+  const [whatsappNumber] = useState("+23233482361"); // Replace with actual number
 
   // Debounced search function using real API
   const performSearch = useCallback(async (query: string) => {
@@ -192,6 +197,18 @@ export default function Home() {
     setSearchResults([]);
     setShowSearchResults(false);
     setTotalResults(0);
+  };
+
+  const openWhatsApp = () => {
+    const message = encodeURIComponent("Hello! I'd like to verify a business.");
+    const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${message}`;
+    window.open(url, "_blank");
+  };
+
+  const copyWhatsAppNumber = () => {
+    navigator.clipboard.writeText(whatsappNumber);
+    // You could add a toast notification here
+    alert("WhatsApp number copied to clipboard!");
   };
 
   return (
@@ -507,6 +524,250 @@ export default function Home() {
                 </div>
                 <div className="mt-2 h-1.5 bg-amber-100 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full w-3/4" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WhatsApp Verification Section */}
+      <section className="px-4 sm:px-6 py-16 md:py-24 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* Left side - Content */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-100 to-green-100 rounded-full border border-emerald-200">
+                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-semibold text-emerald-700">
+                  Alternative Verification
+                </span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+                Verify via{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-green-600">
+                  WhatsApp
+                </span>
+              </h2>
+
+              <p className="text-lg text-gray-600">
+                No computer? Use our WhatsApp service to verify any business
+                instantly. Perfect for mobile users and offline verification.
+              </p>
+
+              {/* Features */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border border-emerald-100">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <Smartphone className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">
+                      Mobile-Friendly
+                    </h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Works on any smartphone
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border border-emerald-100">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">
+                      24/7 Service
+                    </h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Instant responses anytime
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border border-emerald-100">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Secure</h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      End-to-end encryption
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border border-emerald-100">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <BadgeCheck className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">
+                      Official Data
+                    </h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Direct from government registry
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="bg-gradient-to-r from-emerald-50/50 to-green-50/50 rounded-2xl p-6 border border-emerald-200">
+                <h4 className="font-semibold text-gray-900 mb-3">
+                  How it works:
+                </h4>
+                <ol className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-sm flex items-center justify-center flex-shrink-0">
+                      1
+                    </span>
+                    <span className="text-gray-700">
+                      Save our WhatsApp number
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-sm flex items-center justify-center flex-shrink-0">
+                      2
+                    </span>
+                    <span className="text-gray-700">
+                      Send business name or registration ID
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-sm flex items-center justify-center flex-shrink-0">
+                      3
+                    </span>
+                    <span className="text-gray-700">
+                      Get instant verification response
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-sm flex items-center justify-center flex-shrink-0">
+                      4
+                    </span>
+                    <span className="text-gray-700">
+                      Receive detailed business information
+                    </span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+
+            {/* Right side - WhatsApp Card */}
+            <div className="relative">
+              {/* Background effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-emerald-400 to-green-400 rounded-3xl blur-xl opacity-10" />
+
+              <div className="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl border-2 border-emerald-200 shadow-2xl overflow-hidden">
+                {/* WhatsApp header */}
+                <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-6 text-white">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <MessageCircle className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold">
+                        WhatsApp Verification
+                      </h3>
+                      <p className="text-emerald-100 text-sm">
+                        Official Business Registry
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card content */}
+                <div className="p-8">
+                  {/* WhatsApp number display */}
+                  <div className="mb-8">
+                    <div className="text-sm text-gray-600 mb-2">
+                      Our WhatsApp Number
+                    </div>
+                    <div className="flex items-center justify-between bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                          <MessageCircle className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div>
+                          <div className="font-mono text-2xl font-bold text-gray-900">
+                            {whatsappNumber}
+                          </div>
+                          <div className="text-sm text-emerald-600 flex items-center gap-1">
+                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            Online • 24/7 Support
+                          </div>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={copyWhatsAppNumber}
+                        variant="outline"
+                        className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                        size="sm"
+                      >
+                        Copy
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Quick action buttons */}
+                  <div className="space-y-4">
+                    <Button
+                      onClick={openWhatsApp}
+                      className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-lg py-6 text-lg rounded-xl"
+                    >
+                      <MessageCircle className="mr-2 w-5 h-5" />
+                      Open in WhatsApp
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        const exampleMessage = encodeURIComponent(
+                          "Verify 'ABC Enterprises Ltd'\nRegistration: SL-2023-001\nAlso check if they're active.",
+                        );
+                        const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${exampleMessage}`;
+                        window.open(url, "_blank");
+                      }}
+                      variant="outline"
+                      className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50 py-6 rounded-xl"
+                    >
+                      Try Example Query
+                    </Button>
+                  </div>
+
+                  {/* Note about internet */}
+                  <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <div className="flex items-start gap-3">
+                      <Globe className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-blue-800 font-medium">
+                          Requires internet connection
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          WhatsApp needs internet access. If you're offline,
+                          save the number and message later.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Response time */}
+                  <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
+                    <Clock className="w-4 h-4 mr-2" />
+                    Average response time: 2 minutes
+                  </div>
+                </div>
+
+                {/* WhatsApp branding */}
+                <div className="border-t border-gray-200 bg-gray-50 px-8 py-4">
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>Powered by WhatsApp Business API</span>
+                    <span className="flex items-center">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-1 animate-pulse"></div>
+                      Live
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
