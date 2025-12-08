@@ -17,7 +17,7 @@ This document provides guidelines and instructions for contributing to this proj
 1. **Fork and Clone**
    Fork the repository to your GitHub account and clone it locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/business-directory.git
+   git clone https://github.com/Walon-Foundation/business-directory.git
    cd business-directory
    ```
 
@@ -109,6 +109,13 @@ If you modify the database schema (`db/schema.ts`):
    pnpm db:push
    ```
 2. If adding new tables/fields, consider updating `db/seed.ts` to include sample data.
+
+### WhatsApp Integration
+
+The project integrates with the **Wasender API** to provide business verification via WhatsApp.
+- The webhook handler is located at `app/api/webhook/route.ts`.
+- If you are working on WhatsApp features, refer to `SETUP.md` 
+- You can test the webhook locally using tools like `ngrok` to expose your local server.
 
 ## 🔀 Workflow
 
