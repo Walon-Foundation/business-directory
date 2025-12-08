@@ -216,6 +216,23 @@ What company would you like to verify?
 
     // 4. Construct Response Text
     if (company) {
+      // Build location string from available fields
+      const locationParts: string[] = [];
+      
+      if (company.address) {
+        locationParts.push(company.address);
+      }
+      if (company.city) {
+        locationParts.push(company.city);
+      }
+      if (company.district && company.district !== company.city) {
+        locationParts.push(company.district);
+      }
+      
+      const locationString = locationParts.length > 0 
+        ? locationParts.join(", ") 
+        : company.location || "Location not specified";
+
       response_text = `
 *✅ Company Found: ${company.name}*
 
@@ -223,6 +240,7 @@ What company would you like to verify?
 *Registration:* ${company.registrationNumber}
 *Industry:* ${company.industry}
 *Verification:* ${company.verificationLevel}
+*Location:* ${locationString}
 
 ${company.description || company.businessType}
             `.trim();
