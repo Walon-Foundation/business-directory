@@ -5013,6 +5013,2597 @@ async function seedDatabase() {
           },
         ],
       },
+      // ... (previous code remains the same)
+
+      // After the existing businesses array, add these additional businesses:
+
+      // ========== ADDITIONAL TELECOMMUNICATIONS (2 more companies) ==========
+      {
+        registrationNumber: "C567890",
+        taxId: "TAX-2023-020123",
+        name: "Smart Mobile Sierra Leone",
+        tradingName: "Smart Mobile",
+        description:
+          "Fast-growing telecom provider focusing on affordable mobile services and digital inclusion.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "telecommunications",
+        businessType: "private_limited",
+        ownership: "joint_venture",
+
+        location: "Freetown",
+        address: "10 Bathurst Street, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4825",
+        longitude: "-13.2325",
+
+        contactEmail: "info@smartmobile.sl",
+        contactPhone: "+232 76 567 890",
+        website: "https://smartmobile.sl",
+        ceo: "Mr. Ahmed Jalloh",
+
+        foundedYear: 2020,
+        yearEnd: "December 31",
+        employees: "150-300",
+        revenue: "$20M-40M",
+        capitalInvestment: "15000000",
+        annualRevenueRange: "$20M-40M",
+        financialSummary:
+          "Rapidly expanding telecom with focus on youth market and digital services.",
+
+        rating: "4.3",
+        complianceScore: 86,
+        trustScore: 84,
+
+        cacRegistrationDate: "2020-07-10",
+        cacExpiryDate: "2030-07-10",
+        lastVerifiedAt: new Date("2024-01-20"),
+
+        operationalDetails:
+          "Focus on urban areas with strong data network and youth-oriented packages.",
+        marketPosition: "Innovative Challenger",
+        customerBase: "Youth market, students, digital natives",
+
+        tags: ["Telecom", "Youth", "Digital", "Affordable", "Mobile"],
+        services: [
+          "Mobile Services",
+          "Data Packages",
+          "Digital Content",
+          "Youth Plans",
+        ],
+        certifications: ["Telecom Regulatory Licensed"],
+        subsidiaries: ["Smart Digital Services"],
+
+        recentNews: [
+          {
+            title: "Smart Mobile reaches 500K subscribers",
+            date: "2024-01-28",
+            source: "Business Sierra Leone",
+          },
+          {
+            title: "Launches unlimited social media packages",
+            date: "2023-12-15",
+            source: "Tech Africa",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Ahmed Jalloh",
+            position: "CEO",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 40,
+          },
+          {
+            name: "Ms. Sarah Conteh",
+            position: "CTO",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 15,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Telecom License",
+            status: "Active",
+            completedDate: "2024-01-15",
+            score: 90,
+          },
+          {
+            type: "Tax Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 85,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 60, amount: "$35M" },
+          { year: 2022, growth: 50, amount: "$22M" },
+          { year: 2021, growth: 40, amount: "$15M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Western Area",
+            percentage: 85,
+            notes: "Strong urban presence",
+          },
+          {
+            region: "Major Towns",
+            percentage: 70,
+            notes: "Expanding coverage",
+          },
+        ],
+
+        majorClients: ["Youth Market", "Students", "Small Businesses"],
+        awards: [
+          {
+            name: "Fastest Growing Telecom 2023",
+            year: 2023,
+            issuer: "Sierra Leone Business Awards",
+          },
+          {
+            name: "Digital Innovation Award",
+            year: 2022,
+            issuer: "Youth Tech Awards",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/smartmobilesl",
+          twitter: "https://twitter.com/smartmobilesl",
+          instagram: "https://instagram.com/smartmobilesl",
+        },
+
+        esgScores: {
+          environmental: 80,
+          social: 85,
+          governance: 82,
+          overall: 82,
+        },
+        riskAssessment: {
+          financialRisk: 35,
+          operationalRisk: 30,
+          complianceRisk: 25,
+          marketRisk: 40,
+          overallRisk: 33,
+        },
+
+        bankDetails: {
+          bankName: "Ecobank Sierra Leone",
+          accountNumber: "01889900112",
+          accountName: "Smart Mobile Sierra Leone",
+          branch: "Freetown Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Local Auditors Ltd",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Return",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "C678901",
+        taxId: "TAX-2023-021234",
+        name: "National Telecommunications Company",
+        tradingName: "NatTel",
+        description:
+          "Government-owned telecommunications provider focusing on national connectivity.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "telecommunications",
+        businessType: "government_agency",
+        ownership: "government",
+
+        location: "Freetown",
+        address: "Ministry of Information Building, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4848",
+        longitude: "-13.2352",
+
+        contactEmail: "info@nattel.gov.sl",
+        contactPhone: "+232 22 789 012",
+        website: "https://nattel.gov.sl",
+        ceo: "Mr. Alimamy Bangura",
+
+        foundedYear: 2015,
+        yearEnd: "December 31",
+        employees: "200-400",
+        revenue: "$30M-50M",
+        capitalInvestment: "30000000",
+        annualRevenueRange: "$30M-50M",
+        financialSummary:
+          "Government telecom focusing on national infrastructure and rural connectivity.",
+
+        rating: "4.0",
+        complianceScore: 92,
+        trustScore: 90,
+
+        cacRegistrationDate: "2015-09-15",
+        cacExpiryDate: "N/A",
+        lastVerifiedAt: new Date("2024-01-25"),
+
+        operationalDetails:
+          "Focus on national backbone infrastructure and rural connectivity projects.",
+        marketPosition: "National Infrastructure Provider",
+        customerBase: "Government, Rural Communities, Public Institutions",
+
+        tags: ["Telecom", "Government", "Infrastructure", "National", "Rural"],
+        services: [
+          "National Backbone",
+          "Rural Connectivity",
+          "Government Networks",
+          "Public Access",
+        ],
+        certifications: ["Government Standards", "Telecom Regulatory Licensed"],
+        subsidiaries: ["NatTel Infrastructure Ltd"],
+
+        recentNews: [
+          {
+            title: "NatTel expands rural broadband network",
+            date: "2024-01-30",
+            source: "Government News",
+          },
+          {
+            title: "New fiber optic project launched",
+            date: "2023-12-20",
+            source: "Infrastructure Digest",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Alimamy Bangura",
+            position: "Director General",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Fatmata Koroma",
+            position: "Technical Director",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Government Compliance",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 96,
+          },
+          {
+            type: "Infrastructure License",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 94,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 25, amount: "$45M" },
+          { year: 2022, growth: 20, amount: "$36M" },
+          { year: 2021, growth: 15, amount: "$30M" },
+        ],
+
+        marketCoverage: [
+          { region: "Rural Areas", percentage: 60, notes: "Focus area" },
+          {
+            region: "National Backbone",
+            percentage: 100,
+            notes: "Infrastructure focus",
+          },
+        ],
+
+        majorClients: [
+          "Government Ministries",
+          "Public Institutions",
+          "Rural Communities",
+        ],
+        awards: [
+          {
+            name: "Public Service Excellence 2023",
+            year: 2023,
+            issuer: "Government Awards",
+          },
+          {
+            name: "Rural Connectivity Award",
+            year: 2022,
+            issuer: "African Telecom Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/nattelsl",
+          twitter: "https://twitter.com/nattelsl",
+        },
+
+        esgScores: {
+          environmental: 85,
+          social: 92,
+          governance: 90,
+          overall: 89,
+        },
+        riskAssessment: {
+          financialRisk: 30,
+          operationalRisk: 35,
+          complianceRisk: 20,
+          marketRisk: 25,
+          overallRisk: 28,
+        },
+
+        bankDetails: {
+          bankName: "Bank of Sierra Leone",
+          accountNumber: "01990011223",
+          accountName: "National Telecommunications Company",
+          branch: "Government Account",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Government Auditors",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      // ========== ADDITIONAL BANKING & FINANCE (4 more companies) ==========
+      {
+        registrationNumber: "B567890",
+        taxId: "TAX-2023-022345",
+        name: "First International Bank Sierra Leone",
+        tradingName: "First International Bank",
+        description:
+          "International banking group providing comprehensive financial services with global network.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "banking_finance",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Freetown",
+        address: "22 Siaka Stevens Street, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4842",
+        longitude: "-13.2342",
+
+        contactEmail: "info@firstinternational.sl",
+        contactPhone: "+232 22 890 123",
+        website: "https://firstinternational.sl",
+        ceo: "Mr. James Robertson",
+
+        foundedYear: 2005,
+        yearEnd: "December 31",
+        employees: "200-350",
+        revenue: "$80M-120M",
+        capitalInvestment: "50000000",
+        annualRevenueRange: "$80M-120M",
+        financialSummary:
+          "International bank with strong corporate banking and trade finance expertise.",
+
+        rating: "4.4",
+        complianceScore: 93,
+        trustScore: 94,
+
+        cacRegistrationDate: "2005-04-20",
+        cacExpiryDate: "2025-04-20",
+        lastVerifiedAt: new Date("2024-01-30"),
+
+        operationalDetails:
+          "Specializes in international banking, trade finance, and corporate services.",
+        marketPosition: "International Banking Specialist",
+        customerBase:
+          "Corporations, International Traders, High Net Worth Individuals",
+
+        tags: ["Banking", "International", "Corporate", "Trade Finance"],
+        services: [
+          "Corporate Banking",
+          "Trade Finance",
+          "International Banking",
+          "Wealth Management",
+        ],
+        certifications: [
+          "International Banking Standards",
+          "ISO 27001 Certified",
+        ],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "First International Bank expands trade finance desk",
+            date: "2024-01-25",
+            source: "Financial Times",
+          },
+          {
+            title: "Launches digital trade platform",
+            date: "2023-12-18",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. James Robertson",
+            position: "CEO",
+            nationality: "British",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Mariama Sesay",
+            position: "Head of Corporate Banking",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "International Compliance",
+            status: "Excellent",
+            completedDate: "2024-01-20",
+            score: 96,
+          },
+          {
+            type: "AML Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 95,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 22, amount: "$110M" },
+          { year: 2022, growth: 20, amount: "$90M" },
+          { year: 2021, growth: 18, amount: "$75M" },
+        ],
+
+        marketCoverage: [
+          { region: "Freetown", percentage: 95, notes: "Primary market" },
+          {
+            region: "International Network",
+            percentage: 100,
+            notes: "Global connectivity",
+          },
+        ],
+
+        majorClients: [
+          "International Corporations",
+          "Export/Import Companies",
+          "Mining Sector",
+        ],
+        awards: [
+          {
+            name: "Best International Bank 2023",
+            year: 2023,
+            issuer: "Sierra Leone Banking Awards",
+          },
+          {
+            name: "Excellence in Trade Finance",
+            year: 2022,
+            issuer: "African Banking Awards",
+          },
+        ],
+
+        socialMedia: {
+          linkedin:
+            "https://linkedin.com/company/first-international-bank-sierra-leone",
+          twitter: "https://twitter.com/firstintbank",
+        },
+
+        esgScores: {
+          environmental: 82,
+          social: 88,
+          governance: 90,
+          overall: 87,
+        },
+        riskAssessment: {
+          financialRisk: 25,
+          operationalRisk: 28,
+          complianceRisk: 20,
+          marketRisk: 35,
+          overallRisk: 27,
+        },
+
+        bankDetails: {
+          bankName: "First International Bank",
+          accountNumber: "02001122334",
+          accountName: "First International Bank Sierra Leone",
+          branch: "Head Office",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "KPMG Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "B678901",
+        taxId: "TAX-2023-023456",
+        name: "Guaranty Trust Bank Sierra Leone",
+        tradingName: "GTBank SL",
+        description:
+          "Subsidiary of Nigerian banking group providing innovative banking solutions.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "banking_finance",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Freetown",
+        address: "GTBank Building, 18 Wilkinson Road, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4832",
+        longitude: "-13.2312",
+
+        contactEmail: "info@gtbank.sl",
+        contactPhone: "+232 22 901 234",
+        website: "https://gtbank.sl",
+        ceo: "Mr. Femi Oladipo",
+
+        foundedYear: 2012,
+        yearEnd: "December 31",
+        employees: "180-280",
+        revenue: "$60M-90M",
+        capitalInvestment: "40000000",
+        annualRevenueRange: "$60M-90M",
+        financialSummary:
+          "Innovative banking solutions with strong retail focus and digital services.",
+
+        rating: "4.5",
+        complianceScore: 92,
+        trustScore: 93,
+
+        cacRegistrationDate: "2012-06-15",
+        cacExpiryDate: "2032-06-15",
+        lastVerifiedAt: new Date("2024-01-25"),
+
+        operationalDetails:
+          "Focus on retail banking with innovative digital products and SME services.",
+        marketPosition: "Innovative Retail Bank",
+        customerBase: "Retail Customers, SMEs, Youth Market",
+
+        tags: ["Banking", "Retail", "Digital", "Innovation", "GTBank"],
+        services: [
+          "Retail Banking",
+          "SME Banking",
+          "Digital Banking",
+          "Corporate Services",
+        ],
+        certifications: ["GTBank Group Standards", "Central Bank Licensed"],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "GTBank launches youth banking initiative",
+            date: "2024-01-28",
+            source: "Business Sierra Leone",
+          },
+          {
+            title: "Digital banking app reaches 100K users",
+            date: "2023-12-20",
+            source: "Tech Africa",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Femi Oladipo",
+            position: "Managing Director",
+            nationality: "Nigerian",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Aminata Bangura",
+            position: "Head of Retail",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Group Compliance",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 94,
+          },
+          {
+            type: "Digital Security",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 92,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 25, amount: "$85M" },
+          { year: 2022, growth: 22, amount: "$68M" },
+          { year: 2021, growth: 20, amount: "$56M" },
+        ],
+
+        marketCoverage: [
+          { region: "Western Area", percentage: 90, notes: "Strong presence" },
+          {
+            region: "Major Cities",
+            percentage: 75,
+            notes: "Expanding network",
+          },
+        ],
+
+        majorClients: ["Retail Customers", "SMEs", "Corporate Clients"],
+        awards: [
+          {
+            name: "Most Innovative Bank 2023",
+            year: 2023,
+            issuer: "Sierra Leone Banking Awards",
+          },
+          {
+            name: "Digital Banking Excellence",
+            year: 2022,
+            issuer: "African Digital Awards",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/gtbanksl",
+          twitter: "https://twitter.com/gtbanksl",
+          instagram: "https://instagram.com/gtbanksl",
+        },
+
+        esgScores: {
+          environmental: 83,
+          social: 89,
+          governance: 88,
+          overall: 87,
+        },
+        riskAssessment: {
+          financialRisk: 24,
+          operationalRisk: 26,
+          complianceRisk: 18,
+          marketRisk: 32,
+          overallRisk: 25,
+        },
+
+        bankDetails: {
+          bankName: "Guaranty Trust Bank",
+          accountNumber: "02112233445",
+          accountName: "GTBank Sierra Leone",
+          branch: "Head Office",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "PwC Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "B789012",
+        taxId: "TAX-2023-024567",
+        name: "ProCredit Bank Sierra Leone",
+        tradingName: "ProCredit Bank",
+        description:
+          "Development-oriented bank focusing on micro, small and medium enterprise financing.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "banking_finance",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Freetown",
+        address: "12 Campbell Street, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4828",
+        longitude: "-13.2328",
+
+        contactEmail: "info@procredit.sl",
+        contactPhone: "+232 22 012 345",
+        website: "https://procredit.sl",
+        ceo: "Mr. Samuel Kargbo",
+
+        foundedYear: 2010,
+        yearEnd: "December 31",
+        employees: "150-250",
+        revenue: "$40M-60M",
+        capitalInvestment: "25000000",
+        annualRevenueRange: "$40M-60M",
+        financialSummary:
+          "Development bank with focus on financial inclusion and SME growth.",
+
+        rating: "4.6",
+        complianceScore: 91,
+        trustScore: 92,
+
+        cacRegistrationDate: "2010-03-20",
+        cacExpiryDate: "2030-03-20",
+        lastVerifiedAt: new Date("2024-01-28"),
+
+        operationalDetails:
+          "Specializes in SME lending, microfinance, and financial inclusion programs.",
+        marketPosition: "Leading SME Bank",
+        customerBase: "Micro Enterprises, SMEs, Entrepreneurs",
+
+        tags: [
+          "Banking",
+          "SME",
+          "Microfinance",
+          "Development",
+          "Financial Inclusion",
+        ],
+        services: [
+          "SME Loans",
+          "Microfinance",
+          "Business Banking",
+          "Financial Advisory",
+        ],
+        certifications: [
+          "Development Banking Standards",
+          "Microfinance Certified",
+        ],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "ProCredit expands SME loan portfolio by 40%",
+            date: "2024-01-30",
+            source: "Business Sierra Leone",
+          },
+          {
+            title: "Launches women entrepreneurship program",
+            date: "2023-12-15",
+            source: "Women in Business",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Samuel Kargbo",
+            position: "Managing Director",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 10,
+          },
+          {
+            name: "Ms. Fatmata Conteh",
+            position: "Head of SME Banking",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 5,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "SME Banking Compliance",
+            status: "Active",
+            completedDate: "2024-01-25",
+            score: 93,
+          },
+          {
+            type: "Microfinance Standards",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 92,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 28, amount: "$58M" },
+          { year: 2022, growth: 25, amount: "$45M" },
+          { year: 2021, growth: 22, amount: "$36M" },
+        ],
+
+        marketCoverage: [
+          { region: "Urban Areas", percentage: 85, notes: "SME focus" },
+          {
+            region: "Rural Areas",
+            percentage: 60,
+            notes: "Microfinance focus",
+          },
+        ],
+
+        majorClients: [
+          "Small Businesses",
+          "Micro Enterprises",
+          "Women Entrepreneurs",
+        ],
+        awards: [
+          {
+            name: "Best SME Bank 2023",
+            year: 2023,
+            issuer: "Sierra Leone Business Awards",
+          },
+          {
+            name: "Financial Inclusion Award",
+            year: 2022,
+            issuer: "African Development Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/procreditsl",
+          linkedin: "https://linkedin.com/company/procredit-bank-sierra-leone",
+        },
+
+        esgScores: {
+          environmental: 85,
+          social: 95,
+          governance: 88,
+          overall: 89,
+        },
+        riskAssessment: {
+          financialRisk: 28,
+          operationalRisk: 30,
+          complianceRisk: 22,
+          marketRisk: 35,
+          overallRisk: 29,
+        },
+
+        bankDetails: {
+          bankName: "ProCredit Bank",
+          accountNumber: "02223344556",
+          accountName: "ProCredit Bank Sierra Leone",
+          branch: "Head Office",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "EY Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "B890123",
+        taxId: "TAX-2023-025678",
+        name: "Union Trust Bank Sierra Leone",
+        tradingName: "UTB",
+        description:
+          "Full-service commercial bank with focus on retail and corporate banking.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "banking_finance",
+        businessType: "private_limited",
+        ownership: "local",
+
+        location: "Freetown",
+        address: "14 Rawdon Street, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4841",
+        longitude: "-13.2341",
+
+        contactEmail: "info@utb.sl",
+        contactPhone: "+232 22 123 456",
+        website: "https://utb.sl",
+        ceo: "Mr. Mohamed Kamara",
+
+        foundedYear: 2002,
+        yearEnd: "December 31",
+        employees: "120-200",
+        revenue: "$30M-50M",
+        capitalInvestment: "20000000",
+        annualRevenueRange: "$30M-50M",
+        financialSummary:
+          "Local bank with strong community focus and personalized banking services.",
+
+        rating: "4.2",
+        complianceScore: 89,
+        trustScore: 90,
+
+        cacRegistrationDate: "2002-08-10",
+        cacExpiryDate: "2027-08-10",
+        lastVerifiedAt: new Date("2024-01-20"),
+
+        operationalDetails:
+          "Focus on personalized banking services for retail and small corporate clients.",
+        marketPosition: "Community-Focused Bank",
+        customerBase:
+          "Local Businesses, Retail Customers, Community Organizations",
+
+        tags: ["Banking", "Local", "Community", "Trust", "Personalized"],
+        services: [
+          "Retail Banking",
+          "Small Business Banking",
+          "Personal Loans",
+          "Savings Accounts",
+        ],
+        certifications: [
+          "Central Bank Licensed",
+          "Community Banking Certified",
+        ],
+        subsidiaries: ["UTB Microfinance"],
+
+        recentNews: [
+          {
+            title: "UTB launches community banking initiative",
+            date: "2024-01-25",
+            source: "Community News",
+          },
+          {
+            title: "Expands branch network to rural areas",
+            date: "2023-12-18",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Mohamed Kamara",
+            position: "CEO",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 30,
+          },
+          {
+            name: "Ms. Sarah Johnson",
+            position: "Board Chair",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 20,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Community Banking Compliance",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 90,
+          },
+          {
+            type: "Customer Protection",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 88,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 15, amount: "$42M" },
+          { year: 2022, growth: 12, amount: "$36M" },
+          { year: 2021, growth: 10, amount: "$32M" },
+        ],
+
+        marketCoverage: [
+          { region: "Western Area", percentage: 80, notes: "Primary market" },
+          { region: "Northern Province", percentage: 60, notes: "Expanding" },
+        ],
+
+        majorClients: [
+          "Local Businesses",
+          "Community Groups",
+          "Retail Customers",
+        ],
+        awards: [
+          {
+            name: "Best Community Bank 2023",
+            year: 2023,
+            issuer: "Sierra Leone Banking Awards",
+          },
+          {
+            name: "Customer Service Excellence",
+            year: 2022,
+            issuer: "West Africa Banking Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/utbsl",
+          twitter: "https://twitter.com/utbsl",
+        },
+
+        esgScores: {
+          environmental: 82,
+          social: 90,
+          governance: 85,
+          overall: 86,
+        },
+        riskAssessment: {
+          financialRisk: 30,
+          operationalRisk: 32,
+          complianceRisk: 25,
+          marketRisk: 38,
+          overallRisk: 31,
+        },
+
+        bankDetails: {
+          bankName: "Union Trust Bank",
+          accountNumber: "02334455667",
+          accountName: "Union Trust Bank Sierra Leone",
+          branch: "Main Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Local Auditors Ltd",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Return",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      // ========== ADDITIONAL AGRICULTURE (3 more companies) ==========
+      {
+        registrationNumber: "A678901",
+        taxId: "TAX-2023-026789",
+        name: "Sierra Fisheries Corporation",
+        tradingName: "Sierra Fisheries",
+        description:
+          "Leading fishing and seafood processing company with modern facilities and export focus.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "agriculture",
+        businessType: "private_limited",
+        ownership: "mixed",
+
+        location: "Freetown",
+        address: "King Tom Fisheries Complex, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4900",
+        longitude: "-13.2400",
+
+        contactEmail: "info@sierrafisheries.sl",
+        contactPhone: "+232 77 678 901",
+        website: "https://sierrafisheries.sl",
+        ceo: "Mr. Thomas Williams",
+
+        foundedYear: 1998,
+        yearEnd: "December 31",
+        employees: "200-350",
+        revenue: "$25M-40M",
+        capitalInvestment: "15000000",
+        annualRevenueRange: "$25M-40M",
+        financialSummary:
+          "Modern fisheries company with processing plant and cold storage facilities.",
+
+        rating: "4.3",
+        complianceScore: 88,
+        trustScore: 86,
+
+        cacRegistrationDate: "1998-05-15",
+        cacExpiryDate: "2028-05-15",
+        lastVerifiedAt: new Date("2024-01-28"),
+
+        operationalDetails:
+          "Operates fishing fleet and modern processing plant for export markets.",
+        marketPosition: "Leading Fisheries Company",
+        customerBase:
+          "International Buyers, Local Markets, Hotels, Restaurants",
+
+        tags: ["Agriculture", "Fishing", "Seafood", "Export", "Processing"],
+        services: [
+          "Fishing Operations",
+          "Seafood Processing",
+          "Export Services",
+          "Cold Storage",
+        ],
+        certifications: [
+          "EU Export Certified",
+          "Food Safety Standards",
+          "Marine Stewardship",
+        ],
+        subsidiaries: ["Sierra Fishing Fleet Ltd"],
+
+        recentNews: [
+          {
+            title: "Sierra Fisheries secures EU export certification",
+            date: "2024-01-30",
+            source: "Export News",
+          },
+          {
+            title: "Company expands processing capacity",
+            date: "2023-12-20",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Thomas Williams",
+            position: "Managing Director",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 35,
+          },
+          {
+            name: "Ms. Fatmata Kamara",
+            position: "Operations Director",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 15,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Export Compliance",
+            status: "Active",
+            completedDate: "2024-01-25",
+            score: 92,
+          },
+          {
+            type: "Food Safety",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 90,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 20, amount: "$38M" },
+          { year: 2022, growth: 18, amount: "$32M" },
+          { year: 2021, growth: 15, amount: "$27M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Coastal Areas",
+            percentage: 100,
+            notes: "Fishing operations",
+          },
+          {
+            region: "Export Markets",
+            percentage: 70,
+            notes: "EU and regional",
+          },
+        ],
+
+        majorClients: [
+          "European Importers",
+          "West African Markets",
+          "Local Hotels",
+        ],
+        awards: [
+          {
+            name: "Best Fisheries Company 2023",
+            year: 2023,
+            issuer: "Sierra Leone Agricultural Awards",
+          },
+          {
+            name: "Export Excellence Award",
+            year: 2022,
+            issuer: "West Africa Trade Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/sierrafisheries",
+          linkedin: "https://linkedin.com/company/sierra-fisheries-corporation",
+        },
+
+        esgScores: {
+          environmental: 88,
+          social: 85,
+          governance: 82,
+          overall: 85,
+        },
+        riskAssessment: {
+          financialRisk: 32,
+          operationalRisk: 35,
+          complianceRisk: 28,
+          marketRisk: 40,
+          overallRisk: 34,
+        },
+
+        bankDetails: {
+          bankName: "Rokel Commercial Bank",
+          accountNumber: "02445566778",
+          accountName: "Sierra Fisheries Corporation",
+          branch: "Freetown Main",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Local Auditors Ltd",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Return",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "A789012",
+        taxId: "TAX-2023-027890",
+        name: "Bo Poultry Farms",
+        tradingName: "Bo Poultry",
+        description:
+          "Modern poultry farm producing eggs and chicken for Southern Province markets.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "agriculture",
+        businessType: "private_limited",
+        ownership: "local",
+
+        location: "Bo",
+        address: "Bo-Kenema Highway, Bo",
+        city: "Bo",
+        district: "Bo",
+        province: "Southern Province",
+        postalCode: "00233",
+        country: "Sierra Leone",
+        latitude: "7.9700",
+        longitude: "-11.7400",
+
+        contactEmail: "info@bopoultry.sl",
+        contactPhone: "+232 77 789 012",
+        website: "https://bopoultry.sl",
+        ceo: "Mr. Samuel Conteh",
+
+        foundedYear: 2015,
+        yearEnd: "December 31",
+        employees: "50-100",
+        revenue: "$5M-8M",
+        capitalInvestment: "3000000",
+        annualRevenueRange: "$5M-8M",
+        financialSummary:
+          "Modern poultry operation with focus on quality and food safety standards.",
+
+        rating: "4.2",
+        complianceScore: 87,
+        trustScore: 85,
+
+        cacRegistrationDate: "2015-08-20",
+        cacExpiryDate: "2030-08-20",
+        lastVerifiedAt: new Date("2024-01-20"),
+
+        operationalDetails:
+          "Modern poultry houses with automated feeding and climate control systems.",
+        marketPosition: "Leading Poultry Producer in Southern Province",
+        customerBase: "Supermarkets, Hotels, Restaurants, Retailers",
+
+        tags: ["Agriculture", "Poultry", "Eggs", "Chicken", "Livestock"],
+        services: [
+          "Egg Production",
+          "Broiler Chicken",
+          "Poultry Feed",
+          "Veterinary Services",
+        ],
+        certifications: ["Food Safety Certified", "Veterinary Standards"],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "Bo Poultry expands production capacity",
+            date: "2024-01-25",
+            source: "Agricultural News",
+          },
+          {
+            title: "Launches new organic egg line",
+            date: "2023-12-15",
+            source: "Food Industry Journal",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Samuel Conteh",
+            position: "Managing Director",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 70,
+          },
+          {
+            name: "Ms. Aminata Bangura",
+            position: "Operations Manager",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 20,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Food Safety Compliance",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 90,
+          },
+          {
+            type: "Veterinary Standards",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 88,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 25, amount: "$7.5M" },
+          { year: 2022, growth: 22, amount: "$6M" },
+          { year: 2021, growth: 20, amount: "$4.9M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Southern Province",
+            percentage: 80,
+            notes: "Primary market",
+          },
+          { region: "Western Area", percentage: 40, notes: "Expanding market" },
+        ],
+
+        majorClients: ["Supermarkets", "Hotels", "Restaurants", "Schools"],
+        awards: [
+          {
+            name: "Best Poultry Farm 2023",
+            year: 2023,
+            issuer: "Sierra Leone Agricultural Awards",
+          },
+          {
+            name: "Food Safety Excellence",
+            year: 2022,
+            issuer: "West Africa Food Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/bopoultry",
+        },
+
+        esgScores: {
+          environmental: 82,
+          social: 85,
+          governance: 80,
+          overall: 82,
+        },
+        riskAssessment: {
+          financialRisk: 35,
+          operationalRisk: 30,
+          complianceRisk: 25,
+          marketRisk: 40,
+          overallRisk: 33,
+        },
+
+        bankDetails: {
+          bankName: "Sierra Leone Commercial Bank",
+          accountNumber: "02556677889",
+          accountName: "Bo Poultry Farms Ltd",
+          branch: "Bo Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Local Auditors Ltd",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Return",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "A890123",
+        taxId: "TAX-2023-028901",
+        name: "Moyamba Oil Palm Plantation",
+        tradingName: "Moyamba Palm Oil",
+        description:
+          "Large-scale oil palm plantation and processing operation in Southern Sierra Leone.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "agriculture",
+        businessType: "private_limited",
+        ownership: "joint_venture",
+
+        location: "Moyamba",
+        address: "Moyamba Junction, Southern Province",
+        city: "Moyamba",
+        district: "Moyamba",
+        province: "Southern Province",
+        postalCode: "00235",
+        country: "Sierra Leone",
+        latitude: "8.1600",
+        longitude: "-12.4300",
+
+        contactEmail: "info@moyambapalmoil.sl",
+        contactPhone: "+232 77 890 123",
+        website: "https://moyambapalmoil.sl",
+        ceo: "Mr. David Koroma",
+
+        foundedYear: 2010,
+        yearEnd: "December 31",
+        employees: "150-250",
+        revenue: "$15M-25M",
+        capitalInvestment: "12000000",
+        annualRevenueRange: "$15M-25M",
+        financialSummary:
+          "Large-scale palm oil operation with sustainable farming practices.",
+
+        rating: "4.1",
+        complianceScore: 85,
+        trustScore: 83,
+
+        cacRegistrationDate: "2010-04-15",
+        cacExpiryDate: "2030-04-15",
+        lastVerifiedAt: new Date("2024-01-25"),
+
+        operationalDetails:
+          "5000-hectare plantation with modern processing mill and sustainable practices.",
+        marketPosition: "Major Palm Oil Producer",
+        customerBase: "Local Markets, Export Markets, Food Manufacturers",
+
+        tags: [
+          "Agriculture",
+          "Palm Oil",
+          "Plantation",
+          "Export",
+          "Sustainable",
+        ],
+        services: [
+          "Palm Oil Production",
+          "Palm Kernel Processing",
+          "Export Services",
+          "Agricultural Consulting",
+        ],
+        certifications: ["RSPO Certified", "Sustainable Agriculture"],
+        subsidiaries: ["Moyamba Biofuel Ltd"],
+
+        recentNews: [
+          {
+            title: "Moyamba Plantation achieves RSPO certification",
+            date: "2024-01-30",
+            source: "Agricultural News",
+          },
+          {
+            title: "Expands processing capacity",
+            date: "2023-12-20",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. David Koroma",
+            position: "Managing Director",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 40,
+          },
+          {
+            name: "Mr. Lee Chong",
+            position: "Technical Director",
+            nationality: "Malaysian",
+            isPrimary: false,
+            sharePercentage: 30,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Environmental Compliance",
+            status: "Active",
+            completedDate: "2024-01-25",
+            score: 88,
+          },
+          {
+            type: "Export Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 85,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 18, amount: "$22M" },
+          { year: 2022, growth: 15, amount: "$18M" },
+          { year: 2021, growth: 12, amount: "$16M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Southern Province",
+            percentage: 100,
+            notes: "Plantation location",
+          },
+          {
+            region: "National Market",
+            percentage: 60,
+            notes: "Domestic sales",
+          },
+        ],
+
+        majorClients: [
+          "Local Manufacturers",
+          "Export Markets",
+          "Government Institutions",
+        ],
+        awards: [
+          {
+            name: "Sustainable Agriculture Award 2023",
+            year: 2023,
+            issuer: "Sierra Leone Agricultural Awards",
+          },
+          {
+            name: "Export Excellence",
+            year: 2022,
+            issuer: "West Africa Trade Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/moyambapalmoil",
+          linkedin: "https://linkedin.com/company/moyamba-palm-oil",
+        },
+
+        esgScores: {
+          environmental: 85,
+          social: 82,
+          governance: 80,
+          overall: 82,
+        },
+        riskAssessment: {
+          financialRisk: 30,
+          operationalRisk: 35,
+          complianceRisk: 28,
+          marketRisk: 42,
+          overallRisk: 34,
+        },
+
+        bankDetails: {
+          bankName: "Ecobank Sierra Leone",
+          accountNumber: "02667788990",
+          accountName: "Moyamba Oil Palm Plantation",
+          branch: "Moyamba Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Local Auditors Ltd",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Return",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      // ========== ADDITIONAL MINING (2 more companies) ==========
+      {
+        registrationNumber: "M234567",
+        taxId: "TAX-2023-029012",
+        name: "Sierra Minerals Bauxite",
+        tradingName: "Sierra Bauxite",
+        description:
+          "Bauxite mining and export company operating in the Northern Province.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "mining",
+        businessType: "private_limited",
+        ownership: "joint_venture",
+
+        location: "Makeni",
+        address: "Mile 38, Makeni Highway",
+        city: "Makeni",
+        district: "Bombali",
+        province: "Northern Province",
+        postalCode: "00211",
+        country: "Sierra Leone",
+        latitude: "8.8800",
+        longitude: "-12.0500",
+
+        contactEmail: "info@sierrabauxite.com",
+        contactPhone: "+232 78 234 567",
+        website: "https://sierrabauxite.com",
+        ceo: "Mr. Mohamed Bah",
+
+        foundedYear: 2008,
+        yearEnd: "December 31",
+        employees: "250-400",
+        revenue: "$60M-90M",
+        capitalInvestment: "40000000",
+        annualRevenueRange: "$60M-90M",
+        financialSummary:
+          "Bauxite mining operation with modern equipment and export facilities.",
+
+        rating: "4.3",
+        complianceScore: 87,
+        trustScore: 85,
+
+        cacRegistrationDate: "2008-06-20",
+        cacExpiryDate: "2028-06-20",
+        lastVerifiedAt: new Date("2024-01-30"),
+
+        operationalDetails:
+          "Open-pit bauxite mining with processing and loading facilities.",
+        marketPosition: "Leading Bauxite Producer",
+        customerBase: "International Aluminum Companies, Export Markets",
+
+        tags: ["Mining", "Bauxite", "Export", "Aluminum", "Extractive"],
+        services: ["Bauxite Mining", "Mineral Processing", "Export Logistics"],
+        certifications: [
+          "Mining License",
+          "Export Certification",
+          "Environmental Compliance",
+        ],
+        subsidiaries: ["Sierra Minerals Logistics"],
+
+        recentNews: [
+          {
+            title: "Sierra Bauxite expands mining operations",
+            date: "2024-01-28",
+            source: "Mining Journal",
+          },
+          {
+            title: "Secures new export contracts",
+            date: "2023-12-20",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Mohamed Bah",
+            position: "CEO",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 25,
+          },
+          {
+            name: "Mr. Zhang Wei",
+            position: "Technical Director",
+            nationality: "Chinese",
+            isPrimary: false,
+            sharePercentage: 20,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Mining License",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 92,
+          },
+          {
+            type: "Export Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 88,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 22, amount: "$85M" },
+          { year: 2022, growth: 20, amount: "$70M" },
+          { year: 2021, growth: 18, amount: "$58M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Northern Province",
+            percentage: 100,
+            notes: "Mining operations",
+          },
+          {
+            region: "Export Markets",
+            percentage: 100,
+            notes: "International buyers",
+          },
+        ],
+
+        majorClients: [
+          "International Aluminum Smelters",
+          "Trading Companies",
+          "Manufacturers",
+        ],
+        awards: [
+          {
+            name: "Best Mining Operation 2023",
+            year: 2023,
+            issuer: "Sierra Leone Mining Awards",
+          },
+          {
+            name: "Export Excellence Award",
+            year: 2022,
+            issuer: "West Africa Trade Forum",
+          },
+        ],
+
+        socialMedia: {
+          linkedin: "https://linkedin.com/company/sierra-bauxite",
+        },
+
+        esgScores: {
+          environmental: 80,
+          social: 82,
+          governance: 85,
+          overall: 82,
+        },
+        riskAssessment: {
+          financialRisk: 32,
+          operationalRisk: 38,
+          complianceRisk: 30,
+          marketRisk: 45,
+          overallRisk: 36,
+        },
+
+        bankDetails: {
+          bankName: "Standard Chartered Bank",
+          accountNumber: "02778899001",
+          accountName: "Sierra Minerals Bauxite",
+          branch: "Freetown Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "PwC Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Mining Report",
+            filingDate: "2024-03-31",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "M345678",
+        taxId: "TAX-2023-030123",
+        name: "Tonkolili Iron Ore Mines",
+        tradingName: "Tonkolili Mines",
+        description:
+          "Large-scale iron ore mining operation in Tonkolili District.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "mining",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Tonkolili District",
+        address: "Ferengbeya, Tonkolili District",
+        city: "Magburaka",
+        district: "Tonkolili",
+        province: "Northern Province",
+        postalCode: "00214",
+        country: "Sierra Leone",
+        latitude: "8.7200",
+        longitude: "-11.9500",
+
+        contactEmail: "info@tonkolilimines.com",
+        contactPhone: "+232 78 345 678",
+        website: "https://tonkolilimines.com",
+        ceo: "Mr. John Smith",
+
+        foundedYear: 2011,
+        yearEnd: "December 31",
+        employees: "400-600",
+        revenue: "$120M-180M",
+        capitalInvestment: "100000000",
+        annualRevenueRange: "$100M-200M",
+        financialSummary:
+          "Major iron ore mining operation with rail infrastructure to port.",
+
+        rating: "4.4",
+        complianceScore: 89,
+        trustScore: 87,
+
+        cacRegistrationDate: "2011-03-15",
+        cacExpiryDate: "2031-03-15",
+        lastVerifiedAt: new Date("2024-01-25"),
+
+        operationalDetails:
+          "Large-scale iron ore mining with dedicated railway to export port.",
+        marketPosition: "Major Iron Ore Producer",
+        customerBase: "International Steel Companies, Export Markets",
+
+        tags: ["Mining", "Iron Ore", "Export", "Large-scale", "Infrastructure"],
+        services: [
+          "Iron Ore Mining",
+          "Processing",
+          "Rail Transport",
+          "Export Services",
+        ],
+        certifications: [
+          "Mining License",
+          "Environmental Compliance",
+          "Export Standards",
+        ],
+        subsidiaries: ["Tonkolili Railways Ltd"],
+
+        recentNews: [
+          {
+            title: "Tonkolili Mines resumes full production",
+            date: "2024-01-30",
+            source: "Mining Weekly",
+          },
+          {
+            title: "Invests in new processing equipment",
+            date: "2023-12-20",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. John Smith",
+            position: "CEO",
+            nationality: "British",
+            isPrimary: true,
+            sharePercentage: 15,
+          },
+          {
+            name: "Mr. Mohamed Bangura",
+            position: "Operations Director",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 10,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Mining License",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 93,
+          },
+          {
+            type: "Environmental Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 86,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 35, amount: "$165M" },
+          { year: 2022, growth: 30, amount: "$122M" },
+          { year: 2021, growth: 25, amount: "$94M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Tonkolili District",
+            percentage: 100,
+            notes: "Mining area",
+          },
+          {
+            region: "Export Markets",
+            percentage: 100,
+            notes: "International sales",
+          },
+        ],
+
+        majorClients: [
+          "Chinese Steel Mills",
+          "European Manufacturers",
+          "International Traders",
+        ],
+        awards: [
+          {
+            name: "Mining Infrastructure Award 2023",
+            year: 2023,
+            issuer: "African Mining Awards",
+          },
+          {
+            name: "Export Volume Leader",
+            year: 2022,
+            issuer: "Sierra Leone Trade Awards",
+          },
+        ],
+
+        socialMedia: {
+          linkedin: "https://linkedin.com/company/tonkolili-mines",
+        },
+
+        esgScores: {
+          environmental: 78,
+          social: 85,
+          governance: 83,
+          overall: 82,
+        },
+        riskAssessment: {
+          financialRisk: 35,
+          operationalRisk: 42,
+          complianceRisk: 32,
+          marketRisk: 48,
+          overallRisk: 39,
+        },
+
+        bankDetails: {
+          bankName: "Standard Chartered Bank",
+          accountNumber: "02889900112",
+          accountName: "Tonkolili Iron Ore Mines",
+          branch: "Freetown Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "KPMG Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      // ========== ADDITIONAL LOGISTICS & SHIPPING (3 more companies) ==========
+      {
+        registrationNumber: "L456789",
+        taxId: "TAX-2023-031234",
+        name: "Maersk Sierra Leone",
+        tradingName: "Maersk SL",
+        description:
+          "Global shipping and logistics company providing container shipping and integrated logistics.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "logistics_shipping",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Freetown",
+        address: "Queen Elizabeth II Quay, Berth 3, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4945",
+        longitude: "-13.2345",
+
+        contactEmail: "info.sl@maersk.com",
+        contactPhone: "+232 22 456 789",
+        website: "https://maersk.com/sl",
+        ceo: "Mr. Peter Hansen",
+
+        foundedYear: 1995,
+        yearEnd: "December 31",
+        employees: "80-150",
+        revenue: "$40M-60M",
+        capitalInvestment: "20000000",
+        annualRevenueRange: "$40M-60M",
+        financialSummary:
+          "Global shipping leader with comprehensive logistics services in Sierra Leone.",
+
+        rating: "4.5",
+        complianceScore: 94,
+        trustScore: 96,
+
+        cacRegistrationDate: "1995-02-20",
+        cacExpiryDate: "2025-02-20",
+        lastVerifiedAt: new Date("2024-01-30"),
+
+        operationalDetails:
+          "Container shipping, port operations, and integrated logistics solutions.",
+        marketPosition: "Global Shipping Leader",
+        customerBase:
+          "Importers, Exporters, Corporations, International Traders",
+
+        tags: ["Logistics", "Shipping", "Container", "Global", "Maritime"],
+        services: [
+          "Container Shipping",
+          "Port Operations",
+          "Logistics Solutions",
+          "Customs Clearance",
+        ],
+        certifications: [
+          "ISO 9001:2015",
+          "IATA Certified",
+          "Global Shipping Standards",
+        ],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "Maersk launches new West Africa service",
+            date: "2024-01-25",
+            source: "Maritime News",
+          },
+          {
+            title: "Expands container terminal operations",
+            date: "2023-12-15",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Peter Hansen",
+            position: "Country Manager",
+            nationality: "Danish",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Aminata Kamara",
+            position: "Operations Manager",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Shipping Compliance",
+            status: "Excellent",
+            completedDate: "2024-01-20",
+            score: 97,
+          },
+          {
+            type: "Customs Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 95,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 20, amount: "$58M" },
+          { year: 2022, growth: 18, amount: "$48M" },
+          { year: 2021, growth: 15, amount: "$41M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Sierra Leone",
+            percentage: 90,
+            notes: "Nationwide services",
+          },
+          {
+            region: "Global Network",
+            percentage: 100,
+            notes: "Worldwide coverage",
+          },
+        ],
+
+        majorClients: [
+          "Major Importers/Exporters",
+          "Corporations",
+          "International Organizations",
+        ],
+        awards: [
+          {
+            name: "Best Shipping Company 2023",
+            year: 2023,
+            issuer: "Sierra Leone Business Awards",
+          },
+          {
+            name: "Global Shipping Excellence",
+            year: 2022,
+            issuer: "Maersk Group Awards",
+          },
+        ],
+
+        socialMedia: {
+          linkedin: "https://linkedin.com/company/maersk-sierra-leone",
+          twitter: "https://twitter.com/maersksl",
+        },
+
+        esgScores: {
+          environmental: 85,
+          social: 88,
+          governance: 92,
+          overall: 88,
+        },
+        riskAssessment: {
+          financialRisk: 25,
+          operationalRisk: 28,
+          complianceRisk: 20,
+          marketRisk: 35,
+          overallRisk: 27,
+        },
+
+        bankDetails: {
+          bankName: "Standard Chartered Bank",
+          accountNumber: "02990011223",
+          accountName: "Maersk Sierra Leone",
+          branch: "Freetown Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "KPMG Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "L567890",
+        taxId: "TAX-2023-032345",
+        name: "DHL Sierra Leone",
+        tradingName: "DHL SL",
+        description:
+          "Global logistics company providing express delivery and supply chain solutions.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "logistics_shipping",
+        businessType: "private_limited",
+        ownership: "foreign",
+
+        location: "Freetown",
+        address: "29 Wilkinson Road, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4833",
+        longitude: "-13.2315",
+
+        contactEmail: "info@dhl.sl",
+        contactPhone: "+232 22 567 890",
+        website: "https://dhl.sl",
+        ceo: "Mr. Mark Johnson",
+
+        foundedYear: 2000,
+        yearEnd: "December 31",
+        employees: "60-120",
+        revenue: "$20M-35M",
+        capitalInvestment: "10000000",
+        annualRevenueRange: "$20M-35M",
+        financialSummary:
+          "Global express delivery leader with comprehensive logistics services.",
+
+        rating: "4.6",
+        complianceScore: 93,
+        trustScore: 95,
+
+        cacRegistrationDate: "2000-09-15",
+        cacExpiryDate: "2025-09-15",
+        lastVerifiedAt: new Date("2024-01-25"),
+
+        operationalDetails:
+          "Express delivery, freight forwarding, and supply chain management services.",
+        marketPosition: "Global Express Delivery Leader",
+        customerBase: "Businesses, Individuals, E-commerce, Corporations",
+
+        tags: ["Logistics", "Express", "Delivery", "Global", "E-commerce"],
+        services: [
+          "Express Delivery",
+          "Freight Forwarding",
+          "Supply Chain",
+          "E-commerce Logistics",
+        ],
+        certifications: [
+          "ISO 9001:2015",
+          "IATA Certified",
+          "Global Logistics Standards",
+        ],
+        subsidiaries: [],
+
+        recentNews: [
+          {
+            title: "DHL expands e-commerce delivery network",
+            date: "2024-01-28",
+            source: "Logistics News",
+          },
+          {
+            title: "Launches same-day delivery service",
+            date: "2023-12-20",
+            source: "Business Sierra Leone",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Mark Johnson",
+            position: "Country Manager",
+            nationality: "American",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Fatmata Sesay",
+            position: "Operations Manager",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Express Compliance",
+            status: "Excellent",
+            completedDate: "2024-01-20",
+            score: 96,
+          },
+          {
+            type: "Security Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 94,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 25, amount: "$32M" },
+          { year: 2022, growth: 22, amount: "$26M" },
+          { year: 2021, growth: 20, amount: "$21M" },
+        ],
+
+        marketCoverage: [
+          { region: "Freetown", percentage: 95, notes: "Full coverage" },
+          { region: "Major Towns", percentage: 80, notes: "Good coverage" },
+          { region: "Global Network", percentage: 100, notes: "Worldwide" },
+        ],
+
+        majorClients: [
+          "Corporations",
+          "E-commerce Businesses",
+          "International Organizations",
+        ],
+        awards: [
+          {
+            name: "Best Logistics Service 2023",
+            year: 2023,
+            issuer: "Sierra Leone Business Awards",
+          },
+          {
+            name: "Customer Service Excellence",
+            year: 2022,
+            issuer: "DHL Global Awards",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/dhlsierra",
+          twitter: "https://twitter.com/dhlsl",
+          instagram: "https://instagram.com/dhlsl",
+        },
+
+        esgScores: {
+          environmental: 83,
+          social: 90,
+          governance: 88,
+          overall: 87,
+        },
+        riskAssessment: {
+          financialRisk: 22,
+          operationalRisk: 25,
+          complianceRisk: 18,
+          marketRisk: 30,
+          overallRisk: 24,
+        },
+
+        bankDetails: {
+          bankName: "Standard Chartered Bank",
+          accountNumber: "03001122334",
+          accountName: "DHL Sierra Leone",
+          branch: "Freetown Branch",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "PwC Sierra Leone",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
+
+      {
+        registrationNumber: "L678901",
+        taxId: "TAX-2023-033456",
+        name: "Sierra Leone Road Transport Corporation",
+        tradingName: "SLRTC",
+        description:
+          "Government-owned road transport company providing passenger and freight services.",
+        status: "active",
+        verificationLevel: "verified",
+        industry: "logistics_shipping",
+        businessType: "government_agency",
+        ownership: "government",
+
+        location: "Freetown",
+        address: "15 Kissy Road, Freetown",
+        city: "Freetown",
+        district: "Western Area Urban",
+        province: "Western Area",
+        postalCode: "00232",
+        country: "Sierra Leone",
+        latitude: "8.4800",
+        longitude: "-13.2200",
+
+        contactEmail: "info@slrtc.gov.sl",
+        contactPhone: "+232 22 678 901",
+        website: "https://slrtc.gov.sl",
+        ceo: "Mr. Alhaji Mansaray",
+
+        foundedYear: 1975,
+        yearEnd: "December 31",
+        employees: "300-500",
+        revenue: "$30M-50M",
+        capitalInvestment: "25000000",
+        annualRevenueRange: "$30M-50M",
+        financialSummary:
+          "National road transport company serving major routes across Sierra Leone.",
+
+        rating: "4.0",
+        complianceScore: 90,
+        trustScore: 88,
+
+        cacRegistrationDate: "1975-03-15",
+        cacExpiryDate: "N/A",
+        lastVerifiedAt: new Date("2024-01-30"),
+
+        operationalDetails:
+          "Operates bus services on major routes and freight transport nationwide.",
+        marketPosition: "National Road Transport Provider",
+        customerBase: "General Public, Businesses, Government, Students",
+
+        tags: ["Logistics", "Transport", "Road", "Government", "Passenger"],
+        services: [
+          "Passenger Transport",
+          "Freight Services",
+          "Package Delivery",
+          "Charter Services",
+        ],
+        certifications: [
+          "Transport Ministry Licensed",
+          "Safety Standards Certified",
+        ],
+        subsidiaries: ["SLRTC Maintenance Ltd"],
+
+        recentNews: [
+          {
+            title: "SLRTC launches new luxury bus service",
+            date: "2024-01-25",
+            source: "Transport News",
+          },
+          {
+            title: "Receives new fleet of buses",
+            date: "2023-12-20",
+            source: "Government News",
+          },
+        ],
+
+        directors: [
+          {
+            name: "Mr. Alhaji Mansaray",
+            position: "Director General",
+            nationality: "Sierra Leonean",
+            isPrimary: true,
+            sharePercentage: 0,
+          },
+          {
+            name: "Ms. Fatmata Kamara",
+            position: "Operations Director",
+            nationality: "Sierra Leonean",
+            isPrimary: false,
+            sharePercentage: 0,
+          },
+        ],
+
+        complianceRecords: [
+          {
+            type: "Transport License",
+            status: "Active",
+            completedDate: "2024-01-20",
+            score: 94,
+          },
+          {
+            type: "Safety Compliance",
+            status: "Active",
+            completedDate: "2023-12-31",
+            score: 90,
+          },
+        ],
+
+        revenueGrowth: [
+          { year: 2023, growth: 15, amount: "$45M" },
+          { year: 2022, growth: 12, amount: "$39M" },
+          { year: 2021, growth: 10, amount: "$35M" },
+        ],
+
+        marketCoverage: [
+          {
+            region: "Major Routes",
+            percentage: 85,
+            notes: "All major highways",
+          },
+          { region: "Urban Areas", percentage: 90, notes: "City services" },
+        ],
+
+        majorClients: [
+          "General Public",
+          "Educational Institutions",
+          "Government",
+        ],
+        awards: [
+          {
+            name: "Best Public Transport 2023",
+            year: 2023,
+            issuer: "Sierra Leone Transport Awards",
+          },
+          {
+            name: "Safety Excellence Award",
+            year: 2022,
+            issuer: "West Africa Transport Forum",
+          },
+        ],
+
+        socialMedia: {
+          facebook: "https://facebook.com/slrtc",
+          twitter: "https://twitter.com/slrtc",
+        },
+
+        esgScores: {
+          environmental: 78,
+          social: 90,
+          governance: 85,
+          overall: 84,
+        },
+        riskAssessment: {
+          financialRisk: 30,
+          operationalRisk: 35,
+          complianceRisk: 25,
+          marketRisk: 40,
+          overallRisk: 33,
+        },
+
+        bankDetails: {
+          bankName: "Bank of Sierra Leone",
+          accountNumber: "03112233445",
+          accountName: "Sierra Leone Road Transport Corporation",
+          branch: "Government Account",
+        },
+
+        auditInfo: {
+          lastAuditDate: "2023-12-31",
+          auditor: "Government Auditors",
+          auditOpinion: "Unqualified",
+          nextAuditDate: "2024-12-31",
+        },
+
+        regulatoryFilings: [
+          {
+            type: "Annual Report",
+            filingDate: "2024-04-30",
+            status: "Pending",
+            documentUrl: "",
+          },
+        ],
+      },
     ];
 
     console.log(`📝 Inserting ${businesses.length} businesses...`);
