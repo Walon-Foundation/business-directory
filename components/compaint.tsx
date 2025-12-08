@@ -39,7 +39,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { Switch } from "@radix-ui/react-switch";
+import { Switch } from "@/components/ui/switch";
 import axios from "axios";
 
 type ComplaintStatus = "form" | "submitting" | "success" | "error";
@@ -92,10 +92,25 @@ export default function ComplaintModal({
     e.preventDefault();
     setStatus("submitting");
 
+    // Show notification for anonymous submission
+    if (formData.anonymous) {
+      toast.info("Submitting anonymously", {
+        description: "Your identity will not be shared with the company.",
+        duration: 3000,
+      });
+    }
+
+    // Prepare payload - clear personal info if anonymous
+    const payload = {
+      ...formData,
+      username: formData.anonymous ? "" : formData.username,
+      userPhone: formData.anonymous ? "" : formData.userPhone,
+    };
+
     try {
       const res = await axios.post(
         `/api/explore/${companyId}/complaint`,
-        formData,
+        payload,
       );
 
       if (res.status !== 201) throw new Error("Failed to submit complaint");
@@ -125,13 +140,47 @@ export default function ComplaintModal({
         source: "web",
         anonymous: false,
       });
+
+      // Reload the page after 2 seconds to show updated complaints
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       setStatus("error");
-      toast.error("Failed to submit complaint", {
-        description: axios.isAxiosError(error)
-          ? error.response?.data?.error?.message ||
-            "Please try again or contact support."
-          : "Please try again or contact support.",
+
+      // Extract detailed error message from API response
+      let errorMessage = "Please try again or contact support.";
+      let errorTitle = "Failed to submit complaint";
+
+      if (axios.isAxiosError(error)) {
+        const apiError = error.response?.data?.error;
+
+        if (apiError) {
+          // Handle validation errors
+          if (apiError.fieldErrors) {
+            const fieldErrors = Object.entries(apiError.fieldErrors)
+              .map(
+                ([field, errors]) =>
+                  `${field}: ${(errors as string[]).join(", ")}`,
+              )
+              .join("; ");
+            errorMessage = fieldErrors;
+            errorTitle = "Validation Error";
+          } else if (apiError.message) {
+            errorMessage = apiError.message;
+          }
+        } else if (error.response?.data?.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorTitle, {
+        description: errorMessage,
+        duration: 7000,
       });
     }
   };
@@ -354,19 +403,49 @@ export default function ComplaintModal({
                     <UsersIcon className="w-4 h-4 mr-2 text-rose-600" />
                     Contact Information
                   </Label>
-                  <div className="flex items-center gap-2">
+                  <div
+                    className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-all duration-200 ${
+                      formData.anonymous
+                        ? "bg-blue-50 border-blue-200"
+                        : "bg-gray-50 border-gray-200"
+                    }`}
+                  >
                     <Switch
                       checked={formData.anonymous}
                       onCheckedChange={(checked) =>
                         setFormData({ ...formData, anonymous: checked })
                       }
-                      className="data-[state=checked]:bg-rose-600"
+                      className="data-[state=checked]:bg-blue-600"
                     />
-                    <Label className="text-sm text-gray-700">
-                      Submit anonymously
+                    <Label
+                      className={`text-sm font-medium ${formData.anonymous ? "text-blue-700" : "text-gray-700"}`}
+                    >
+                      {formData.anonymous
+                        ? "Anonymous Mode Active"
+                        : "Submit Anonymously"}
                     </Label>
                   </div>
                 </div>
+
+                {/* Anonymous mode notification */}
+                {formData.anonymous && (
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-200 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <Shield className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900 text-sm mb-1">
+                          Anonymous Submission Active
+                        </h4>
+                        <p className="text-xs text-blue-700">
+                          Your identity will not be shared with the company.
+                          Contact information fields are hidden.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {!formData.anonymous && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
