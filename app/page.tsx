@@ -234,7 +234,7 @@ export default function Home() {
   const copyWhatsAppNumber = () => {
     navigator.clipboard.writeText(whatsappNumber);
     // You could add a toast notification here
-    alert("WhatsApp number copied to clipboard!");
+    // alert("WhatsApp number copied to clipboard!");
   };
 
   return (
@@ -320,7 +320,7 @@ export default function Home() {
                   </div>
 
                   {/* Search Suggestions */}
-                  <div className="border-t border-gray-100 bg-gradient-to-b from-gray-50/50 to-white/50 p-4">
+                  {/* <div className="border-t border-gray-100 bg-gradient-to-b from-gray-50/50 to-white/50 p-4">
                     <div className="flex flex-wrap gap-2 justify-center">
                       {searchCategories.map((category) => (
                         <button
@@ -332,7 +332,7 @@ export default function Home() {
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Search Results Dropdown */}
