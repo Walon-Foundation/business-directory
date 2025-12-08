@@ -919,7 +919,7 @@ console.log("User password:", password);
 
 ---
 
-## Reporting Security Vulnerabilities
+<!-- ## Reporting Security Vulnerabilities
 
 **If you discover a security vulnerability:**
 
@@ -938,18 +938,16 @@ console.log("User password:", password);
 - Patch and deploy
 - Public disclosure after fix
 
----
+--- -->
 
 ## Questions?
 
-For security-related questions, contact:
-- **Email**: security@walon-foundation.org
 - **GitHub**: [Security Issues](https://github.com/Walon-Foundation/business-directory/security)
 
 ---
 
-**Last Updated**: December 2024
+**Last Updated**: December 2025
 **Version**: 1.0
-**Next Review**: June 2025
+**Next Review**: January 2026
 
 <!-- Built with 🔐 security in mind for Sierra Leone -->
