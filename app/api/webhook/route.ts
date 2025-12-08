@@ -218,7 +218,7 @@ What company would you like to verify?
     if (company) {
       // Build location string from available fields
       const locationParts: string[] = [];
-      
+
       if (company.address) {
         locationParts.push(company.address);
       }
@@ -228,10 +228,11 @@ What company would you like to verify?
       if (company.district && company.district !== company.city) {
         locationParts.push(company.district);
       }
-      
-      const locationString = locationParts.length > 0 
-        ? locationParts.join(", ") 
-        : company.location || "Location not specified";
+
+      const locationString =
+        locationParts.length > 0
+          ? locationParts.join(", ")
+          : company.location || "Location not specified";
 
       response_text = `
 *✅ Company Found: ${company.name}*

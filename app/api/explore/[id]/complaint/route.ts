@@ -26,26 +26,13 @@ const complaintSchema = z
       .string()
       .max(100, "Username is too long")
       .optional()
-      .or(z.literal(""))
-      .refine((username) => !username || username.trim().length > 0, {
-        message: "Username cannot be empty or whitespace only",
-      }),
+      .or(z.literal("")),
     userPhone: z
       .string()
       .max(20, "Phone number is too long")
       .optional()
-      .or(z.literal(""))
-      .refine((phone) => !phone || /^\+?[\d\s\-()]+$/.test(phone), {
-        message: "Invalid phone number format",
-      }),
-    evidenceUrl: z
-      .string()
-      .url("Invalid URL format")
-      .optional()
-      .or(z.literal(""))
-      .refine((url) => !url || /^https?:\/\/.+/.test(url), {
-        message: "Evidence URL must start with http:// or https://",
-      }),
+      .or(z.literal("")),
+    evidenceUrl: z.string().optional().or(z.literal("")),
     source: z.enum(["web", "whatsapp"]).default("web"),
     anonymous: z.boolean().default(false),
   })
@@ -75,17 +62,33 @@ export async function POST(
 
     // Validate businessId format (optional)
     if (!businessId || typeof businessId !== "string") {
-      return errorResponse(400, null, "Invalid business ID");
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Invalid business ID",
+          error: {
+            message: "The business ID provided is invalid or missing.",
+          },
+        },
+        { status: 400 },
+      );
     }
 
     // Validate input
     const validationResult = complaintSchema.safeParse(body);
 
     if (!validationResult.success) {
-      return errorResponse(
-        400,
-        validationResult.error.flatten,
-        "invalid data from the user",
+      const fieldErrors = validationResult.error.flatten().fieldErrors;
+      return NextResponse.json(
+        {
+          ok: false,
+          message: "Validation failed",
+          error: {
+            message: "Please check your input and try again",
+            fieldErrors: fieldErrors,
+          },
+        },
+        { status: 400 },
       );
     }
 
@@ -138,17 +141,45 @@ export async function POST(
     // Handle specific database errors
     if (error instanceof Error) {
       if (error.message.includes("foreign key constraint")) {
-        return errorResponse(404, null, "Business not found");
+        return NextResponse.json(
+          {
+            ok: false,
+            message: "Business not found",
+            error: {
+              message:
+                "The business you are trying to file a complaint against does not exist in our system.",
+            },
+          },
+          { status: 404 },
+        );
       }
       if (error.message.includes("duplicate key")) {
-        return errorResponse(409, null, "A similar complaint already exists");
+        return NextResponse.json(
+          {
+            ok: false,
+            message: "Duplicate complaint",
+            error: {
+              message:
+                "A similar complaint already exists. Please check your previous submissions.",
+            },
+          },
+          { status: 409 },
+        );
       }
     }
 
-    return errorResponse(
-      500,
-      error instanceof Error ? error.message : "Unknown error",
-      "Failed to submit complaint",
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Failed to submit complaint",
+        error: {
+          message:
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred. Please try again later.",
+        },
+      },
+      { status: 500 },
     );
   }
 }
