@@ -39,6 +39,14 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 // Search categories for quick filters
@@ -199,10 +207,28 @@ export default function Home() {
     setTotalResults(0);
   };
 
-  const openWhatsApp = () => {
-    const message = encodeURIComponent("Hello! I'd like to verify a business.");
-    const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${message}`;
+  const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
+  const [whatsAppMessage, setWhatsAppMessage] = useState(
+    "Hello! I'd like to verify a business.",
+  );
+
+  const handleWhatsAppClick = (
+    message: string = "Hello! I'd like to verify a business.",
+  ) => {
+    setWhatsAppMessage(message);
+    setShowWhatsAppDialog(true);
+  };
+
+  const openWhatsAppApp = () => {
+    const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsAppMessage)}`;
     window.open(url, "_blank");
+    setShowWhatsAppDialog(false);
+  };
+
+  const openWhatsAppWeb = () => {
+    const url = `https://web.whatsapp.com/send?phone=${whatsappNumber.replace(/\D/g, "")}&text=${encodeURIComponent(whatsAppMessage)}`;
+    window.open(url, "_blank");
+    setShowWhatsAppDialog(false);
   };
 
   const copyWhatsAppNumber = () => {
@@ -714,7 +740,7 @@ export default function Home() {
                   {/* Quick action buttons */}
                   <div className="space-y-4">
                     <Button
-                      onClick={openWhatsApp}
+                      onClick={() => handleWhatsAppClick()}
                       className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-lg py-6 text-lg rounded-xl"
                     >
                       <MessageCircle className="mr-2 w-5 h-5" />
@@ -723,11 +749,9 @@ export default function Home() {
 
                     <Button
                       onClick={() => {
-                        const exampleMessage = encodeURIComponent(
-                          "Verify 'ABC Enterprises Ltd'\nRegistration: SL-2023-001\nAlso check if they're active.",
-                        );
-                        const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${exampleMessage}`;
-                        window.open(url, "_blank");
+                        const exampleMessage =
+                          "Verify 'ABC Enterprises Ltd'\nRegistration: SL-2023-001\nAlso check if they're active.";
+                        handleWhatsAppClick(exampleMessage);
                       }}
                       variant="outline"
                       className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50 py-6 rounded-xl"
@@ -1234,6 +1258,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* WhatsApp Choice Dialog */}
+      <Dialog open={showWhatsAppDialog} onOpenChange={setShowWhatsAppDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Open WhatsApp</DialogTitle>
+            <DialogDescription>
+              Choose how you would like to open WhatsApp
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Button
+              onClick={openWhatsAppApp}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 h-14 text-lg"
+            >
+              <Smartphone className="mr-2 w-5 h-5" />
+              Open WhatsApp App
+            </Button>
+            <Button
+              onClick={openWhatsAppWeb}
+              variant="outline"
+              className="w-full border-emerald-200 hover:bg-emerald-50 h-14 text-lg text-emerald-700"
+            >
+              <Globe className="mr-2 w-5 h-5" />
+              Open WhatsApp Web
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

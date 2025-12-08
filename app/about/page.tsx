@@ -94,7 +94,7 @@ export default function AboutPage() {
               <div className="relative max-w-md mx-auto">
                 <div className="absolute -top-6 -left-6 w-24 h-24 bg-emerald-200/20 rounded-full blur-2xl" />
                 <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-200/20 rounded-full blur-2xl" />
-                
+
                 <div className="relative bg-white rounded-2xl shadow-2xl shadow-emerald-500/10 border border-emerald-100 overflow-hidden">
                   {/* WhatsApp Header */}
                   <div className="bg-gradient-to-r from-emerald-600 to-green-600 p-4">
@@ -103,8 +103,12 @@ export default function AboutPage() {
                         <MessageCircle className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-white">SL Business Registry</h3>
-                        <p className="text-emerald-100 text-sm">Typically replies in minutes</p>
+                        <h3 className="font-bold text-white">
+                          SL Business Registry
+                        </h3>
+                        <p className="text-emerald-100 text-sm">
+                          Typically replies in minutes
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -114,18 +118,27 @@ export default function AboutPage() {
                     <div className="flex justify-start">
                       <div className="max-w-[80%]">
                         <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                          <p className="text-gray-800">Hi! Send "REGISTER [Business Name]" to verify any business in Sierra Leone</p>
+                          <p className="text-gray-800">
+                            Hi! Send "REGISTER [Business Name]" to verify any
+                            business in Sierra Leone
+                          </p>
                         </div>
-                        <span className="text-xs text-gray-500 mt-1 block">10:24 AM</span>
+                        <span className="text-xs text-gray-500 mt-1 block">
+                          10:24 AM
+                        </span>
                       </div>
                     </div>
 
                     <div className="flex justify-end">
                       <div className="max-w-[80%]">
                         <div className="bg-emerald-100 rounded-2xl rounded-tr-none px-4 py-3">
-                          <p className="text-gray-800">REGISTER ABC Enterprises</p>
+                          <p className="text-gray-800">
+                            REGISTER ABC Enterprises
+                          </p>
                         </div>
-                        <span className="text-xs text-gray-500 mt-1 block text-right">10:25 AM</span>
+                        <span className="text-xs text-gray-500 mt-1 block text-right">
+                          10:25 AM
+                        </span>
                       </div>
                     </div>
 
@@ -133,16 +146,28 @@ export default function AboutPage() {
                       <div className="max-w-[80%]">
                         <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
                           <div className="space-y-2">
-                            <p className="font-semibold text-emerald-700">✅ ABC Enterprises Verified</p>
-                            <p className="text-sm text-gray-600">Registration: CAC-2023-5678</p>
-                            <p className="text-sm text-gray-600">Status: Active • Since: 2023</p>
+                            <p className="font-semibold text-emerald-700">
+                              ✅ ABC Enterprises Verified
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Registration: CAC-2023-5678
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Status: Active • Since: 2023
+                            </p>
                             <div className="flex gap-2 mt-2">
-                              <Badge className="bg-emerald-100 text-emerald-700">✓ Verified</Badge>
-                              <Badge className="bg-blue-100 text-blue-700">📍 Freetown</Badge>
+                              <Badge className="bg-emerald-100 text-emerald-700">
+                                ✓ Verified
+                              </Badge>
+                              <Badge className="bg-blue-100 text-blue-700">
+                                📍 Freetown
+                              </Badge>
                             </div>
                           </div>
                         </div>
-                        <span className="text-xs text-gray-500 mt-1 block">10:25 AM</span>
+                        <span className="text-xs text-gray-500 mt-1 block">
+                          10:25 AM
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -150,11 +175,19 @@ export default function AboutPage() {
                   {/* Quick Actions */}
                   <div className="p-3 border-t border-gray-100 bg-white">
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="text-xs h-8">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs h-8"
+                      >
                         <FileText className="w-3 h-3 mr-1" />
                         Get Certificate
                       </Button>
-                      <Button size="sm" variant="outline" className="text-xs h-8">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs h-8"
+                      >
                         <Bell className="w-3 h-3 mr-1" />
                         Status Updates
                       </Button>
@@ -182,8 +215,9 @@ export default function AboutPage() {
               </h2>
 
               <p className="text-lg text-gray-600 mb-8">
-                Get instant access to verified business information right from your WhatsApp. 
-                No app downloads, no complicated forms — just simple, fast verification.
+                Get instant access to verified business information right from
+                your WhatsApp. No app downloads, no complicated forms — just
+                simple, fast verification.
               </p>
 
               <div className="space-y-6">
@@ -191,39 +225,43 @@ export default function AboutPage() {
                   {
                     icon: Zap,
                     title: "Instant Verification",
-                    description: "Send a business name and get verification results in seconds",
-                    color: "emerald"
+                    description:
+                      "Send a business name and get verification results in seconds",
+                    color: "emerald",
                   },
                   {
                     icon: Smartphone,
                     title: "No App Required",
-                    description: "Works on any device with WhatsApp — no additional apps needed",
-                    color: "blue"
+                    description:
+                      "Works on any device with WhatsApp — no additional apps needed",
+                    color: "blue",
                   },
                   {
                     icon: Clock,
                     title: "24/7 Availability",
-                    description: "Access business verification anytime, anywhere",
-                    color: "purple"
+                    description:
+                      "Access business verification anytime, anywhere",
+                    color: "purple",
                   },
                   {
                     icon: Shield,
                     title: "Secure & Private",
-                    description: "End-to-end encrypted verification for your security",
-                    color: "amber"
-                  }
+                    description:
+                      "End-to-end encrypted verification for your security",
+                    color: "amber",
+                  },
                 ].map((feature, index) => (
                   <div key={index} className="flex items-start gap-4 group">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${feature.color}-500 to-${feature.color}-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${feature.color}-500 to-${feature.color}-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}
+                    >
                       <feature.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600">
-                        {feature.description}
-                      </p>
+                      <p className="text-gray-600">{feature.description}</p>
                     </div>
                   </div>
                 ))}
@@ -524,10 +562,12 @@ export default function AboutPage() {
                 Join thousands who verify businesses instantly via WhatsApp
               </p>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 mb-2">15K+</div>
+                <div className="text-3xl font-bold text-emerald-600 mb-2">
+                  15K+
+                </div>
                 <div className="text-sm text-gray-600">Daily Verifications</div>
               </div>
               <div className="text-center">
@@ -535,12 +575,20 @@ export default function AboutPage() {
                 <div className="text-sm text-gray-600">Satisfaction Rate</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">45s</div>
-                <div className="text-sm text-gray-600">Average Response Time</div>
+                <div className="text-3xl font-bold text-purple-600 mb-2">
+                  45s
+                </div>
+                <div className="text-sm text-gray-600">
+                  Average Response Time
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-amber-600 mb-2">24/7</div>
-                <div className="text-sm text-gray-600">Service Availability</div>
+                <div className="text-3xl font-bold text-amber-600 mb-2">
+                  24/7
+                </div>
+                <div className="text-sm text-gray-600">
+                  Service Availability
+                </div>
               </div>
             </div>
           </div>
@@ -607,7 +655,9 @@ export default function AboutPage() {
                 <p className="text-gray-600">
                   +232 88 123 4567
                   <br />
-                  <span className="text-emerald-600 font-medium">24/7 Verification Service</span>
+                  <span className="text-emerald-600 font-medium">
+                    24/7 Verification Service
+                  </span>
                 </p>
               </CardContent>
             </Card>

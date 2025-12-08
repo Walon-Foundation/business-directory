@@ -1,4 +1,16 @@
-import { Search, Shield, TrendingUp, MessageCircle, Globe, AlertCircle, Database, BadgeCheck, Zap } from "lucide-react";
+import {
+  Search,
+  Shield,
+  TrendingUp,
+  MessageCircle,
+  Globe,
+  AlertCircle,
+  Database,
+  BadgeCheck,
+  Zap,
+  Rocket,
+  FileText,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -22,14 +34,22 @@ export default function FeaturesPage() {
             </span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
-            The Sierra Leone Business Directory brings together real-time verification, rich company profiles,
-            analytics and multi-channel access (web + WhatsApp) in a single modern platform.
+            The Sierra Leone Business Directory brings together real-time
+            verification, rich company profiles, analytics and multi-channel
+            access (web + WhatsApp) in a single modern platform.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button asChild className="px-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg">
+            <Button
+              asChild
+              className="px-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
+            >
               <Link href="/explore">Browse Businesses</Link>
             </Button>
-            <Button asChild variant="outline" className="px-8 rounded-full border-blue-300">
+            <Button
+              asChild
+              variant="outline"
+              className="px-8 rounded-full border-blue-300"
+            >
               <Link href="/api-page">View API for Developers</Link>
             </Button>
           </div>
@@ -88,22 +108,32 @@ export default function FeaturesPage() {
               Built for government, banks and citizens
             </h2>
             <p className="text-gray-700 mb-6">
-              The platform is designed as a shared verification layer for the Sierra Leonean economy. Government
-              registries provide authoritative data, financial institutions use it for due diligence, and
-              everyday citizens use it to avoid scams.
+              The platform is designed as a shared verification layer for the
+              Sierra Leonean economy. Government registries provide
+              authoritative data, financial institutions use it for due
+              diligence, and everyday citizens use it to avoid scams.
             </p>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start gap-2">
                 <BadgeCheck className="w-5 h-5 mt-0.5 text-emerald-600" />
-                <span>Single source of truth for registered businesses and their current status.</span>
+                <span>
+                  Single source of truth for registered businesses and their
+                  current status.
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <AlertCircle className="w-5 h-5 mt-0.5 text-amber-600" />
-                <span>Complaint records help surface patterns of fraud and unresolved issues.</span>
+                <span>
+                  Complaint records help surface patterns of fraud and
+                  unresolved issues.
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="w-5 h-5 mt-0.5 text-blue-600" />
-                <span>Fast lookups via web, API or WhatsApp depending on the user&apos;s context.</span>
+                <span>
+                  Fast lookups via web, API or WhatsApp depending on the
+                  user&apos;s context.
+                </span>
               </li>
             </ul>
           </div>
@@ -116,12 +146,86 @@ export default function FeaturesPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6 space-y-4 text-sm text-gray-700">
-              <StepRow step="1" label="User submits a search" detail="Via web, API or WhatsApp (Wasender webhook)." />
-              <StepRow step="2" label="Directory queries PostgreSQL" detail="Using optimized indexes and Drizzle ORM to locate the matching business." />
-              <StepRow step="3" label="Rules & risk checks" detail="Status, verification level, complaints and scores are combined into a human-readable response." />
-              <StepRow step="4" label="Response delivered" detail="Results are returned to the channel that initiated the request in under a second in most cases." />
+              <StepRow
+                step="1"
+                label="User submits a search"
+                detail="Via web, API or WhatsApp (Wasender webhook)."
+              />
+              <StepRow
+                step="2"
+                label="Directory queries PostgreSQL"
+                detail="Using optimized indexes and Drizzle ORM to locate the matching business."
+              />
+              <StepRow
+                step="3"
+                label="Rules & risk checks"
+                detail="Status, verification level, complaints and scores are combined into a human-readable response."
+              />
+              <StepRow
+                step="4"
+                label="Response delivered"
+                detail="Results are returned to the channel that initiated the request in under a second in most cases."
+              />
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Future Roadmap */}
+      <section className="px-4 sm:px-6 pb-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-full border border-purple-200 mb-6">
+            <Rocket className="w-4 h-4 text-purple-600" />
+            <span className="text-sm font-semibold text-purple-700">
+              Coming Soon
+            </span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            Self-Service Business Registration
+          </h2>
+
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            We are working on a comprehensive portal that will allow business
+            owners to register their companies, update their profiles, and
+            manage their verification status directly on our platform.
+          </p>
+
+          <div className="grid sm:grid-cols-3 gap-6 text-left">
+            <div className="p-6 bg-white rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
+                <FileText className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Easy Registration
+              </h3>
+              <p className="text-sm text-gray-600">
+                Streamlined digital forms to register your business in minutes.
+              </p>
+            </div>
+            <div className="p-6 bg-white rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
+                <Shield className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Claim Ownership
+              </h3>
+              <p className="text-sm text-gray-600">
+                Verify your identity and claim existing business profiles.
+              </p>
+            </div>
+            <div className="p-6 bg-white rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
+                <TrendingUp className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Manage Growth
+              </h3>
+              <p className="text-sm text-gray-600">
+                Update financial data and track your compliance score.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

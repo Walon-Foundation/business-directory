@@ -1,4 +1,12 @@
-import { Building2, MapPin, Globe2, Users, TrendingUp, ShieldCheck, ArrowRight } from "lucide-react";
+import {
+  Building2,
+  MapPin,
+  Globe2,
+  Users,
+  TrendingUp,
+  ShieldCheck,
+  ArrowRight,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -22,27 +30,51 @@ export default function BusinessesPage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mb-8">
-              The directory aggregates structured information about companies operating in Sierra Leone so you
-              can quickly understand who they are, where they operate and how trustworthy they are.
+              The directory aggregates structured information about companies
+              operating in Sierra Leone so you can quickly understand who they
+              are, where they operate and how trustworthy they are.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild className="px-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg">
+              <Button
+                asChild
+                className="px-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
+              >
                 <Link href="/explore">
                   Browse all businesses
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="px-8 rounded-full border-blue-300">
+              <Button
+                asChild
+                variant="outline"
+                className="px-8 rounded-full border-blue-300"
+              >
                 <Link href="/api-page">Use the data via API</Link>
               </Button>
             </div>
           </div>
 
           <div className="flex-1 grid grid-cols-2 gap-4 sm:gap-6">
-            <StatCard label="Demo records" value="50+" detail="Seeded sample businesses across key sectors" />
-            <StatCard label="Industries" value="10+" detail="Technology, banking, mining, agriculture & more" />
-            <StatCard label="Coverage" value="Nationwide" detail="Location, city, district & province fields" />
-            <StatCard label="Verification" value="Multi-layer" detail="Status, verification level, complaints & scores" />
+            <StatCard
+              label="Demo records"
+              value="50+"
+              detail="Seeded sample businesses across key sectors"
+            />
+            <StatCard
+              label="Industries"
+              value="10+"
+              detail="Technology, banking, mining, agriculture & more"
+            />
+            <StatCard
+              label="Coverage"
+              value="Nationwide"
+              detail="Location, city, district & province fields"
+            />
+            <StatCard
+              label="Verification"
+              value="Multi-layer"
+              detail="Status, verification level, complaints & scores"
+            />
           </div>
         </div>
       </section>
@@ -55,46 +87,54 @@ export default function BusinessesPage() {
               What a business profile contains
             </h2>
             <p className="text-gray-700 mb-6">
-              Each row in the <code className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-xs">business</code> table
-              represents a single company with a rich set of attributes designed for compliance checks,
-              onboarding and market analysis.
+              Each row in the{" "}
+              <code className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-xs">
+                business
+              </code>{" "}
+              table represents a single company with a rich set of attributes
+              designed for compliance checks, onboarding and market analysis.
             </p>
             <ul className="space-y-3 text-gray-700 text-sm">
               <li className="flex items-start gap-2">
                 <Building2 className="w-5 h-5 mt-0.5 text-blue-600" />
                 <span>
-                  <strong>Identification:</strong> registration number, tax ID, official name and trading name.
+                  <strong>Identification:</strong> registration number, tax ID,
+                  official name and trading name.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-5 h-5 mt-0.5 text-emerald-600" />
                 <span>
-                  <strong>Location:</strong> address, city, district, province, country and optional geo-coordinates.
+                  <strong>Location:</strong> address, city, district, province,
+                  country and optional geo-coordinates.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <Users className="w-5 h-5 mt-0.5 text-purple-600" />
                 <span>
-                  <strong>People & ownership:</strong> directors, ownership type and major clients stored as structured JSON.
+                  <strong>People & ownership:</strong> directors, ownership type
+                  and major clients stored as structured JSON.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <TrendingUp className="w-5 h-5 mt-0.5 text-amber-600" />
                 <span>
-                  <strong>Financial & growth:</strong> revenue ranges, investment, revenue growth and market position.
+                  <strong>Financial & growth:</strong> revenue ranges,
+                  investment, revenue growth and market position.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <ShieldCheck className="w-5 h-5 mt-0.5 text-emerald-600" />
                 <span>
-                  <strong>Risk & compliance:</strong> compliance score, risk assessment, regulatory filings and complaint
-                  history.
+                  <strong>Risk & compliance:</strong> compliance score, risk
+                  assessment, regulatory filings and complaint history.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <Globe2 className="w-5 h-5 mt-0.5 text-cyan-600" />
                 <span>
-                  <strong>Online presence:</strong> websites and social media links for due-diligence research.
+                  <strong>Online presence:</strong> websites and social media
+                  links for due-diligence research.
                 </span>
               </li>
             </ul>
@@ -107,7 +147,7 @@ export default function BusinessesPage() {
                 Example use cases
               </CardTitle>
             </CardHeader>
-          <CardContent className="pt-4 space-y-4 text-sm text-gray-700">
+            <CardContent className="pt-4 space-y-4 text-sm text-gray-700">
               <UseCase
                 title="Bank onboarding"
                 description="Verify registration, ownership and compliance score before opening accounts or approving loans."
@@ -132,16 +172,27 @@ export default function BusinessesPage() {
       {/* Call to action */}
       <section className="px-4 sm:px-6 pb-24">
         <div className="max-w-5xl mx-auto text-center bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl py-10 px-6 sm:px-10 text-white shadow-2xl">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Ready to explore the businesses in our directory?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+            Ready to explore the businesses in our directory?
+          </h2>
           <p className="mb-6 text-sm sm:text-base text-blue-100 max-w-2xl mx-auto">
-            Remember: the current dataset is demo data seeded into PostgreSQL while we work with the Government of
-            Sierra Leone to onboard official registry records.
+            Remember: the current dataset is demo data seeded into PostgreSQL
+            while we work with the Government of Sierra Leone to onboard
+            official registry records.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="secondary" className="px-8 rounded-full text-blue-900 font-semibold">
+            <Button
+              asChild
+              variant="secondary"
+              className="px-8 rounded-full text-blue-900 font-semibold"
+            >
               <Link href="/explore">Open the Explore page</Link>
             </Button>
-            <Button asChild variant="outline" className="px-8 rounded-full border-white text-white hover:bg-white/10">
+            <Button
+              asChild
+              variant="outline"
+              className="px-8 rounded-full border-white text-white hover:bg-white/10"
+            >
               <Link href="/">Back to landing page</Link>
             </Button>
           </div>
@@ -158,7 +209,9 @@ function StatCard(props: { label: string; value: string; detail: string }) {
         <div className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
           {props.label}
         </div>
-        <div className="text-2xl font-bold text-gray-900 mb-1">{props.value}</div>
+        <div className="text-2xl font-bold text-gray-900 mb-1">
+          {props.value}
+        </div>
         <div className="text-xs text-gray-600">{props.detail}</div>
       </CardContent>
     </Card>
@@ -171,7 +224,7 @@ function UseCase(props: { title: string; description: string }) {
       <Badge className="mt-0.5 bg-blue-50 text-blue-700 border-blue-200">
         {props.title}
       </Badge>
-            <p className="text-gray-700 text-sm flex-1">{props.description}</p>
+      <p className="text-gray-700 text-sm flex-1">{props.description}</p>
     </div>
   );
 }
