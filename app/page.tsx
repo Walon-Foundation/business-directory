@@ -195,11 +195,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white">
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 pt-12 sm:pt-16 md:pt-24 pb-24 sm:pb-32 md:pb-48 overflow-hidden">
         {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-green-50/20 dark:from-blue-950/20 dark:via-transparent dark:to-green-950/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-green-50/20" />
 
         {/* Floating particles */}
         <div className="absolute inset-0 overflow-hidden">
@@ -214,15 +214,15 @@ export default function Home() {
 
         <div className="relative max-w-6xl mx-auto">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-blue-200 dark:border-blue-800 shadow-sm">
+            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-blue-200 shadow-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
+              <span className="text-sm font-medium text-blue-700">
                 Live • Official Government Partnership
               </span>
               <Sparkles className="w-4 h-4 text-amber-500" />
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900 dark:text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900">
               <span className="relative inline-block">
                 <span className="relative z-10">Business Verification</span>
                 <div className="absolute -bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-blue-500/20 to-green-500/20 blur-md" />
@@ -232,7 +232,7 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed px-4 font-light">
+            <p className="text-lg sm:text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed px-4 font-light">
               The definitive registry transforming how businesses are verified.
               Real-time data, AI-powered search, and complete transparency for
               economic growth.
@@ -242,7 +242,7 @@ export default function Home() {
             <div className="max-w-xl sm:max-w-2xl mx-auto mb-8 px-2">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-emerald-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-500" />
-                <div className="relative bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm overflow-hidden">
+                <div className="relative bg-gradient-to-r from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-200/50 backdrop-blur-sm overflow-hidden">
                   <div className="flex items-center p-1">
                     <div className="flex-1 flex items-center relative">
                       <Search className="ml-4 w-5 h-5 text-gray-400" />
@@ -251,12 +251,12 @@ export default function Home() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="Search business, registration ID, director name..."
-                        className="flex-1 border-0 bg-transparent pl-3 pr-12 py-6 text-lg text-gray-900 dark:text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                        className="flex-1 border-0 bg-transparent pl-3 pr-12 py-6 text-lg text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
                       />
                       {searchQuery && (
                         <button
                           onClick={clearSearch}
-                          className="absolute right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                          className="absolute right-4 text-gray-400 hover:text-gray-600 transition-colors"
                         >
                           <X className="w-5 h-5" />
                         </button>
@@ -277,13 +277,13 @@ export default function Home() {
                   </div>
 
                   {/* Search Suggestions */}
-                  <div className="border-t border-gray-100 dark:border-gray-700 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50 p-4">
+                  <div className="border-t border-gray-100 bg-gradient-to-b from-gray-50/50 to-white/50 p-4">
                     <div className="flex flex-wrap gap-2 justify-center">
                       {searchCategories.map((category) => (
                         <button
                           key={category}
                           onClick={() => handleCategoryClick(category)}
-                          className="px-3 py-1.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors hover:shadow-sm"
+                          className="px-3 py-1.5 text-sm bg-white text-gray-900 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors hover:shadow-sm"
                         >
                           {category}
                         </button>
@@ -294,10 +294,10 @@ export default function Home() {
 
                 {/* Search Results Dropdown */}
                 {showSearchResults && searchQuery.trim() && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm z-50 max-h-96 overflow-y-auto">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-200/50 backdrop-blur-sm z-50 max-h-96 overflow-y-auto">
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                        <h3 className="font-semibold text-gray-900">
                           Search Results
                           {totalResults > 0 && (
                             <span className="ml-2 text-sm font-normal text-gray-500">
@@ -463,49 +463,49 @@ export default function Home() {
 
             {/* Stats with Progress Bars */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto mt-12">
-              <div className="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-950/30 rounded-2xl p-6 border border-blue-100 dark:border-blue-900 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-gradient-to-br from-white to-blue-50 rounded-2xl p-6 border border-blue-100 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-3xl font-bold text-blue-600">50K+</div>
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                     <Building2 className="w-5 h-5 text-blue-600" />
                   </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <div className="text-sm text-gray-600 font-medium">
                   Registered Businesses
                 </div>
-                <div className="mt-2 h-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-full overflow-hidden">
+                <div className="mt-2 h-1.5 bg-blue-100 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full w-4/5" />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-950/30 rounded-2xl p-6 border border-emerald-100 dark:border-emerald-900 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-gradient-to-br from-white to-emerald-50 rounded-2xl p-6 border border-emerald-100 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-3xl font-bold text-emerald-600">
                     99.9%
                   </div>
-                  <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
                     <BadgeCheck className="w-5 h-5 text-emerald-600" />
                   </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <div className="text-sm text-gray-600 font-medium">
                   Data Accuracy
                 </div>
-                <div className="mt-2 h-1.5 bg-emerald-100 dark:bg-emerald-900/30 rounded-full overflow-hidden">
+                <div className="mt-2 h-1.5 bg-emerald-100 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-emerald-500 to-green-500 rounded-full w-full" />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-white to-amber-50 dark:from-gray-800 dark:to-amber-950/30 rounded-2xl p-6 border border-amber-100 dark:border-amber-900 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-gradient-to-br from-white to-amber-50 rounded-2xl p-6 border border-amber-100 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-3xl font-bold text-amber-600">100ms</div>
-                  <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
                     <Zap className="w-5 h-5 text-amber-600" />
                   </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <div className="text-sm text-gray-600 font-medium">
                   Response Time
                 </div>
-                <div className="mt-2 h-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-full overflow-hidden">
+                <div className="mt-2 h-1.5 bg-amber-100 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full w-3/4" />
                 </div>
               </div>
