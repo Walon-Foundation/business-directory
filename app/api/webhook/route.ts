@@ -94,7 +94,7 @@ function isSimpleGreeting(text: string): boolean {
     "afternoon",
   ];
   // Check if the message exactly matches one of the greetings
-  return greetings.some((greeting) => lowerText === greeting);
+  return  greetings.includes(lowerText)
 }
 
 /**

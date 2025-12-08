@@ -209,11 +209,11 @@ export default function Home() {
 
   const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
   const [whatsAppMessage, setWhatsAppMessage] = useState(
-    "Hello! I'd like to verify a business.",
+    "Hello",
   );
 
   const handleWhatsAppClick = (
-    message: string = "Hello! I'd like to verify a business.",
+    message: string = "Hello",
   ) => {
     setWhatsAppMessage(message);
     setShowWhatsAppDialog(true);
