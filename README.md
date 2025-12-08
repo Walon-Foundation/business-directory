@@ -22,6 +22,8 @@ The **Sierra Leone Business Directory** is a hackathon-winning web application t
 - 🌐 **API-First Design** - RESTful API for third-party integrations
 - 📈 **Business Analytics** - ESG scores, risk assessments, and market coverage data
 
+> **IMPORTANT DATA NOTICE:** This project currently uses _demo business data_ that was manually created for testing and evaluation purposes and is stored securely in a PostgreSQL database. We are actively working with the Government of Sierra Leone to onboard and synchronize **official registry data** in a future release.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
