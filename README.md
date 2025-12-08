@@ -19,6 +19,7 @@ The **Sierra Leone Business Directory** is a hackathon-winning web application t
 - 🎯 **Advanced Filtering** - Filter by industry, location, verification status, compliance scores, and more
 - 📱 **Mobile Responsive** - Beautiful, modern UI with glassmorphism design and smooth animations
 - 🛡️ **Complaint System** - Public accountability through business complaint tracking
+- 💬 **WhatsApp Integration** - Verify businesses via WhatsApp bot or start chats directly from the web with seamless App/Web choice
 - 🌐 **API-First Design** - RESTful API for third-party integrations
 - 📈 **Business Analytics** - ESG scores, risk assessments, and market coverage data
 
@@ -284,6 +285,11 @@ Returns all complaints for a specific business.
 
 The directory can also be queried via **WhatsApp**, using the hosted [Wasender API](https://www.wasenderapi.com/).
 
+**Website Integration:**
+- Users can start a verification chat directly from the homepage.
+- A smart dialog allows users to choose between opening the **WhatsApp App** (for mobile users) or **WhatsApp Web** (for desktop users), ensuring a seamless experience across devices.
+
+**Bot Capabilities:**
 - Incoming WhatsApp messages are delivered to the application via the webhook endpoint:
   - `POST /api/webhook` → handled by `app/api/webhook/route.ts`
 - The webhook extracts the text message and looks up a matching business by:
