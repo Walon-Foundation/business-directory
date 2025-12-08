@@ -15,6 +15,13 @@ import {
   Mail,
   Calendar,
   Sparkles,
+  MessageCircle,
+  Zap,
+  Bell,
+  FileText,
+  Smartphone,
+  Clock,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,6 +80,174 @@ export default function AboutPage() {
                 <Globe className="mr-2 w-5 h-5" />
                 Our Mission
               </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WhatsApp Features Section */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              {/* WhatsApp Chat Mockup */}
+              <div className="relative max-w-md mx-auto">
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-emerald-200/20 rounded-full blur-2xl" />
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-200/20 rounded-full blur-2xl" />
+                
+                <div className="relative bg-white rounded-2xl shadow-2xl shadow-emerald-500/10 border border-emerald-100 overflow-hidden">
+                  {/* WhatsApp Header */}
+                  <div className="bg-gradient-to-r from-emerald-600 to-green-600 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <MessageCircle className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white">SL Business Registry</h3>
+                        <p className="text-emerald-100 text-sm">Typically replies in minutes</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Chat Messages */}
+                  <div className="p-4 space-y-4 bg-emerald-50/30">
+                    <div className="flex justify-start">
+                      <div className="max-w-[80%]">
+                        <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                          <p className="text-gray-800">Hi! Send "REGISTER [Business Name]" to verify any business in Sierra Leone</p>
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1 block">10:24 AM</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <div className="max-w-[80%]">
+                        <div className="bg-emerald-100 rounded-2xl rounded-tr-none px-4 py-3">
+                          <p className="text-gray-800">REGISTER ABC Enterprises</p>
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1 block text-right">10:25 AM</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-start">
+                      <div className="max-w-[80%]">
+                        <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                          <div className="space-y-2">
+                            <p className="font-semibold text-emerald-700">✅ ABC Enterprises Verified</p>
+                            <p className="text-sm text-gray-600">Registration: CAC-2023-5678</p>
+                            <p className="text-sm text-gray-600">Status: Active • Since: 2023</p>
+                            <div className="flex gap-2 mt-2">
+                              <Badge className="bg-emerald-100 text-emerald-700">✓ Verified</Badge>
+                              <Badge className="bg-blue-100 text-blue-700">📍 Freetown</Badge>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1 block">10:25 AM</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="p-3 border-t border-gray-100 bg-white">
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" className="text-xs h-8">
+                        <FileText className="w-3 h-3 mr-1" />
+                        Get Certificate
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs h-8">
+                        <Bell className="w-3 h-3 mr-1" />
+                        Status Updates
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Elements */}
+                <div className="absolute -right-4 top-1/4">
+                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white p-3 rounded-xl shadow-lg">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-emerald-500/10 to-green-500/10 text-emerald-700">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                WhatsApp Features
+              </Badge>
+
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                Verify Businesses Instantly via WhatsApp
+              </h2>
+
+              <p className="text-lg text-gray-600 mb-8">
+                Get instant access to verified business information right from your WhatsApp. 
+                No app downloads, no complicated forms — just simple, fast verification.
+              </p>
+
+              <div className="space-y-6">
+                {[
+                  {
+                    icon: Zap,
+                    title: "Instant Verification",
+                    description: "Send a business name and get verification results in seconds",
+                    color: "emerald"
+                  },
+                  {
+                    icon: Smartphone,
+                    title: "No App Required",
+                    description: "Works on any device with WhatsApp — no additional apps needed",
+                    color: "blue"
+                  },
+                  {
+                    icon: Clock,
+                    title: "24/7 Availability",
+                    description: "Access business verification anytime, anywhere",
+                    color: "purple"
+                  },
+                  {
+                    icon: Shield,
+                    title: "Secure & Private",
+                    description: "End-to-end encrypted verification for your security",
+                    color: "amber"
+                  }
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-start gap-4 group">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${feature.color}-500 to-${feature.color}-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 p-6 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-100">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">Try It Now</h4>
+                    <p className="text-gray-600 text-sm">
+                      Save our number and start verifying
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge className="bg-white text-emerald-700 border-emerald-200 px-4 py-2 text-lg font-mono">
+                      +232 88 123 4567
+                    </Badge>
+                    <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700">
+                      <Send className="w-4 h-4 mr-2" />
+                      Start Chat
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -335,6 +510,40 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
+
+          {/* WhatsApp Usage Stats */}
+          <div className="mt-16 bg-gradient-to-r from-emerald-50 to-green-50 rounded-2xl border border-emerald-100 p-8">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 mb-4">
+                <MessageCircle className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                WhatsApp Verification Adoption
+              </h3>
+              <p className="text-gray-600">
+                Join thousands who verify businesses instantly via WhatsApp
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-600 mb-2">15K+</div>
+                <div className="text-sm text-gray-600">Daily Verifications</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-2">98%</div>
+                <div className="text-sm text-gray-600">Satisfaction Rate</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">45s</div>
+                <div className="text-sm text-gray-600">Average Response Time</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-amber-600 mb-2">24/7</div>
+                <div className="text-sm text-gray-600">Service Availability</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -387,61 +596,44 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-purple-100 bg-white/80 backdrop-blur-sm">
+            <Card className="border-2 border-emerald-100 bg-white/80 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-violet-500 flex items-center justify-center mx-auto mb-4">
-                  <Mail className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                  Email
+                  WhatsApp
                 </h3>
                 <p className="text-gray-600">
-                  support@slregistry.gov.sl
+                  +232 88 123 4567
                   <br />
-                  verification@cac.gov.sl
+                  <span className="text-emerald-600 font-medium">24/7 Verification Service</span>
                 </p>
               </CardContent>
             </Card>
           </div>
 
           <div className="text-center mt-12">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-blue-300 text-blue-700 hover:bg-blue-50"
-            >
-              <Globe className="mr-2 w-5 h-5" />
-              Government Portal
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+              >
+                <MessageCircle className="mr-2 w-5 h-5" />
+                Start WhatsApp Verification
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-blue-300 text-blue-700 hover:bg-blue-50"
+              >
+                <Globe className="mr-2 w-5 h-5" />
+                Government Portal
+              </Button>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Footer Note */}
-      {/* <div className="border-t border-gray-200/50 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-left">
-                <div className="text-lg font-bold text-gray-900">SL Business Registry</div>
-                <div className="text-sm text-gray-600">Official Government Directory</div>
-              </div>
-            </div>
-            
-            <p className="text-gray-600 max-w-2xl mx-auto mb-6">
-              A public service initiative by the Government of Sierra Leone to promote 
-              business transparency and economic growth.
-            </p>
-            
-            <div className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Sierra Leone Business Registry. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
