@@ -278,6 +278,22 @@ GET /api/explore/[id]/complaint
 
 Returns all complaints for a specific business.
 
+### WhatsApp Company Verification (Wasender API)
+
+The directory can also be queried via **WhatsApp**, using the hosted [Wasender API](https://www.wasenderapi.com/).
+
+- Incoming WhatsApp messages are delivered to the application via the webhook endpoint:
+  - `POST /api/webhook` → handled by `app/api/webhook/route.ts`
+- The webhook extracts the text message and looks up a matching business by:
+  - Registration number (exact match), **or**
+  - Case‑insensitive partial match on `name` and `tradingName` in the `business` table.
+- The bot replies over WhatsApp with either:
+  - ✅ A structured summary of the matching company (status, registration, industry, verification level, description)
+  - ❌ A "not found" message with guidance to try a different name or registration number
+- Simple greetings like `hi`, `hello`, `good morning` trigger an onboarding message explaining how to use the bot.
+
+For full setup instructions (getting an API key, configuring the webhook URL in Wasender, and securing the integration), see [`SETUP.md`](./SETUP.md) and [`SECURITY.md`](./SECURITY.md).
+
 ## 🛠️ Available Scripts
 
 ```bash
@@ -406,6 +422,8 @@ For support, questions, or feedback:
 - Open an issue on GitHub
 - Contact the Walon Foundation team
 
+To try the live WhatsApp verification bot running on the maintainer's production deployment, send a message to: **+23233482361**.
+
 <!-- ## 🗺️ Roadmap
 
 - [ ] WhatsApp integration for complaints
@@ -421,4 +439,4 @@ For support, questions, or feedback:
 
 --- -->
 
-**Built with ❤️ for Sierra Leone** 🇸🇱
+<!-- **Built with ❤️ for Sierra Leone** 🇸🇱 -->

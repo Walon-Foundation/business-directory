@@ -138,7 +138,7 @@ const nextConfig = {
 };
 ```
 
-#### Environment Variables
+### Environment Variables
 
 ```bash
 # ❌ NEVER commit these to git
@@ -146,6 +146,7 @@ DATABASE_URL
 API_KEYS
 SECRETS
 PASSWORDS
+WASENDER_API_KEY
 
 # ✅ Always use .env files (add to .gitignore)
 # .gitignore should contain:
@@ -153,6 +154,31 @@ PASSWORDS
 .env.local
 .env.*.local
 ```
+
+---
+
+## Third-Party Integrations (Wasender API)
+
+The application can optionally integrate with **Wasender API** to provide WhatsApp-based company verification via the `/api/webhook` endpoint.
+
+### Security Considerations
+
+- Treat `WASENDER_API_KEY` as a **highly sensitive secret**:
+  - Store it only in environment variables or your hosting provider's secret store.
+  - Rotate it periodically and immediately if you suspect compromise.
+- Restrict webhook access as much as possible:
+  - Configure any IP allowlisting features offered by Wasender.
+  - Prefer HTTPS-only URLs for the webhook (`https://.../api/webhook`).
+- Logging:
+  - Do **not** log full WhatsApp message bodies or phone numbers in production logs unless strictly necessary.
+  - When debugging, sanitize logs to avoid storing personal data from end users.
+- Abuse protection:
+  - Add rate limiting in front of `/api/webhook` in production (at the reverse proxy / platform level) to prevent abuse.
+  - Monitor for unusual spikes in webhook traffic.
+- Future hardening (recommended):
+  - If Wasender supports signed webhooks, add signature verification in `app/api/webhook/route.ts` and reject unsigned/invalid requests.
+
+These measures help ensure that the WhatsApp channel remains secure and that user phone numbers and message contents are handled responsibly.
 
 ---
 
@@ -926,4 +952,4 @@ For security-related questions, contact:
 **Version**: 1.0
 **Next Review**: June 2025
 
-Built with 🔐 security in mind for Sierra Leone
+<!-- Built with 🔐 security in mind for Sierra Leone -->

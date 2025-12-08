@@ -239,6 +239,7 @@ DATABASE_URL="postgresql://user@server:password@server.postgres.database.azure.c
 # .env (Development)
 DATABASE_URL="postgresql://user:password@localhost:5432/business_directory"
 NODE_ENV="development"
+WASENDER_API_KEY="your_wasender_api_key_from_wasenderapi.com"
 ```
 
 ### Production Environment
@@ -247,7 +248,36 @@ NODE_ENV="development"
 # .env.production (Production)
 DATABASE_URL="postgresql://user:password@host:5432/business_directory?sslmode=require"
 NODE_ENV="production"
+WASENDER_API_KEY="your_strong_production_wasender_api_key"
 ```
+
+### WhatsApp / Wasender API Integration
+
+The project includes an optional **WhatsApp verification bot** powered by [Wasender API](https://www.wasenderapi.com/). When enabled, users can send a company name or registration number via WhatsApp and receive verification results from this directory.
+
+To enable it:
+
+1. **Create a Wasender account & connect your WhatsApp number**
+   - Follow Wasender's onboarding to connect the phone number that will send and receive messages.
+2. **Generate an API key in the Wasender dashboard**
+   - Copy the key and set it as `WASENDER_API_KEY` in your `.env` / production environment.
+3. **Configure the webhook URL in Wasender**
+   - Set the webhook URL to point to this app's endpoint:
+     - Local development (via tunnel, e.g. ngrok): `https://<your-tunnel-domain>/api/webhook`
+     - Production: `https://<your-domain>/api/webhook`
+   - HTTP method: `POST`
+4. **Deploy or restart the app** so it picks up the `WASENDER_API_KEY`.
+
+Once configured:
+
+- Any WhatsApp message to your connected number is POSTed by Wasender to `/api/webhook`.
+- The handler in `app/api/webhook/route.ts`:
+  - Ignores group/self messages and non‑`messages.received` events
+  - Treats simple greetings ("hi", "hello", etc.) as a request for help and replies with usage instructions
+  - Uses the message text as a search term against the `business` table (registration number or name/trading name)
+  - Sends a formatted success or "not found" response back via Wasender
+
+See [`SECURITY.md`](./SECURITY.md#third-party-integrations-wasender-api) for security recommendations (API key handling, webhook hardening, and logging policies).
 
 ### Optional Configuration
 
@@ -677,4 +707,4 @@ psql $DATABASE_URL -c "\d business"
 
 **Happy coding! 🚀**
 
-Built with ❤️ for Sierra Leone
+<!-- Built with ❤️ for Sierra Leone -->
