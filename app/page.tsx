@@ -276,13 +276,12 @@ export default function Home() {
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed px-4 font-light">
-              The definitive registry transforming how businesses are verified.
-              Real-time data, AI-powered search, and complete transparency for
-              economic growth.
+             Easily check if a business is real.
+             Fast verification, smart AI search, and transparent information you can trust.
             </p>
 
             {/* Interactive Search with Suggestions */}
-            <div className="max-w-xl sm:max-w-2xl mx-auto mb-8 px-2">
+            <div className="max-w-xl sm:max-w-2xl mx-auto mb-4 px-2">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-emerald-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-500" />
                 <div className="relative bg-gradient-to-r from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-200/50 backdrop-blur-sm overflow-hidden">
