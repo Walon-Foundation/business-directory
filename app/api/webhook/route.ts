@@ -11,7 +11,6 @@ import { db } from "@/db/db";
 import { env } from "@/lib/env";
 import axios from "axios";
 
-
 // const ONE_MINUTE = 60 * 1000
 
 // =========================================================================
@@ -97,7 +96,7 @@ function isSimpleGreeting(text: string): boolean {
     "afternoon",
   ];
   // Check if the message exactly matches one of the greetings
-  return  greetings.includes(lowerText)
+  return greetings.includes(lowerText);
 }
 
 /**

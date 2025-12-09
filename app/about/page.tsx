@@ -277,7 +277,7 @@ export default function AboutPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge className="bg-white text-emerald-700 border-emerald-200 px-4 py-2 text-lg font-mono">
-                      +232 88 123 4567
+                      +232 33 482 361
                     </Badge>
                     <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700">
                       <Send className="w-4 h-4 mr-2" />
@@ -621,7 +621,7 @@ export default function AboutPage() {
                   Our Office
                 </h3>
                 <p className="text-gray-600">
-                  Corporate Affairs Commission
+                  Walon-Drive
                   <br />
                   Freetown, Sierra Leone
                 </p>
@@ -637,7 +637,7 @@ export default function AboutPage() {
                   Phone
                 </h3>
                 <p className="text-gray-600">
-                  +232 00 000 000
+                  +232 33 482 361
                   <br />
                   Mon - Fri, 8:00 AM - 5:00 PM
                 </p>
@@ -653,7 +653,7 @@ export default function AboutPage() {
                   WhatsApp
                 </h3>
                 <p className="text-gray-600">
-                  +232 88 123 4567
+                  +232 33 482 361
                   <br />
                   <span className="text-emerald-600 font-medium">
                     24/7 Verification Service

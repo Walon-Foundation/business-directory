@@ -208,13 +208,9 @@ export default function Home() {
   };
 
   const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false);
-  const [whatsAppMessage, setWhatsAppMessage] = useState(
-    "Hello",
-  );
+  const [whatsAppMessage, setWhatsAppMessage] = useState("Hello");
 
-  const handleWhatsAppClick = (
-    message: string = "Hello",
-  ) => {
+  const handleWhatsAppClick = (message: string = "Hello") => {
     setWhatsAppMessage(message);
     setShowWhatsAppDialog(true);
   };
@@ -265,58 +261,68 @@ export default function Home() {
               <Sparkles className="w-4 h-4 text-amber-500" />
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900">
-              <span className="relative inline-block">
-                <span className="relative z-10">Business Verification</span>
-                <div className="absolute -bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-blue-500/20 to-green-500/20 blur-md" />
-              </span>
-              <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600">
-                Reimagined for Sierra Leone
-              </span>
-            </h1>
+            <div
+              className={cn(
+                "transition-all duration-500 ease-in-out",
+                showSearchResults ? "-translate-y-12 sm:-translate-y-24" : "",
+              )}
+            >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900">
+                <span className="relative inline-block">
+                  <span className="relative z-10">Business Verification</span>
+                  <div className="absolute -bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-blue-500/20 to-green-500/20 blur-md" />
+                </span>
+                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600">
+                  Reimagined for Sierra Leone
+                </span>
+              </h1>
 
-            <p className="text-lg sm:text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed px-4 font-light">
-             Easily check if a business is real.
-             Fast verification, smart AI search, and transparent information you can trust.
-            </p>
+              <p className="text-lg sm:text-xl text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed px-4 font-light">
+                Easily check if a business is real. Fast verification, smart AI
+                search, and transparent information you can trust.
+              </p>
+            </div>
 
             {/* Interactive Search with Suggestions */}
-            <div className="max-w-xl sm:max-w-2xl mx-auto mb-4 px-2">
+            <div
+              className={cn(
+                "max-w-xl sm:max-w-2xl mx-auto mb-4 px-2 transition-all duration-500 ease-in-out",
+                showSearchResults ? "-translate-y-8 sm:-translate-y-16" : "",
+              )}
+            >
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-emerald-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-500" />
-                <div className="relative bg-gradient-to-r from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-200/50 backdrop-blur-sm overflow-hidden">
-                  <div className="flex items-center p-1">
-                    <div className="flex-1 flex items-center relative">
-                      <Search className="ml-4 w-5 h-5 text-gray-400" />
-                      <Input
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Search business, registration ID, director name..."
-                        className="flex-1 border-0 bg-transparent pl-3 pr-12 py-6 text-lg text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
-                      />
-                      {searchQuery && (
-                        <button
-                          onClick={clearSearch}
-                          className="absolute right-4 text-gray-400 hover:text-gray-600 transition-colors"
-                        >
-                          <X className="w-5 h-5" />
-                        </button>
-                      )}
-                    </div>
-                    <Button
-                      onClick={handleSearch}
-                      disabled={!searchQuery.trim() || isSearching}
-                      className="mx-4 px-8 py-6 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSearching ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <Search className="mr-2 w-5 h-5" />
-                      )}
-                      {isSearching ? "Searching..." : "Verify Now"}
-                    </Button>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-emerald-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-all duration-500" />
+                <div className="relative bg-white/80 backdrop-blur-xl rounded-full shadow-2xl border border-white/50 overflow-hidden p-2 flex items-center">
+                  <div className="flex-1 flex items-center relative pl-4">
+                    <Search className="w-6 h-6 text-gray-400" />
+                    <Input
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Search business, registration ID..."
+                      className="flex-1 border-0 bg-transparent h-14 text-lg text-gray-900 placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 px-4"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={clearSearch}
+                        className="p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
                   </div>
+                  <Button
+                    onClick={handleSearch}
+                    disabled={!searchQuery.trim() || isSearching}
+                    className="h-14 px-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed text-base font-medium"
+                  >
+                    {isSearching ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <span className="hidden sm:inline">Verify Now</span>
+                    )}
+                    {!isSearching && <Search className="w-5 h-5 sm:ml-2" />}
+                  </Button>
 
                   {/* Search Suggestions */}
                   {/* <div className="border-t border-gray-100 bg-gradient-to-b from-gray-50/50 to-white/50 p-4">
@@ -936,24 +942,24 @@ export default function Home() {
           </div>
 
           <Tabs defaultValue="search" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-12 bg-gradient-to-r from-blue-50 to-cyan-50 p-1 rounded-2xl">
+            <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 h-auto gap-2 mb-12 bg-gradient-to-r from-blue-50 to-cyan-50 p-1 rounded-2xl">
               <TabsTrigger
                 value="search"
-                className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg"
+                className="rounded-xl py-3 md:py-2 data-[state=active]:bg-white data-[state=active]:shadow-lg"
               >
                 <Search className="w-4 h-4 mr-2" />
                 Instant Search
               </TabsTrigger>
               <TabsTrigger
                 value="verify"
-                className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg"
+                className="rounded-xl py-3 md:py-2 data-[state=active]:bg-white data-[state=active]:shadow-lg"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Live Verification
               </TabsTrigger>
               <TabsTrigger
                 value="insights"
-                className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg"
+                className="rounded-xl py-3 md:py-2 data-[state=active]:bg-white data-[state=active]:shadow-lg"
               >
                 <TrendingUp className="w-4 h-4 mr-2" />
                 Business Insights
