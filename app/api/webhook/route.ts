@@ -185,7 +185,7 @@ I can help you instantly verify registered businesses in Sierra Leone.
 *How to search:*
 Simply reply with the **Business Name** or **Registration Number**.
 
-_Example: "Acme Corp" or "RC12345"_
+_Example: "Orange" or "RC12345"_
             `.trim();
 
       await sendWasenderMessage(recipientId, response_text);
