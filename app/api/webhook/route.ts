@@ -9,17 +9,9 @@ import { eq, like, or, sql } from "drizzle-orm";
 import { db } from "@/db/db";
 // Utility Imports
 import { env } from "@/lib/env";
-import axios from "axios";
-
-// const ONE_MINUTE = 60 * 1000
-
-// =========================================================================
-// === 📞 OUTBOUND WASENDER MESSAGE HELPER (AXIOS) ==========================
-// =========================================================================
-
 /**
  * Sends an outbound message to a specific WhatsApp chat ID via the Wasender API.
- * Uses Axios with a timeout for robust error handling.
+ * Uses Fetch API with a timeout for robust error handling.
  * @param chatId The WhatsApp JID of the recipient.
  * @param message The text content to send.
  */
@@ -30,32 +22,25 @@ async function sendWasenderMessage(
   const wasenderToken = env.WASENDER_API_KEY;
   const wasenderUrl = "https://www.wasenderapi.com/api/send-message";
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+
   try {
-    const response = await axios.post(
-      wasenderUrl,
-      { to: chatId, text: message },
-      {
-        headers: {
-          Authorization: `Bearer ${wasenderToken}`,
-          "Content-Type": "application/json",
-        },
-        timeout: 10000, // 10 seconds timeout
+    const response = await fetch(wasenderUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${wasenderToken}`,
+        "Content-Type": "application/json",
       },
-    );
-    console.log("Wasender message sent successfully.");
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
-        console.error("Wasender API Timeout/Connection Error:", error.message);
-        throw new Error(
-          `Failed to send Wasender message: Connection Timed Out.`,
-        );
-      }
-      const status = error.response?.status;
-      const errorText = JSON.stringify(
-        error.response?.data || { message: error.message },
-      );
+      body: JSON.stringify({ to: chatId, text: message }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const status = response.status;
+      const errorText = await response.text();
       console.error(
         "Wasender API Response Error (Status:",
         status,
@@ -66,6 +51,24 @@ async function sendWasenderMessage(
         `Failed to send Wasender message: ${status} - ${errorText}.`,
       );
     }
+
+    const data = await response.json();
+    console.log("Wasender message sent successfully.");
+    return data;
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    if (error.name === "AbortError") {
+      console.error("Wasender API Timeout/Connection Error: Request timed out");
+      throw new Error(
+        `Failed to send Wasender message: Connection Timed Out.`,
+      );
+    }
+    
+    // If it's already one of our formatted errors, rethrow it
+    if (error.message && error.message.startsWith("Failed to send Wasender message")) {
+        throw error;
+    }
+
     console.error("Wasender API Unknown Error:", error);
     throw new Error(`Failed to send Wasender message: Unknown API error.`);
   }
