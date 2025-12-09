@@ -1,5 +1,3 @@
-// app/api/webhook/route.ts
-
 import { errorResponse } from "@/lib/errorHandler";
 import { NextRequest, NextResponse } from "next/server";
 // Drizzle Imports
