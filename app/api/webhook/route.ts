@@ -318,7 +318,7 @@ _Example: "Orange" or "RC12345"_
       }
 
       // --- Links ---
-      const profileUrl = `${env.APP_URL}/explore/${company.id}`;
+      const profileUrl = `${env.APP_URL}explore/${company.id}`;
       sections.push(`🔗 *View Full Profile:*`);
       sections.push(profileUrl);
       sections.push("");
