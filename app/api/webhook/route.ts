@@ -169,15 +169,20 @@ export async function POST(req: NextRequest) {
     if (isSimpleGreeting(companyIdentifier)) {
       const userName = pushName || "there";
       response_text = `
-*👋 Hello, ${userName}! I am the Business Verification Bot.*
+👋 *Hello, ${userName}!*
+*Welcome to the Business Verification Bot.* 🤖
 
-I can instantly check the registration status and provide key details for any company in our database.
+I can help you instantly verify registered businesses in Sierra Leone.
 
-*How to use me:*
-Just type the **full company name** or its **registration number**.
-_Example: "Acme Corp Ltd" or "RC12345"_
+*Here is what I can do:*
+✅ Check Registration Status
+✅ Provide Business Details
+✅ Verify Official Address
 
-What company would you like to verify?
+*How to search:*
+Simply reply with the **Business Name** or **Registration Number**.
+
+_Example: "Acme Corp" or "RC12345"_
             `.trim();
 
       await sendWasenderMessage(recipientId, response_text);
@@ -218,42 +223,121 @@ What company would you like to verify?
 
     // 4. Construct Response Text
     if (company) {
-      // Build location string from available fields
+      // Build location string
       const locationParts: string[] = [];
-
-      if (company.address) {
-        locationParts.push(company.address);
-      }
-      if (company.city) {
-        locationParts.push(company.city);
-      }
+      if (company.address) locationParts.push(company.address);
+      if (company.city) locationParts.push(company.city);
       if (company.district && company.district !== company.city) {
         locationParts.push(company.district);
       }
-
       const locationString =
         locationParts.length > 0
           ? locationParts.join(", ")
-          : company.location || "Location not specified";
+          : company.location || "Not specified";
 
-      response_text = `
-*✅ Company Found: ${company.name}*
+      // Build Services string
+      let servicesString = "";
+      if (Array.isArray(company.services) && company.services.length > 0) {
+        servicesString = company.services.slice(0, 3).join(", ");
+        if (company.services.length > 3) servicesString += ", ...";
+      }
 
-*Status:* ${company.status}
-*Registration:* ${company.registrationNumber}
-*Industry:* ${company.industry}
-*Verification:* ${company.verificationLevel}
-*Location:* ${locationString}
+      // Build Response Sections
+      const sections: string[] = [];
 
-${company.description || company.businessType}
-            `.trim();
+      // --- Header ---
+      sections.push(`🏢 *${company.name}*`);
+      if (company.tradingName) {
+        sections.push(`_Trading as: ${company.tradingName}_`);
+      }
+      sections.push(""); // Spacer
+
+      // --- Core Status ---
+      const statusIcon = company.status === "active" ? "✅" : "⚠️";
+      sections.push(`*Status:* ${statusIcon} ${company.status.toUpperCase()}`);
+      sections.push(
+        `*Verification:* ${
+          company.verificationLevel === "verified" ? "🔵 Verified" : "⚪ " + company.verificationLevel
+        }`,
+      );
+
+      // --- Trust & Rating ---
+      const ratingParts: string[] = [];
+      if (company.rating && Number(company.rating) > 0) {
+        ratingParts.push(`⭐ ${company.rating}/5.0`);
+      }
+      if (company.trustScore) {
+        ratingParts.push(`🛡️ Trust Score: ${company.trustScore}/100`);
+      }
+      if (ratingParts.length > 0) {
+        sections.push(ratingParts.join("  |  "));
+      }
+
+      sections.push(`*Reg. Number:* ${company.registrationNumber}`);
+      sections.push("");
+
+      // --- Business Details ---
+      sections.push(`*Industry:* ${company.industry}`);
+      sections.push(`*Type:* ${company.businessType.replace(/_/g, " ")}`);
+      if (company.foundedYear) {
+        sections.push(`*Est:* ${company.foundedYear}`);
+      }
+      sections.push("");
+
+      // --- Location ---
+      sections.push(`📍 *Location:* ${locationString}`);
+      sections.push("");
+
+      // --- Contact Info (if available) ---
+      const contacts: string[] = [];
+      if (company.contactPhone) contacts.push(`📞 ${company.contactPhone}`);
+      if (company.contactEmail) contacts.push(`📧 ${company.contactEmail}`);
+      if (company.website) contacts.push(`🌐 ${company.website}`);
+
+      if (contacts.length > 0) {
+        sections.push("*Contact Details:*");
+        sections.push(contacts.join("\n"));
+        sections.push("");
+      }
+
+      // --- Services (if available) ---
+      if (servicesString) {
+        sections.push(`*Services:* ${servicesString}`);
+        sections.push("");
+      }
+
+      // --- Description Snippet ---
+      if (company.description) {
+        const descSnippet =
+          company.description.length > 100
+            ? company.description.substring(0, 97) + "..."
+            : company.description;
+        sections.push(`_${descSnippet}_`);
+        sections.push("");
+      }
+
+      // --- Links ---
+      const profileUrl = `${env.APP_URL}/explore/${company.id}`;
+      sections.push(`🔗 *View Full Profile:*`);
+      sections.push(profileUrl);
+      sections.push("");
+
+      // --- Footer ---
+      sections.push("🔍 _Reply with another name to search again._");
+
+      response_text = sections.join("\n").trim();
     } else {
       response_text = `
-*❌ Company Not Found*
+❌ *Company Not Found*
 
-The identifier *"${companyIdentifier}"* is **not valid** or could not be matched to a registered business in our database.
+We couldn't find a match for *"${companyIdentifier}"*.
 
-Please double-check the spelling or try using the full **Registration Number**.
+*Suggestions:*
+1. Check the spelling.
+2. Try the **Registration Number** (e.g., RC12345).
+3. Try a simpler keyword.
+
+_Reply with a new name to try again._
             `.trim();
     }
 
