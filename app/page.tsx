@@ -48,6 +48,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 // Search categories for quick filters
 const searchCategories = [
@@ -229,8 +230,7 @@ export default function Home() {
 
   const copyWhatsAppNumber = () => {
     navigator.clipboard.writeText(whatsappNumber);
-    // You could add a toast notification here
-    // alert("WhatsApp number copied to clipboard!");
+    toast.success("WhatsApp number copied to clipboard!");
   };
 
   return (

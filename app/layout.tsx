@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     "A modern, comprehensive business verification and directory platform for Sierra Leone. Built to transform how businesses are verified, discovered, and trusted in the Sierra Leonean economy.",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,6 +35,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

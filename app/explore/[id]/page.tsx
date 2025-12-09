@@ -49,6 +49,7 @@ import {
   AlertTriangle,
   ChevronLeft,
   ChevronRight,
+  Copy,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -72,6 +73,19 @@ import {
 import ComplaintModal from "@/components/compaint";
 import CertificateModal from "@/components/certificate-modal";
 import { Company } from "@/types/company";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface ApiResponse {
   success: boolean;
@@ -420,6 +434,13 @@ export default function CompanyDetailPage() {
   const [complaintsLoading, setComplaintsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const complaintsPerPage = 2;
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
 
   // Fetch company details
   useEffect(() => {
@@ -747,22 +768,65 @@ export default function CompanyDetailPage() {
                   </Tooltip>
                 </TooltipProvider>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                <Dialog>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-600 transition-all duration-200"
+                          >
+                            <Share2 className="w-5 h-5" />
+                          </Button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Share profile</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Share Company Profile</DialogTitle>
+                      <DialogDescription>
+                        Share this company profile with others. Copy the link below.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex items-center space-x-2">
+                      <div className="grid flex-1 gap-2">
+                        <Label htmlFor="link" className="sr-only">
+                          Link
+                        </Label>
+                        <Input
+                          id="link"
+                          value={currentUrl}
+                          readOnly
+                        />
+                      </div>
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 rounded-xl backdrop-blur-sm bg-white/50 border border-gray-200/50 text-gray-600 hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-600 transition-all duration-200"
+                        type="submit"
+                        size="sm"
+                        className="px-3"
+                        onClick={() => {
+                          navigator.clipboard.writeText(currentUrl);
+                          toast.success("Link copied to clipboard");
+                        }}
                       >
-                        <Share2 className="w-5 h-5" />
+                        <span className="sr-only">Copy</span>
+                        <Copy className="h-4 w-4" />
                       </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Share profile</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                    </div>
+                    <DialogFooter className="sm:justify-start">
+                      <DialogClose asChild>
+                        <Button type="button" variant="secondary">
+                          Close
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
 
                 {/* Prominent complaint button in header */}
                 {company && (
