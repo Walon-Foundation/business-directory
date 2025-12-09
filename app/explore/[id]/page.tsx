@@ -50,6 +50,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -68,6 +70,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ComplaintModal from "@/components/compaint";
+import CertificateModal from "@/components/certificate-modal";
 import { Company } from "@/types/company";
 
 interface ApiResponse {
@@ -571,6 +574,122 @@ export default function CompanyDetailPage() {
     setCurrentPage(pageNumber);
   };
 
+  const generatePDF = () => {
+    if (!company) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+
+    // Header
+    doc.setFontSize(24);
+    doc.setTextColor(0, 82, 204); // Blue
+    doc.text(company.name, pageWidth / 2, 20, { align: "center" });
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(
+      `Generated on ${new Date().toLocaleDateString()}`,
+      pageWidth / 2,
+      28,
+      {
+        align: "center",
+      },
+    );
+
+    let yPos = 40;
+
+    // Company Details Table
+    autoTable(doc, {
+      startY: yPos,
+      head: [["Company Details", ""]],
+      body: [
+        ["Registration Number", company.registrationNumber || "N/A"],
+        ["Industry", formatIndustry(company.industry)],
+        ["Status", formatStatus(company.status)],
+        ["Founded", company.foundedYear?.toString() || "N/A"],
+        ["Location", company.city || company.location || "N/A"],
+        ["Email", company.contactEmail || "N/A"],
+        ["Phone", company.contactPhone || "N/A"],
+        ["Website", company.website || "N/A"],
+      ],
+      theme: "grid",
+      headStyles: { fillColor: [0, 82, 204] },
+      columnStyles: { 0: { fontStyle: "bold", cellWidth: 60 } },
+    });
+
+    yPos = (doc as any).lastAutoTable.finalY + 15;
+
+    // Description
+    if (company.description) {
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text("About Us", 14, yPos);
+      yPos += 8;
+
+      doc.setFontSize(10);
+      doc.setTextColor(60);
+      const splitDesc = doc.splitTextToSize(
+        company.description,
+        pageWidth - 28,
+      );
+      doc.text(splitDesc, 14, yPos);
+      yPos += splitDesc.length * 5 + 10;
+    }
+
+    // Financials (if available)
+    if (company.revenue || company.employees) {
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text("Key Metrics", 14, yPos);
+      yPos += 6;
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [["Metric", "Value"]],
+        body: [
+          [
+            "Annual Revenue",
+            company.revenue || company.annualRevenueRange || "N/A",
+          ],
+          ["Employees", company.employees || "N/A"],
+          ["Compliance Score", `${company.complianceScore || 0}%`],
+          ["Trust Score", `${company.trustScore || 0}%`],
+        ],
+        theme: "striped",
+        headStyles: { fillColor: [0, 82, 204] },
+      });
+      yPos = (doc as any).lastAutoTable.finalY + 15;
+    }
+
+    // Services
+    if (company.services && company.services.length > 0) {
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text("Services", 14, yPos);
+      yPos += 6;
+
+      autoTable(doc, {
+        startY: yPos,
+        head: [["Service"]],
+        body: company.services.map((s) => [s]),
+        theme: "striped",
+        headStyles: { fillColor: [0, 82, 204] },
+      });
+    }
+
+    doc.save(`${company.name.replace(/\s+/g, "_")}_Report.pdf`);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/20 to-white">
       {/* Background Effects */}
@@ -818,7 +937,10 @@ export default function CompanyDetailPage() {
                   </Button>
                 )}
 
-                <Button className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group">
+                <Button
+                  onClick={generatePDF}
+                  className="h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl rounded-xl transition-all duration-200 group"
+                >
                   <div className="flex items-center justify-center w-full">
                     <IconContainer
                       variant="primary"
@@ -1798,19 +1920,24 @@ export default function CompanyDetailPage() {
                     </div>
                   )}
                 </div>
-                <Button
-                  variant="outline"
-                  className={`border-2 px-6 py-3 rounded-xl shadow-sm ${
-                    company.verificationLevel === "verified"
-                      ? "border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400"
-                      : company.verificationLevel === "pending"
-                        ? "border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
-                  }`}
-                >
-                  <FileText className="w-5 h-5 mr-2" />
-                  View Certificate
-                </Button>
+                <CertificateModal
+                  company={company}
+                  trigger={
+                    <Button
+                      variant="outline"
+                      className={`border-2 px-6 py-3 rounded-xl shadow-sm ${
+                        company.verificationLevel === "verified"
+                          ? "border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400"
+                          : company.verificationLevel === "pending"
+                            ? "border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400"
+                            : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                      }`}
+                    >
+                      <FileText className="w-5 h-5 mr-2" />
+                      View Certificate
+                    </Button>
+                  }
+                />
               </div>
             </div>
           </div>
